@@ -41,6 +41,12 @@
 
         /* Avoid stacking-context issues that can block header overlay */
         .shop { isolation: auto !important; }
+
+        /* Shop page fix: remove forced tall container that creates huge whitespace */
+        .frame-div { min-height: auto !important; }
+
+        /* Shop page fix: footer adds a big top margin by default */
+        body .footer-main { margin-top: 16px !important; }
     </style>
 </head>
 
@@ -70,7 +76,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="frame-div" style="display: flex; justify-content: center; width: 100%; padding: 40px 20px 24px 20px; margin: 0;">
+                    <div class="frame-div" style="display: flex; justify-content: center; width: 100%; padding: 24px 20px 16px 20px; margin: 0;">
                         <div style="width: 100%; max-width: 1200px; padding: 0;">
                             <section class="our-products" style="width: 100%; max-width: 100%; margin: 0; padding: 0; margin-top: 0px;">
                                 <div class="text-description2" style="width: 100%; margin: 0; display: flex; flex-direction: column; gap: 8px; padding: 0;">
@@ -130,7 +136,7 @@
                                     </div>
                                 </div>
                             </section>
-                                <section class="card2" style="display: grid; grid-template-columns: repeat(4, 282px); gap: 24px 24px; width: 1200px; margin: 30px auto 30px auto;">
+                                <section class="card2" style="display: grid; grid-template-columns: repeat(4, 282px); gap: 24px 24px; width: 1200px; margin: 16px auto 16px auto;">
                                     <c:forEach var="product" items="${products}" varStatus="loop">
                                         <c:if test="${loop.index < 21}">
                                         <div class="product-cadt" style="width: 282px; height: 343px; display: flex; flex-direction: column;">
@@ -173,7 +179,7 @@
                                     </c:forEach>
                                 </section>
                                 <c:if test="${!empty products}">
-                                    <div style="display: flex; justify-content: center; margin-top: 24px; margin-bottom: 16px; gap: 6px;">
+                                    <div style="display: flex; justify-content: center; margin-top: 12px; margin-bottom: 0; gap: 6px;">
                                         <c:if test="${currentPage > 1}">
                                             <a href="/product?page=${currentPage - 1}" style="width: 32px; height: 32px; border: 1px solid #d9d9d9; display: flex; align-items: center; justify-content: center; border-radius: 4px; text-decoration: none; color: #212337; font-size: 14px;">
                                                 &laquo;
@@ -208,11 +214,11 @@
         </main>
 
         <!-- Flash Sale Section -->
-        <section class="homepage-inner" style="margin-top: 0; margin-bottom: 16px; min-height: auto; padding: 0; position: relative; z-index: 0;">
-            <div class="special-offer-wrapper" style="position: relative; z-index: 0; overflow: hidden; padding: 200px 10px 80px 180px; box-sizing: border-box; background-image: url('/resources/images/content/FooterSection.png'); background-size: 100% auto; background-position: center top; background-repeat: no-repeat; background-attachment: scroll;">
-                <div class="special-offer" style="position: relative; z-index: 1; gap: 24px; align-items: flex-start; text-align: left;">
-                    <section class="special-offer2" style="gap: 20px; align-items: flex-start;">
-                        <div class="text-description5" style="gap: 16px; align-items: flex-start;">
+        <section class="homepage-inner" style="min-height: auto; padding-bottom: 0;">
+            <div class="special-offer-wrapper" style="background-image: url('/resources/images/content/FooterSection.png'); background-size: 100% auto; background-position: center top; background-repeat: no-repeat; background-attachment: scroll; padding: 50px 10px 16px 180px;">
+                <div class="special-offer">
+                    <section class="special-offer2">
+                        <div class="text-description5">
                             <div class="text-description6">
                                 <div class="text-description7">
                                     <div class="caption2" style="background-color: rgba(116, 155, 63, 0.3);">
@@ -226,26 +232,26 @@
                                 <span class="off" style="color: #ff7a3d; font-weight: bold;">80% OFF</span>
                             </h2>
                         </div>
-                        <div class="countdown" style="color: #212337; justify-content: flex-start;">
-                            <div class="countdown2">
-                                <h2 class="countdown-delimiters">03</h2>
-                                <div class="ngy-wrapper"><div class="ngy">Ngày</div></div>
+                        <div class="countdown" style="color: #212337; align-items: flex-start; gap: 24px; margin-bottom: 16px;">
+                            <div class="countdown2" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                                <h2 class="countdown-delimiters" style="position: static; margin: 0;">03</h2>
+                                <div class="ngy-wrapper" style="padding: 0; justify-content: center;"><div class="ngy" style="position: static;">Ngày</div></div>
                             </div>
-                            <div class="countdown3">
-                                <h2 class="h2">18</h2>
-                                <div class="gi-wrapper"><div class="gi">Giờ</div></div>
+                            <div class="countdown3" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                                <h2 class="h2" style="position: static; margin: 0;">18</h2>
+                                <div class="gi-wrapper" style="padding: 0; justify-content: center;"><div class="gi" style="position: static;">Giờ</div></div>
                             </div>
-                            <div class="countdown2">
-                                <h2 class="countdown-delimiters">54</h2>
-                                <div class="pht-wrapper"><div class="pht">Phút</div></div>
+                            <div class="countdown2" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                                <h2 class="countdown-delimiters" style="position: static; margin: 0;">54</h2>
+                                <div class="pht-wrapper" style="padding: 0; justify-content: center;"><div class="pht" style="position: static;">Phút</div></div>
                             </div>
-                            <div class="countdown3">
-                                <h2 class="h2">21</h2>
-                                <div class="ngy-wrapper"><div class="ma">Mùa</div></div>
+                            <div class="countdown3" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                                <h2 class="h2" style="position: static; margin: 0;">21</h2>
+                                <div class="ngy-wrapper" style="padding: 0; justify-content: center;"><div class="ma" style="position: static;">Mùa</div></div>
                             </div>
                         </div>
                     </section>
-                    <button class="button16" style="background-color: #176d38;">
+                    <button class="button16" style="background-color: #176d38; margin-top: 8px;">
                         <b class="code-fruit28-container">
                             <span class="code">CODE : </span>
                             <span class="fruit28" style="color: #ffeb3b; font-weight: bold;">FRUIT28</span>
