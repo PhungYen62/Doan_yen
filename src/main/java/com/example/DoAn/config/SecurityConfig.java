@@ -1,5 +1,6 @@
 package com.example.DoAn.config;
 
+import jakarta.servlet.DispatcherType;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -10,68 +11,104 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.session.security.web.authentication.SpringSessionRememberMeServices;
 
-import jakarta.servlet.DispatcherType;
-
 @Configuration
 public class SecurityConfig {
 
-        @Bean
-        public PasswordEncoder passwordEncoder() {
-                return new BCryptPasswordEncoder();
-        }
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-        @Bean
-        public AuthenticationSuccessHandler customSuccessHandler() {
-                return new CustomSuccessHandler();
-        }
+    @Bean
+    public AuthenticationSuccessHandler customSuccessHandler() {
+        return new CustomSuccessHandler();
+    }
 
-        @Bean
-        public SpringSessionRememberMeServices rememberMeServices() {
-                SpringSessionRememberMeServices rememberMeServices = new SpringSessionRememberMeServices();
-                // optionally customize
-                rememberMeServices.setAlwaysRemember(true);
+    @Bean
+    public SpringSessionRememberMeServices rememberMeServices() {
+        SpringSessionRememberMeServices rememberMeServices = new SpringSessionRememberMeServices();
+        rememberMeServices.setAlwaysRemember(true);
+        return rememberMeServices;
+    }
 
-                return rememberMeServices;
-        }
+    @Bean
+    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        @Bean
-        SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-                // v6. lamda
-                http
-                                .authorizeHttpRequests(authorize -> authorize
-                                                .dispatcherTypeMatchers(DispatcherType.FORWARD,
-                                                                DispatcherType.INCLUDE)
-                                                .permitAll()
-                                                .requestMatchers("/", "/login", "/product/**", "/products/**",
-                                                                "/register", "/lib/**", "/img/**",
-                                                                "/client/**", "/css/**", "/js/**", "/images/**")
-                                                .permitAll()
+        http
+            .authorizeHttpRequests(authorize -> authorize
 
-                                                .requestMatchers("/admin/**").hasRole("ADMIN")
+                // Cho phép JSP forward/include
+                .dispatcherTypeMatchers(
+                        DispatcherType.FORWARD,
+                        DispatcherType.INCLUDE
+                ).permitAll()
 
-                                                .anyRequest().authenticated())
+                // ===== PUBLIC PAGES =====
+                .requestMatchers(
+                        "/",
+                        "/login",
+                        "/register",
+                        "/logout",
+                        "/product/**",
+                        "/products/**",
+                        "/client/**"
+                ).permitAll()
 
-                                .sessionManagement((sessionManagement) -> sessionManagement
-                                                .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
-                                                .invalidSessionUrl("/logout?expired")
-                                                .maximumSessions(1)
-                                                .maxSessionsPreventsLogin(false))
+                // ===== STATIC RESOURCES =====
+                .requestMatchers(
+                        "/css/**",
+                        "/js/**",
+                        "/img/**",
+                        "/images/**",
+                        "/lib/**",
+                        "/avatar/**",
+                        "/products/**",
+                        "/scss/**",
+                        "/resources/**"
+                ).permitAll()
 
-                                .logout(logout -> logout
-                                                .logoutUrl("/logout")
-                                                .logoutSuccessUrl("/") // chuyển về trang chủ sau khi logout
-                                                .invalidateHttpSession(true)
-                                                .deleteCookies("JSESSIONID"))
+                // ADMIN
+                .requestMatchers("/admin/**").hasRole("ADMIN")
 
-                                .rememberMe(r -> r.rememberMeServices(rememberMeServices()))
-                                .formLogin(formLogin -> formLogin
-                                                .loginPage("/login")
-                                                .failureUrl("/login?error")
-                                                .successHandler(customSuccessHandler())
-                                                .permitAll())
-                                .exceptionHandling(ex -> ex.accessDeniedPage("/access-deny"));
+                // Các request khác cần login
+                .anyRequest().authenticated()
+            )
 
-                return http.build();
-        }
+            // ===== SESSION =====
+            .sessionManagement(session -> session
+                    .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+                    .invalidSessionUrl("/logout?expired")
+                    .maximumSessions(1)
+                    .maxSessionsPreventsLogin(false)
+            )
 
+            // ===== LOGIN =====
+            .formLogin(form -> form
+                    .loginPage("/login")
+                    .failureUrl("/login?error")
+                    .successHandler(customSuccessHandler())
+                    .permitAll()
+            )
+
+            // ===== LOGOUT =====
+            .logout(logout -> logout
+                    .logoutUrl("/logout")
+                    .logoutSuccessUrl("/")
+                    .invalidateHttpSession(true)
+                    .deleteCookies("JSESSIONID")
+                    .permitAll()
+            )
+
+            // ===== REMEMBER ME =====
+            .rememberMe(r -> r.rememberMeServices(rememberMeServices()))
+
+            // ===== ACCESS DENIED =====
+            .exceptionHandling(ex -> ex.accessDeniedPage("/access-deny"))
+
+            // Nếu form JSP lỗi CSRF thì bật dòng này
+            //.csrf(csrf -> csrf.disable())
+        ;
+
+        return http.build();
+    }
 }

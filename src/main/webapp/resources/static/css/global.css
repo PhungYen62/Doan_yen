@@ -1,0 +1,136 @@
+body {
+  margin: 0;
+  line-height: normal;
+}
+
+:root {
+  /* Figma Variables */
+
+  /* Color */
+  --Color-Red-500: #fd364e;
+  --s-colors-alpha-60: rgba(255, 255, 255, 0.6);
+  --s-colors-beta-60: rgba(11, 11, 12, 0.6);
+
+  /* Common Style Variables */
+
+  /* Color */
+  --Black: #212337;
+  --color-black: #000;
+  --color-dodgerblue: #008bf5;
+  --color-gainsboro-100: #e6e6e6;
+  --color-gainsboro-200: rgba(217, 217, 217, 0.5);
+  --color-gold: #fac714;
+  --color-olivedrab-100: #5c8226;
+  --color-olivedrab-200: #497d03;
+  --color-olivedrab-300: rgba(116, 155, 63, 0.1);
+  --color-orangered-100: #e64f00;
+  --color-orangered-200: rgba(230, 79, 0, 0.09);
+  --color-orangered: #ff6a1a;
+  --color-seagreen-100: #3d945e;
+  --color-seagreen-200: #176d38;
+  --color-seagreen: #176d38;
+  --color-silver: #bfbfbf;
+  --color-white: #fff;
+  --White: #fff;
+  --Green: #749b3f;
+  --Grey-20: #f4f6f6;
+  --Grey-50: #d9d9d9;
+  --Grey-80: #a6a6a6;
+  --Grey-100: #4a4a52;
+  --Primary: #ff6a1a;
+
+  /* Gap */
+  --gap-4: 4px;
+  --gap-8: 8px;
+  --gap-10: 10px;
+  --gap-12: 12px;
+  --gap-16: 16px;
+  --gap-20: 20px;
+  --gap-24: 24px;
+  --gap-32: 32px;
+  --gap-60: 60px;
+
+  /* Padding */
+  --padding-0: 0px;
+  --padding-01: 0;
+  --padding-4: 4px;
+  --padding-5: 5px;
+  --padding-8: 8px;
+  --padding-10: 10px;
+  --padding-12: 12px;
+  --padding-14: 14px;
+  --padding-16: 16px;
+  --padding-20: 20px;
+  --padding-22: 22px;
+  --padding-23: 23px;
+  --padding-24: 24px;
+  --padding-28: 28px;
+  --padding-31: 31px;
+  --padding-32: 32px;
+  --padding-48: 48px;
+  --padding-60: 60px;
+
+  /* BorderRadius */
+  --br-8: 8px;
+  --br-16: 16px;
+  --br-20: 20px;
+  --br-10_7: 10.7px;
+
+  /* Font */
+  --font-inter: Inter;
+  --font-rubik: Rubik;
+  --font-svn-gilroy: SVN-Gilroy;
+
+  /* FontSize */
+  --fs-14: 14px;
+  --fs-16: 16px;
+  --fs-18: 18px;
+  --fs-20: 20px;
+  --fs-24: 24px;
+  --fs-32: 32px;
+  --fs-38: 38px;
+  --fs-40: 40px;
+  --fs-48: 48px;
+
+  /* Borders */
+  --border-1: 1px solid var(--Grey-50);
+  --border-2: 1px solid var(--color-silver);
+
+  /* Shadows */
+  --shadow-drop: 0px 2.3px 12px rgba(9, 43, 94, 0.06);
+  --shadow-drop-1: 0px 2.1px 10.7px rgba(9, 43, 94, 0.16);
+  --shadow-drop-2: 0px 2.1px 10.7px rgba(9, 43, 94, 0.16);
+  --Shadow-xs: 0px 1px 2px rgba(16, 24, 40, 0.05);
+
+  /* WidthHeights */
+  --height-1: 1px;
+  --height-16: 16px;
+  --height-20: 20px;
+  --height-24: 24px;
+  --height-32: 32px;
+  --height-40: 40px;
+  --height-48: 48px;
+  --height-122: 122px;
+  --height-208: 208px;
+  --width-1: 1px;
+  --width-2: 2px;
+  --width-16: 16px;
+  --width-20: 20px;
+  --width-32: 32px;
+  --width-98: 98px;
+  --width-282: 282px;
+  --width-384: 384px;
+
+  /* LineHeights */
+  --lh-20: 20px;
+  --lh-24: 24px;
+  --lh-26: 26px;
+  --lh-28: 28px;
+
+  /* LetterSpacings */
+  --ls--0_02: -0.02;
+  --ls-0_04: 0.04;
+
+  --left-16: 16px;
+  --top-16: 16px;
+}

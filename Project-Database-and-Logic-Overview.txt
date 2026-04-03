@@ -1,0 +1,400 @@
+Project Database and Logic Overview
+===================================
+
+This file explains the database schema, the backend Java code logic, and how the frontend JSP consumes data in this project.
+
+1. Project / Database Context
+-----------------------------
+- The app runs with Spring Boot + Spring MVC + JSP.
+- Database schema used by the project is `do_an_backup` in MySQL.
+- The app connects to MySQL via `src/main/resources/application.properties`:
+  - URL: `jdbc:mysql://${MYSQL_HOST:localhost}:3306/do_an_backup`
+  - user: `root`
+  - password: `123456`
+- Spring MVC JSP views are resolved with prefix `/WEB-INF/view/` and suffix `.jsp`.
+
+2. Main Tables and Meaning
+--------------------------
+- `products`: main product data.
+  - id, name, price, quantity, sale_price, short_desc, detail_desc, created_at, updated_at, is_deleted
+  - mapped by `com.example.DoAn.domain.Product`
+- `categories`: product categories.
+  - id, name, description
+  - mapped by `com.example.DoAn.domain.Categories`
+- `product_category`: join table between products and categories.
+  - product_id, category_id
+  - supports the `@ManyToMany` relation between Product and Categories.
+- `product_image`: image metadata.
+  - id, image_url, product_id, created_at
+  - mapped by `com.example.DoAn.domain.ProductImage`
+- `users`, `roles`: user accounts and roles.
+- `cart`, `cart_detail`: shopping cart and line items.
+- `orders`, `order_detail`: order data.
+
+3. Entity Relationships
+------------------------
+- `Product` entity:
+  - table `products`
+  - `@OneToMany(mappedBy = "product")` -> `List<ProductImage> images`
+  - `@ManyToMany` -> `List<Categories> categories`
+
+- `Categories` entity:
+  - table `categories`
+  - `@ManyToMany(mappedBy = "categories")` -> `List<Product> products`
+
+- `ProductImage` entity:
+  - table `product_image`
+  - `@ManyToOne` -> `Product product`
+
+4. How product images work
+--------------------------
+- Images are stored in the database only as metadata in `product_image.image_url`.
+- The actual image files are stored under `src/main/webapp/resources/images/products/` on the server.
+- `UploadService.handleSaveUploadImage(file, targetFolder)` saves uploaded images into:
+  - `/resources/images/products/{targetFolder}/{generated-file-name}`
+- It returns `targetFolder + "/" + generatedFileName`.
+- In JSP, code often uses `<img src="/products/${product.firstImage}" ...>`.
+  - That means the app expects a URL path under `/products/` plus the returned `image_url`.
+- In `Product.java`, `getFirstImage()` does:
+  - if `images` exists and is not empty: return `images.get(0).getImageUrl()`
+  - otherwise return `"/images/default.jpg"`
+- So the first image is always the first item in `product.images`.
+
+5. Homepage data flow
+---------------------
+- The homepage is rendered by `HomePageController.getHomePage()`.
+- It prepares data for `client/homepage/show.jsp`.
+- Steps in `getHomePage()`:
+  1. `categories = categoriesService.getAll()`
+     - loads all categories from `categories` table.
+  2. `allProducts = productService.getAllProducts()`
+     - loads all products where `is_deleted = false` from `products` table.
+  3. Filter discounted products:
+     - `salePrice != null && salePrice > 0 && salePrice < price`
+     - these products are added to `discountedProducts`.
+  4. Sort `discountedProducts` by percentage discount, descending.
+     - compute percent = `(price - salePrice) / price`
+     - sort so larger discount appears first.
+  5. Create `topDiscountedProducts` as the first 6 items.
+  6. Add model attributes:
+     - `categories`
+     - `selectedCategoryId` (default `1`)
+     - `topDiscountedProducts`
+     - `discountedProducts`
+     - `activePage = "home"`
+- `show.jsp` uses these model attributes to render sections.
+
+6. What `show.jsp` reads
+------------------------
+The JSP home page needs these models:
+- `${topDiscountedProducts}`
+  - used for the featured discount blocks.
+- `${categories}`
+  - used for category tabs and category product lists.
+- `${selectedCategoryId}`
+  - marks the currently active category tab.
+- `${discountedProducts}`
+  - used for the discount carousel.
+- `${_csrf.parameterName}` and `${_csrf.token}`
+  - used in forms to add product to cart.
+
+7. How discount products are shown
+----------------------------------
+- In `show.jsp`, the "Ưu đãi đặc biệt" block loops:
+  - `<c:forEach var="product" items="${topDiscountedProducts}">`
+- Each product uses:
+  - `product.id` for product link `/product/${product.id}`
+  - `product.name` for title
+  - `product.firstImage` for image URL
+  - `product.salePrice` rendered with `<fmt:formatNumber>`
+- The logic to choose them is in the controller, not in JSP.
+
+8. How categories/products are shown in tabs
+--------------------------------------------
+- `show.jsp` renders a tab list from `${categories}`.
+- For each category, it creates a tab panel with `category.products`.
+- That means `category.products` is loaded when `categories` is fetched.
+- Each product item has:
+  - `product.name`, `product.shortDesc`, `product.firstImage`
+  - price display logic: if salePrice exists and lower than price, show salePrice with original price crossed out.
+- The category-product relation is from `product_category` join table.
+
+9. Backend query overview
+-------------------------
+- `ProductRepository.findByIsDeletedFalse()` returns all non-deleted products.
+- `CategoriesRepository.findAll()` returns all categories.
+- `ProductRepository.findByCategories_IdInAndIdNotAndIsDeletedFalse(...)` is used elsewhere for related products.
+- `ProductRepository.findByName(String name)` and `findById` are used for item details.
+
+10. Static and view handling
+----------------------------
+- JSP view location: `/WEB-INF/view/` (configured in `application.properties`).
+- For example `client/homepage/show` resolves to `src/main/webapp/WEB-INF/view/client/homepage/show.jsp`.
+- Static resources are served from webapp folders like:
+  - `src/main/webapp/resources/static/css/`
+  - `src/main/webapp/resources/static/js/`
+  - `src/main/webapp/resources/images/`
+- Uploads use `ServletContext.getRealPath("/resources/images")`.
+
+11. Notes for understanding FE/BE linkage
+-----------------------------------------
+- BE builds the model in controllers and returns a JSP view name.
+- FE in JSP reads the model using JSTL (`${...}`) and loops (`<c:forEach>`).
+- JSP does not contain direct SQL or database code.
+- Database tables are mapped by JPA entities.
+- The controller decides the strategy for each page.
+
+12. Example: how discount is determined
+---------------------------------------
+- `salePrice` not null and positive.
+- `salePrice < price`.
+- Sort by highest discount percentage:
+  - `((price - salePrice) / price)`
+- That means a product with 50% off appears before 20% off.
+
+13. Important caution points
+-----------------------------
+- `Product.getFirstImage()` only returns the first image from `product.images`.
+  - if the list order is not guaranteed, it may be non-deterministic.
+- If no images exist, it returns `"/images/default.jpg"`.
+- The URL prefix `/products/` comes from JSP hardcoding.
+  - actual path handling may need controller/static resource mapping.
+- `is_deleted` flag is used to soft-delete products.
+- Category tab logic assumes `selectedCategoryId` exists.
+
+14. Recommended reading path for a beginner
+------------------------------------------
+- Read `show.jsp` to see what data the homepage needs.
+- Read `HomePageController.getHomePage()` to see where those models come from.
+- Read `ProductService.getAllProducts()` and `CategoriesService.getAll()` for DB access.
+- Read `Product.java`, `Categories.java`, `ProductImage.java` for relationships.
+- Read `application.properties` for database and view configuration.
+
+15. Quick table reference
+-------------------------
+- `do_an_backup.products` -> `Product`
+- `do_an_backup.categories` -> `Categories`
+- `do_an_backup.product_category` -> many-to-many link Product <-> Categories
+- `do_an_backup.product_image` -> `ProductImage`
+- `do_an_backup.users` / `roles` -> user authentication
+- `do_an_backup.cart`, `cart_detail` -> shopping cart
+- `do_an_backup.orders`, `order_detail` -> order history
+
+16. Các màn chính của ứng dụng (Frontend + Backend)
+---------------------------------------------------
+16.1. Màn client (khách hàng)
+- Trang chủ: `/`
+  - Controller: `HomePageController.getHomePage()`
+  - BE load: `categories`, `allProducts`, lọc `discountedProducts`, sắp giảm giá, tạo `topDiscountedProducts`.
+  - FE dùng `show.jsp` để render: banner, tab danh mục, sản phẩm nổi bật, carousel giảm giá.
+  - Dữ liệu sản phẩm lấy qua `ProductService.getAllProducts()`.
+
+- Trang cửa hàng: `/product`
+  - Controller: `ItemController.getShopPage()`
+  - BE load: `categories`, products theo filter, paging, sort.
+  - Input URL: `page`, `name`, `category`, `minPrice`, `maxPrice`, `sort`.
+  - `ProductService.getAllProductsWithSpec(...)` truy vấn theo tiêu chí.
+  - FE dùng `client/product/shop.jsp` (và các include) để hiển thị danh sách và phân trang.
+  - Đồng thời BE còn tạo `topDiscountedProducts` để hiển thị sản phẩm sale nổi bật.
+
+- Trang chi tiết sản phẩm: `/product/{id}`
+  - Controller: `ItemController.getProductDetail()`
+  - BE load: `product` theo `id`, `relatedProducts` theo category.
+  - FE hiển thị: hình ảnh sản phẩm, mô tả ngắn, giá, giá sale, nút thêm giỏ hàng.
+
+- Trang giỏ hàng: `/cart`
+  - Controller: `CartController.getCartPage()`
+  - BE lấy user id từ session, lấy `Cart cart` từ `productService.getCartByUser(user)`.
+  - FE hiển thị `cartDetails`, tổng tiền, nút delete và checkout.
+
+- Thêm sản phẩm vào giỏ: POST `/add-product-to-cart/{id}`
+  - Controller: `CartController.addProductToCart()`
+  - Logic BE sử dụng `ProductService.handleAddProductToCart(email, productId, session, quantity)`.
+  - Nếu cart chưa tồn tại thì tạo mới, nếu đã có sản phẩm thì cộng quantity.
+
+- Xóa sản phẩm trong giỏ: POST `/delete-cart-product/{id}`
+  - Controller: `CartController.deleteCartDetail()`
+  - Logic BE xóa `CartDetail` và cập nhật `cart.sum`.
+
+- Checkout: `/checkout`
+  - Controller: `CartController.getCheckOutPage()`
+  - BE lấy giỏ theo user, tính tổng tiền, lấy thông tin user để tự điền.
+  - FE hiển thị form nhận thông tin giao hàng và chọn phương thức thanh toán.
+
+- Confirm cart trước khi checkout: POST `/confirm-checkout`
+  - Controller: `CartController.getCheckOutPage()` (POST)
+  - Logic BE kiểm tra tồn kho bằng `productService.handleUpdateCartBeforeCheckout(cartDetails)`.
+  - Nếu có lỗi tồn kho thì redirect về `/cart` và hiển thị lỗi.
+
+- Đặt hàng (COD hoặc VNPAY): POST `/place-order`
+  - Controller: `CartController.handlePlaceOrder()`
+  - Nếu `paymentMethod=VNPAY`: gọi `PaymentController.createPayment()` tạo URL VNPAY và redirect sang cổng thanh toán.
+  - Nếu COD: gọi `productService.handlePlaceOrder(...)` với `paymentStatus=0`.
+
+- Màn cảm ơn: `/thanks`
+  - Controller: `CartController.getThankYouPage()`
+  - FE thông báo đặt hàng thành công hoặc lỗi.
+
+- Xử lý callback VNPAY: `/vnpay-return`
+  - Controller: `PaymentController.handleVNPayReturn()`
+  - Nếu `vnp_ResponseCode == "00"` thì gọi `handlePlaceOrder(..., paymentStatus=1)`.
+  - Nếu thanh toán thất bại thì redirect về `/thanks` với thông báo phù hợp.
+
+- Lịch sử đơn hàng: `/order-history`
+  - Controller: `OrderController.getOrderHistoryPage()`
+  - BE lấy `Order` của user hiện tại bằng `orderService.fetchOrdersByUser(user)`.
+  - FE hiển thị danh sách đơn đã đặt.
+
+- Trang liên hệ: `/contact`
+  - Controller: `ContactController` (client)
+  - FE hiển thị form liên hệ, gửi message.
+
+- Trang đăng ký: `/register`
+  - Controller: `HomePageController.getRegisterPage()`
+  - FE hiển thị form đăng ký.
+
+- Trang login: `/login`
+  - Controller: `HomePageController.getLoginPage()`
+  - FE hiển thị form đăng nhập.
+
+- Trang hồ sơ người dùng: `/user/profile`
+  - Controller: `HomePageController.showProfile()`
+  - FE hiển thị thông tin user, form cập nhật.
+
+- Cập nhật hồ sơ: POST `/user/update`
+  - Controller: `HomePageController.updateProfile()`
+  - Logic BE cập nhật user, lưu avatar nếu upload.
+
+- Đổi mật khẩu: `/user/change-password`
+  - Controller: `HomePageController.showChangePasswordForm()` và `changePassword()`.
+  - Form đổi mật khẩu được xử lý server-side.
+
+16.2. Màn admin
+- Dashboard: `/admin`
+  - Controller: `DashBoardController.getDashboardPage()`
+  - FE hiển thị số liệu chung, có API nội bộ `/api/revenue/last7days`.
+
+- Quản lý sản phẩm:
+  - `/admin/product` -> `admin/product/show`
+  - `/admin/product/create`
+  - `/admin/product/{id}` -> chi tiết
+  - `/admin/product/update/{id}`
+  - `/admin/product/delete/{id}`
+  - Controller: `admin.ProductController`
+  - Logic BE: CRUD sản phẩm, upload & xử lý ảnh, save product với category.
+
+- Quản lý danh mục:
+  - `/admin/categories` -> `admin/categories/show`
+  - `/admin/categories/create`
+  - `/admin/categories/{id}` -> chi tiết
+  - `/admin/categories/update/{id}`
+  - `/admin/categories/delete/{id}`
+  - Controller: `admin.CategoriesController`
+  - Logic BE: CRUD danh mục, gỡ liên kết product khi xoá.
+
+- Quản lý đơn hàng:
+  - `/admin/order` -> `admin/order/show`
+  - `/admin/order/{id}` -> chi tiết
+  - `/admin/order/update/{id}`
+  - `/admin/order/delete/{id}`
+  - Controller: `admin.OrderController`
+  - Logic BE: hiển thị đơn, cập nhật trạng thái, xoá.
+
+- Quản lý người dùng:
+  - `/admin/user` -> `admin/user/show`
+  - `/admin/user/create`
+  - `/admin/user/{id}` -> chi tiết
+  - `/admin/user/update/{id}`
+  - `/admin/user/delete/{id}`
+  - Controller: `admin.UserController`
+  - Logic BE: CRUD user, role, validation.
+
+- Quản lý liên hệ:
+  - `/admin/contact` -> `admin/contact/show`
+  - `/admin/contact/{id}` -> chi tiết
+  - `/admin/contact/delete/{id}`
+  - Controller: `admin.ContactController`
+
+17. Logic BE chi tiết cho từng màn
+----------------------------------
+17.1. Home + product listing
+- `HomePageController` và `ItemController` dùng `ProductService` + `CategoriesService`.
+- `ProductService.getAllProductsWithSpec(...)` xây `Specification<Product>` dựa trên:
+  - từ khoá `name`
+  - `minPrice`, `maxPrice`
+  - danh sách `categoryIds`
+  - điều kiện `isDeleted = false`
+- Màn shop có paging và sort bằng `Pageable`.
+
+17.2. Thu thập ảnh sản phẩm
+- `Product` có `List<ProductImage> images`.
+- `ProductImage.imageUrl` lưu tên hoặc đường dẫn con của ảnh.
+- `Product.getFirstImage()` trả ảnh đầu tiên.
+- FE hiển thị `img src="/products/${product.firstImage}"`.
+
+17.3. Giỏ hàng và đặt hàng
+- `CartController` lấy dữ liệu user từ `session`.
+- `ProductService.handleAddProductToCart(...)`:
+  - nếu user chưa có cart: tạo mới cart và save.
+  - nếu cart chưa có sản phẩm: tạo `CartDetail`.
+  - nếu đã có: tăng quantity.
+  - cập nhật `cart.sum` và session `sum`.
+- `ProductService.handleRemoveCartDetail(...)` xóa chi tiết giỏ hàng và cập nhật `sum`.
+- `CartController.confirm-checkout` kiểm tra tồn kho với `handleUpdateCartBeforeCheckout`.
+- `handlePlaceOrder(...)`:
+  - tạo `Order`, set user, receiver info, status `PENDING`.
+  - duyệt `CartDetail`, tạo `OrderDetail` tương ứng.
+  - xóa `CartDetail` sau khi đặt xong.
+  - reset `cart.sum = 0`, lưu session `sum` = 0.
+
+17.4. Thanh toán VNPAY
+- `PaymentController.createPayment()` tạo URL tới cổng VNPAY.
+- Truyền tham số: amount, txnRef, locale, returnUrl.
+- Redirect sang cổng VNPAY.
+- Callback `/vnpay-return` nhận `vnp_ResponseCode`.
+  - nếu `00` => xử lý đặt hàng và lưu `paymentStatus=1`.
+  - nếu lỗi => báo thất bại.
+
+17.5. Đăng ký / đăng nhập / profile
+- `HomePageController` chỉ trả view cho register/login/profile.
+- Việc đăng nhập có thể do Spring Security xử lý ngoài controller.
+- Update profile: nếu upload avatar thì `UploadService.deleteAvatarImage()` và `handleSaveUploadFile()`.
+
+17.6. Admin CRUD
+- Các controller admin đều theo pattern:
+  - GET render view
+  - POST xử lý form, validate
+  - redirect sau khi thành công
+- `CategoriesController.deleteCategories(id)` gỡ liên kết category-product trước khi xoá.
+
+18. Frontend (JSP) dùng gì?
+---------------------------
+- Các view JSP dùng JSTL taglibs: `c` và `fmt`.
+- Dùng Bootstrap CSS và FontAwesome.
+- Dùng Owl Carousel cho carousel sản phẩm.
+- Dùng các file static ở `resources/static/css`, `resources/static/js`, `resources/images`.
+- Các page layout có include header/footer để tái sử dụng.
+- FE đọc model từ BE bằng `${attribute}`.
+- Các form POST dùng CSRF token `${_csrf.parameterName}` và `${_csrf.token}`.
+
+19. Liên kết BE/FE quan trọng
+----------------------------
+- BE controller trả model + view name.
+- FE JSP render model và tạo HTML.
+- Các URL action form/kết nối:
+  - `/add-product-to-cart/{id}` thêm giỏ hàng
+  - `/checkout`, `/confirm-checkout`, `/place-order`
+  - `/product`, `/product/{id}`
+  - `/admin/*` cho admin
+- Database chỉ được truy vấn trong service/repository, không truy vấn thẳng trong JSP.
+
+20. Ghi chú tổng quan
+---------------------
+- Tất cả dữ liệu sản phẩm chính đều từ table `products`.
+- Ảnh sản phẩm từ `product_image`.
+- Danh mục từ `categories` và join `product_category`.
+- Giỏ hàng và đơn hàng dùng `cart`, `cart_detail`, `orders`, `order_detail`.
+- `is_deleted` dùng để soft delete sản phẩm.
+- Luồng đặt hàng: giỏ hàng -> checkout -> thanh toán -> order -> xóa cart detail.
+
+End of file.

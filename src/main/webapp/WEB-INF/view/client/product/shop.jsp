@@ -1,375 +1,309 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-    <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-        <%@page contentType="text/html" pageEncoding="UTF-8" %>
-            <!DOCTYPE html>
-            <html lang="en">
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" %>
+<!DOCTYPE html>
+<html lang="en">
 
-            <head>
-                <meta charset="utf-8">
-                <title>Sản phẩm</title>
-                <meta content="width=device-width, initial-scale=1.0" name="viewport">
-                <meta content="" name="keywords">
-                <meta content="" name="description">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, width=device-width" />
+    <title>Sản phẩm - Fresh Food</title>
+    <meta content="" name="keywords">
+    <meta content="" name="description">
 
-                <!-- Google Web Fonts -->
-                <link rel="preconnect" href="https://fonts.googleapis.com">
-                <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-                <link
-                    href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Raleway:wght@600;800&display=swap"
-                    rel="stylesheet">
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Rubik:wght@500&display=swap" rel="stylesheet">
 
-                <!-- Icon Font Stylesheet -->
-                <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
-                <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css"
-                    rel="stylesheet">
+    <!-- Icon Font Stylesheet -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
-                <!-- Libraries Stylesheet -->
-                <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet">
-                <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <!-- Libraries Stylesheet -->
+    <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
 
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
 
-                <!-- Customized Bootstrap Stylesheet -->
-                <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="css/global.css" />
+    <link rel="stylesheet" href="css/index.css" />
+    
+    <!-- Template Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
 
-                <!-- Template Stylesheet -->
-                <link href="css/style.css" rel="stylesheet">
-            </head>
+    <style>
+        /* Keep the fixed header above all page content (shop page only) */
+        .header-top { z-index: 3000 !important; }
+        .header-nav { z-index: 2999 !important; }
 
-            <body>
+        /* Avoid stacking-context issues that can block header overlay */
+        .shop { isolation: auto !important; }
+    </style>
+</head>
 
-                <!-- Spinner Start -->
-                <div id="spinner"
-                    class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50  d-flex align-items-center justify-content-center">
-                    <div class="spinner-grow text-primary" role="status"></div>
-                </div>
-                <!-- Spinner End -->
+<body style="font-family: 'Inter', sans-serif;">
 
+    <!-- Spinner Start -->
+    <div id="spinner"
+        class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-grow text-primary" role="status"></div>
+    </div>
+    <!-- Spinner End -->
 
-                <!-- Navbar start -->
-                <jsp:include page="../layout/header.jsp" />
-                <!-- Navbar End -->
+    <div class="shop" style="gap: 0; justify-content: flex-start; align-items: stretch;">
+        <!-- Navbar start -->
+        <jsp:include page="../layout/header.jsp" />
+        <!-- Navbar End -->
 
-
-                <!-- Modal Search Start -->
-                <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog modal-fullscreen">
-                        <div class="modal-content rounded-0">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Search by keyword</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body d-flex align-items-center">
-                                <div class="input-group w-75 mx-auto d-flex">
-                                    <input type="search" class="form-control p-3" placeholder="keywords"
-                                        aria-describedby="search-icon-1">
-                                    <span id="search-icon-1" class="input-group-text p-3"><i
-                                            class="fa fa-search"></i></span>
-                                </div>
+        <main class="shop-inner">
+            <div class="frame-group" style="gap: 0;">
+                <div class="frame-container" style="gap: 0;">
+                    <div class="text-description-wrapper" style="background-image: url('/resources/images/content/Bgcontent.png'); background-size: cover; background-position: center; background-repeat: no-repeat; aspect-ratio: 1445 / 199; min-height: 199px; display: flex; align-items: center; justify-content: center; padding: 0 20px; margin: 0; margin-top: 0; width: 100vw; margin-left: calc(-50vw + 50%);">
+                        <div class="text-description" style="text-align: center; transform: translateY(45px);">
+                            <h2 class="page-title" style="color: #212337; font-size: 48px; font-weight: 700; margin-bottom: 8px;">Cửa hàng</h2>
+                            <div class="breadcrumb" style="color: #212337; font-size: 16px; letter-spacing: 0.5px;">
+                                <span>Trang chủ</span>
+                                <span class="ca-hng2" style="color: #ff6a1a;"> / Cửa hàng</span>
                             </div>
                         </div>
                     </div>
-                </div>
-                <!-- Modal Search End -->
-
-
-                <!-- Single Page Header start -->
-                <div class="container-fluid page-header py-5">
-                    <h1 class="text-center text-white display-6">Shop</h1>
-                    <ol class="breadcrumb justify-content-center mb-0">
-                        <li class="breadcrumb-item"><a href="/">Home</a></li>
-                        <li class="breadcrumb-item active text-white">Shop</li>
-                    </ol>
-                </div>
-                <!-- Single Page Header End -->
-
-
-                <!-- Fruits Shop Start-->
-                <div class="container-fluid fruite py-5">
-                    <div class="container py-5">
-                        <h1 class="mb-4">FarmFresh Shop</h1>
-                        <div class="row g-4">
-                            <div class="col-lg-12">
-                                <div class="row g-4">
-                                    <div class="col-xl-3">
-                                        <div class="input-group w-100 mx-auto d-flex">
-                                            <input type="search" class="form-control p-3" placeholder="Nhập từ khóa"
-                                                id="searchName" aria-describedby="search-icon-1">
-                                            <button id="btnFilterFirst" class="input-group-text p-3">
-                                                <i class="fa fa-search"></i>
-                                            </button>
+                    <div class="frame-div" style="display: flex; justify-content: center; width: 100%; padding: 40px 20px 24px 20px; margin: 0;">
+                        <div style="width: 100%; max-width: 1200px; padding: 0;">
+                            <section class="our-products" style="width: 100%; max-width: 100%; margin: 0; padding: 0; margin-top: 0px;">
+                                <div class="text-description2" style="width: 100%; margin: 0; display: flex; flex-direction: column; gap: 8px; padding: 0;">
+                                    <div class="caption" style="margin: 0; padding: 0;">
+                                        <h3 class="section-title" style="font-size: 14px; color: #749b3f; font-weight: 600; margin: 0 !important; background-color: #e8f3d6; padding: 4px 12px; display: inline-block; border-radius: 4px;">Sản phẩm của chúng tôi</h3>
+                                    </div>
+                                    <div class="text-description3" style="display: flex; flex-direction: column; align-items: flex-start !important; gap: 4px; margin: 0; padding: 0;">
+                                        <h2 class="page-title" style="margin: 0 !important; margin-left: 0 !important; padding: 0 !important; padding-left: 0 !important; font-size: 32px; color: #212337; font-weight: 700; text-align: left;">
+                                            Đặc sản vùng miền của chúng tôi
+                                        </h2>
+                                        <div class="section-description" style="font-size: 14px; color: #666; line-height: 1.5; text-align: left; margin: 0; padding: 0;">
+                                            Chúng tôi tự hào cung cấp nhiều loại trái cây, rau củ và nguyên liệu làm salad tươi ngon nhất.
                                         </div>
                                     </div>
-                                    <div class="col-6"></div>
-
                                 </div>
-                                <div class="row g-4 mt-2">
-                                    <div class="col-lg-3">
-                                        <div class="row g-4">
-                                            <div class="col-lg-12">
-                                                <div class="mb-3">
-                                                    <div class="mb-2"><b>Danh mục</b></div>
-                                                    <c:forEach var="category" items="${categories}">
-                                                        <div class="form-check form-check-inline">
-                                                            <input class="form-check-input category-checkbox"
-                                                                type="checkbox" id="category-${category.id}"
-                                                                value="${category.id}">
-                                                            <label class="form-check-label"
-                                                                for="factory-1">${category.name}</label>
-                                                        </div>
-                                                    </c:forEach>
+                                <div class="categories-parent" style="align-self: stretch; width: 100%; max-width: 1200px; display: flex; justify-content: space-between; align-items: center; gap: 20px; margin-top: 20px; flex-wrap: nowrap;">
+                                    <div class="categories" style="display: flex; gap: 12px; flex-wrap: nowrap; align-items: center; white-space: nowrap; flex: 1;">
+                                        <button class="button3" style="min-width: 120px; height: 48px; justify-content: center; align-items: center;">
+                                            <div class="c-sn-min">Tất cả</div>
+                                        </button>
+                                        <c:forEach var="category" items="${categories}">
+                                            <button class="button3" style="min-width: 120px; height: 48px; justify-content: center; align-items: center;">
+                                                <div class="c-sn-min">${category.name}</div>
+                                            </button>
+                                        </c:forEach>
+                                    </div>
+                                    <div style="display: flex; gap: 24px; align-items: center; flex-wrap: nowrap; justify-content: flex-end; flex-shrink: 0;">
+                                        <div class="sort-by" style="display: flex; flex-direction: row; gap: 12px; align-items: center; cursor: pointer; flex-wrap: nowrap; white-space: nowrap; position: relative;">
+                                            <span style="font-size: 14px; color: #666; font-weight: 500; font-family: 'Inter', sans-serif;">Nơi bán:</span>
+                                            <div class="location-dropdown" style="display: flex; gap: 6px; align-items: center; border: 1px solid #e5e7eb; border-radius: 4px; padding: 6px 12px; background-color: #f9fafb; flex-shrink: 0; cursor: pointer;" onclick="toggleDropdown(event, 'location-menu')">
+                                                <span style="font-size: 12px; color: #666;">▼</span>
+                                                <span style="font-size: 14px; color: #666; font-family: 'Inter', sans-serif;">Hà Nội</span>
+                                            </div>
+                                            <div id="location-menu" style="position: absolute; top: 100%; left: 60px; background: white; border: 1px solid #e5e7eb; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: none; z-index: 10; min-width: 150px;">
+                                                <div style="padding: 8px 0;">
+                                                    <div onclick="selectLocation(this, 'location-dropdown')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #333; font-family: 'Inter', sans-serif;" onmouseover="this.style.backgroundColor='#f0f0f0'" onmouseout="this.style.backgroundColor='transparent'">Hà Nội</div>
+                                                    <div onclick="selectLocation(this, 'location-dropdown')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #333; font-family: 'Inter', sans-serif;" onmouseover="this.style.backgroundColor='#f0f0f0'" onmouseout="this.style.backgroundColor='transparent'">Hồ Chí Minh</div>
+                                                    <div onclick="selectLocation(this, 'location-dropdown')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #333; font-family: 'Inter', sans-serif;" onmouseover="this.style.backgroundColor='#f0f0f0'" onmouseout="this.style.backgroundColor='transparent'">Đà Nẵng</div>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-12">
-                                                <div class="mb-3">
-                                                    <div class="mb-2"><b>Giá</b></div>
-                                                    <input type="range" class="form-range w-100" id="rangeInput"
-                                                        name="rangeInput" min="0" max="300000" value="0"
-                                                        oninput="amount.value=rangeInput.value">
-
-                                                    <span class="text-muted">0đ - </span>
-                                                    <output id="amount" name="amount" min-velue="0" max-value="300000"
-                                                        for="rangeInput">0đ</output>
+                                        </div>
+                                        <div class="sort-by3" style="display: flex; flex-direction: row; gap: 12px; align-items: center; cursor: pointer; flex-wrap: nowrap; white-space: nowrap; position: relative;">
+                                            <span style="font-size: 14px; color: #666; font-weight: 500; font-family: 'Inter', sans-serif;">Sắp xếp theo:</span>
+                                            <div class="sort-dropdown" style="display: flex; gap: 6px; align-items: center; border: 1px solid #e5e7eb; border-radius: 4px; padding: 6px 12px; background-color: #f9fafb; flex-shrink: 0; cursor: pointer;" onclick="toggleDropdown(event, 'sort-menu')">
+                                                <span style="font-size: 12px; color: #666;">▼</span>
+                                                <span style="font-size: 14px; color: #666; font-family: 'Inter', sans-serif;">Phổ biến</span>
+                                            </div>
+                                            <div id="sort-menu" style="position: absolute; top: 100%; right: 0; background: white; border: 1px solid #e5e7eb; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: none; z-index: 10; min-width: 150px;">
+                                                <div style="padding: 8px 0;">
+                                                    <div onclick="selectSort(this, 'sort-dropdown')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #333; font-family: 'Inter', sans-serif;" onmouseover="this.style.backgroundColor='#f0f0f0'" onmouseout="this.style.backgroundColor='transparent'">Phổ biến</div>
+                                                    <div onclick="selectSort(this, 'sort-dropdown')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #333; font-family: 'Inter', sans-serif;" onmouseover="this.style.backgroundColor='#f0f0f0'" onmouseout="this.style.backgroundColor='transparent'">Mới nhất</div>
+                                                    <div onclick="selectSort(this, 'sort-dropdown')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #333; font-family: 'Inter', sans-serif;" onmouseover="this.style.backgroundColor='#f0f0f0'" onmouseout="this.style.backgroundColor='transparent'">Giá thấp tới cao</div>
+                                                    <div onclick="selectSort(this, 'sort-dropdown')" style="padding: 8px 12px; cursor: pointer; font-size: 14px; color: #333; font-family: 'Inter', sans-serif;" onmouseover="this.style.backgroundColor='#f0f0f0'" onmouseout="this.style.backgroundColor='transparent'">Giá cao tới thấp</div>
                                                 </div>
                                             </div>
-                                            <div class="col-12">
-                                                <div class="mb-2"><b>Sắp xếp</b></div>
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input sort-radio" type="radio" id="sort-1"
-                                                        value="gia-tang-dan" name="radio-sort">
-                                                    <label class="form-check-label" for="sort-1">Giá tăng dần</label>
-                                                </div>
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input sort-radio" type="radio" id="sort-2"
-                                                        value="gia-giam-dan" name="radio-sort">
-                                                    <label class="form-check-label" for="sort-2">Giá giảm dần</label>
-                                                </div>
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input sort-radio" type="radio" id="sort-3"
-                                                        value="gia-nothing" name="radio-sort" checked>
-                                                    <label class="form-check-label" for="sort-3">Không sắp xếp</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-12">
-                                                <button
-                                                    class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4"
-                                                    id="btnFilter">
-                                                    Lọc Sản Phẩm
-                                                </button>
-                                            </div>
-                                            <div class="col-lg-12">
-                                                <h4 class="mb-3">Sản phẩm giảm giá</h4>
-                                                <c:forEach var="product" items="${topDiscountedProducts}">
-                                                    <div class="d-flex align-items-center justify-content-start">
-                                                        <div class="rounded me-4" style="width: 100px; height: 100px;">
-                                                            <a href="/product/${product.id}">
-                                                                <img src="/products/${product.firstImage}"
-                                                                    class="img-fluid rounded" alt="">
-                                                            </a>
-                                                        </div>
-                                                        <div>
-                                                            <a href="/product/${product.id}">
-                                                                <h6 class="mb-2">${product.name}</h6>
-                                                            </a>
-                                                            <div class="d-flex mb-2">
-                                                                <i class="fa fa-star text-secondary"></i>
-                                                                <i class="fa fa-star text-secondary"></i>
-                                                                <i class="fa fa-star text-secondary"></i>
-                                                                <i class="fa fa-star text-secondary"></i>
-                                                                <i class="fa fa-star"></i>
-                                                            </div>
-                                                            <div class="d-flex mb-2">
-                                                                <h5 class="fw-bold me-2 fs-6">
-                                                                    <fmt:formatNumber value="${product.salePrice}"
-                                                                        type="number" maxFractionDigits="2" />đ/kg
-                                                                </h5>
-                                                            </div>
-                                                            <div class="d-flex mb-2">
-                                                                <h5
-                                                                    class="text-danger text-decoration-line-through fs-6">
-                                                                    <fmt:formatNumber value="${product.price}"
-                                                                        type="number" maxFractionDigits="2" />đ/kg
-                                                                </h5>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </c:forEach>
-
-                                            </div>
-
                                         </div>
                                     </div>
-                                    <div class="col-lg-9">
-                                        <div class="row g-4 justify-content-center" id="productList">
+                                </div>
+                            </section>
+                                <section class="card2" style="display: grid; grid-template-columns: repeat(4, 282px); gap: 24px 24px; width: 1200px; margin: 30px auto 30px auto;">
+                                    <c:forEach var="product" items="${products}" varStatus="loop">
+                                        <c:if test="${loop.index < 21}">
+                                        <div class="product-cadt" style="width: 282px; height: 343px; display: flex; flex-direction: column;">
+                                            <div class="product-img-container bg-icon" style="width: 258px; height: 200px; margin: 0 auto;">
+                                                <c:if test="${not empty product.firstImage}">
+                                                    <img src="/products/${product.firstImage}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/258x200/e0e0e0/999?text=${product.name}'" style="width: 100%; height: 100%; object-fit: cover;">
+                                                </c:if>
+                                                <c:if test="${empty product.firstImage}">
+                                                    <img src="https://via.placeholder.com/258x200/e0e0e0/999?text=${product.name}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover;">
+                                                </c:if>
+                                            </div>
+                                            <div class="bnh-phu-th-h-ni-gi-500g-parent" style="flex: 1; display: flex; flex-direction: column; padding: 8px; width: 100%; box-sizing: border-box;">
+                                                <b class="bnh-phu-th" style="flex-shrink: 0; margin-bottom: 6px;">${product.name}</b>
+                                                <c:choose>
+                                                    <c:when test="${product.salePrice != 0 && product.salePrice < product.price}">
+                                                        <div style="display: flex; align-items: center; gap: 8px; justify-content: center; margin-bottom: 8px; flex-shrink: 0;">
+                                                            <span style="font-size: 16px; font-weight: 600; color: #ff6a1a;">
+                                                                <fmt:formatNumber value="${product.salePrice}" type="number" maxFractionDigits="0" />đ
+                                                            </span>
+                                                            <span style="font-size: 13px; color: #999; text-decoration: line-through;">
+                                                                <fmt:formatNumber value="${product.price}" type="number" maxFractionDigits="0" />đ
+                                                            </span>
+                                                        </div>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <div style="font-size: 16px; font-weight: 600; color: #ff6a1a; margin-bottom: 8px; flex-shrink: 0;">
+                                                            <fmt:formatNumber value="${product.price}" type="number" maxFractionDigits="0" />đ
+                                                        </div>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                                <form action="/add-product-to-cart/${product.id}" method="post" style="margin-top: auto; width: 258px; margin-left: 8px; margin-right: 8px;">
+                                                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+                                                    <button type="submit" class="button7" onmouseover="this.style.backgroundColor='#ff6a1a'; this.style.color='white';" onmouseout="this.style.backgroundColor='white'; this.style.color='#1f2937';" style="background-color: white; color: #1f2937; border: 1px solid #e5e7eb; padding: 10px 16px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; width: 100%;">
+                                                        <span>Thêm vào giỏ hàng</span>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        </c:if>
+                                    </c:forEach>
+                                </section>
+                                <c:if test="${!empty products}">
+                                    <div style="display: flex; justify-content: center; margin-top: 24px; margin-bottom: 16px; gap: 6px;">
+                                        <c:if test="${currentPage > 1}">
+                                            <a href="/product?page=${currentPage - 1}" style="width: 32px; height: 32px; border: 1px solid #d9d9d9; display: flex; align-items: center; justify-content: center; border-radius: 4px; text-decoration: none; color: #212337; font-size: 14px;">
+                                                &laquo;
+                                            </a>
+                                        </c:if>
+                                        <c:forEach begin="0" end="${totalPages-1}" varStatus="loop">
                                             <c:choose>
-                                                <c:when test="${empty products}">
-                                                    <div class="col-12 text-center py-5">
-                                                        <p class="fs-4">Không tìm thấy sản phẩm phù hợp.</p>
-                                                    </div>
+                                                <c:when test="${(loop.index + 1) == currentPage}">
+                                                    <button style="width: 32px; height: 32px; background-color: #ff6a1a; border: 1px solid #ff6a1a; color: white; border-radius: 4px; font-weight: 600; cursor: default; font-size: 14px; padding: 0; display: flex; align-items: center; justify-content: center;">
+                                                        ${loop.index + 1}
+                                                    </button>
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <c:forEach var="product" items="${products}">
-                                                        <div class="col-md-6 col-lg-6 col-xl-4">
-                                                            <div class="rounded position-relative fruite-item">
-                                                                <div class="fruite-img">
-                                                                    <a href="/product/${product.id}">
-                                                                        <img src="/products/${product.firstImage}"
-                                                                            class="img-fluid w-100 rounded-top" alt="">
-                                                                    </a>
-                                                                </div>
-
-                                                                <div
-                                                                    class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                                                    <a href="/product/${product.id}">
-                                                                        <h4>${product.name}</h4>
-                                                                    </a>
-                                                                    <p>${product.shortDesc}</p>
-                                                                    <div
-                                                                        class="d-flex justify-content-between flex-lg-wrap">
-                                                                        <div
-                                                                            class="d-flex justify-content-between align-items-center flex-wrap">
-                                                                            <c:choose>
-                                                                                <c:when
-                                                                                    test="${product.salePrice != 0 && product.salePrice < product.price}">
-                                                                                    <p
-                                                                                        class="text-danger fs-5 fw-bold mb-0">
-
-                                                                                        <fmt:formatNumber
-                                                                                            value="${product.salePrice}"
-                                                                                            type="number"
-                                                                                            maxFractionDigits="2" />đ/kg
-                                                                                        <span
-                                                                                            class="text-muted ms-2 fs-6"
-                                                                                            style="text-decoration: line-through;">
-                                                                                            <fmt:formatNumber
-                                                                                                value="${product.price}"
-                                                                                                type="number"
-                                                                                                maxFractionDigits="2" />
-                                                                                            đ/kg
-                                                                                        </span>
-                                                                                    </p>
-                                                                                </c:when>
-                                                                                <c:otherwise>
-                                                                                    <p
-                                                                                        class="text-dark fs-5 fw-bold mb-0">
-
-                                                                                        <fmt:formatNumber
-                                                                                            value="${product.price}"
-                                                                                            type="number"
-                                                                                            maxFractionDigits="2" /> /
-                                                                                        kg
-                                                                                    </p>
-                                                                                </c:otherwise>
-                                                                            </c:choose>
-                                                                        </div>
-                                                                        <form
-                                                                            action="/add-product-to-cart/${product.id}"
-                                                                            method="post">
-                                                                            <input type="hidden"
-                                                                                name="${_csrf.parameterName}"
-                                                                                value="${_csrf.token}" />
-
-                                                                            <button
-                                                                                class="mx-auto btn border border-secondary rounded-pill px-3 text-primary"><i
-                                                                                    class="fa fa-shopping-bag me-2 text-primary"></i>
-                                                                                Thêm vào giỏ hàng
-                                                                            </button>
-                                                                        </form>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </c:forEach>
-                                                    <div class="col-12">
-                                                        <div class="pagination d-flex justify-content-center mt-5">
-                                                            <c:if test="${currentPage > 1}">
-                                                                <li class="page-item">
-                                                                    <a href="?page=${currentPage - 1}" class="rounded">
-                                                                        <span aria-hidden="true">&laquo;</span>
-                                                                    </a>
-                                                                </li>
-
-                                                            </c:if>
-                                                            <c:forEach begin="0" end="${totalPages-1}" varStatus="loop">
-                                                                <li class="page-item">
-                                                                    <a class="${(loop.index + 1) eq currentPage ? 'active rounded' : 'rounded'}"
-                                                                        href="/product?page=${loop.index + 1}">${loop.index
-                                                                        + 1}
-                                                                    </a>
-                                                                </li>
-
-                                                            </c:forEach>
-
-                                                            <c:if test="${currentPage < totalPages}">
-                                                                <li class="page-item">
-                                                                    <a href="?page=${currentPage + 1}" class="rounded">
-                                                                        <span aria-hidden="true">&raquo;</span>
-                                                                    </a>
-                                                                </li>
-                                                            </c:if>
-
-                                                        </div>
-                                                    </div>
+                                                    <a href="/product?page=${loop.index + 1}" style="width: 32px; height: 32px; border: 1px solid #d9d9d9; display: flex; align-items: center; justify-content: center; border-radius: 4px; text-decoration: none; color: #212337; font-size: 14px;">
+                                                        ${loop.index + 1}
+                                                    </a>
                                                 </c:otherwise>
                                             </c:choose>
-                                        </div>
+                                        </c:forEach>
+                                        <c:if test="${currentPage < totalPages}">
+                                            <a href="/product?page=${currentPage + 1}" style="width: 32px; height: 32px; border: 1px solid #d9d9d9; display: flex; align-items: center; justify-content: center; border-radius: 4px; text-decoration: none; color: #212337; font-size: 14px;">
+                                                &raquo;
+                                            </a>
+                                        </c:if>
                                     </div>
-                                </div>
+                                </c:if>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- Fruits Shop End-->
+            </div>
+        </main>
 
+        <!-- Flash Sale Section -->
+        <section class="homepage-inner" style="margin-top: 0; margin-bottom: 16px; min-height: auto; padding: 0; position: relative; z-index: 0;">
+            <div class="special-offer-wrapper" style="position: relative; z-index: 0; overflow: hidden; padding: 200px 10px 80px 180px; box-sizing: border-box; background-image: url('/resources/images/content/FooterSection.png'); background-size: 100% auto; background-position: center top; background-repeat: no-repeat; background-attachment: scroll;">
+                <div class="special-offer" style="position: relative; z-index: 1; gap: 24px; align-items: flex-start; text-align: left;">
+                    <section class="special-offer2" style="gap: 20px; align-items: flex-start;">
+                        <div class="text-description5" style="gap: 16px; align-items: flex-start;">
+                            <div class="text-description6">
+                                <div class="text-description7">
+                                    <div class="caption2" style="background-color: rgba(116, 155, 63, 0.3);">
+                                        <h3 class="u-i-c" style="color: #749b3f;">Ưu đãi đặc biệt</h3>
+                                    </div>
+                                </div>
+                                <h1 class="flash-sale2" style="color: #1f2937;">Flash Sale</h1>
+                            </div>
+                            <h2 class="gim-gi-ln-container" style="color: #1f2937;">
+                                <span>Giảm giá lên tới </span>
+                                <span class="off" style="color: #ff7a3d; font-weight: bold;">80% OFF</span>
+                            </h2>
+                        </div>
+                        <div class="countdown" style="color: #212337; justify-content: flex-start;">
+                            <div class="countdown2">
+                                <h2 class="countdown-delimiters">03</h2>
+                                <div class="ngy-wrapper"><div class="ngy">Ngày</div></div>
+                            </div>
+                            <div class="countdown3">
+                                <h2 class="h2">18</h2>
+                                <div class="gi-wrapper"><div class="gi">Giờ</div></div>
+                            </div>
+                            <div class="countdown2">
+                                <h2 class="countdown-delimiters">54</h2>
+                                <div class="pht-wrapper"><div class="pht">Phút</div></div>
+                            </div>
+                            <div class="countdown3">
+                                <h2 class="h2">21</h2>
+                                <div class="ngy-wrapper"><div class="ma">Mùa</div></div>
+                            </div>
+                        </div>
+                    </section>
+                    <button class="button16" style="background-color: #176d38;">
+                        <b class="code-fruit28-container">
+                            <span class="code">CODE : </span>
+                            <span class="fruit28" style="color: #ffeb3b; font-weight: bold;">FRUIT28</span>
+                        </b>
+                    </button>
+                </div>
+            </div>
+        </section>
 
+        <!-- Footer -->
+        <jsp:include page="../layout/footer.jsp" />
+    </div>
 
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i
+            class="fa fa-arrow-up"></i></a>
 
-                <jsp:include page="../layout/footer.jsp" />
+    <!-- JavaScript Libraries -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/lightbox/js/lightbox.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
 
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
+    
+    <script>
+        function toggleDropdown(event, menuId) {
+            event.stopPropagation();
+            const menu = document.getElementById(menuId);
+            menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+        }
+        
+        function selectLocation(element, dropdownId) {
+            const value = element.textContent;
+            const dropdown = document.querySelector('.' + dropdownId);
+            dropdown.querySelector('span:last-child').textContent = value;
+            document.getElementById('location-menu').style.display = 'none';
+        }
+        
+        function selectSort(element, dropdownId) {
+            const value = element.textContent;
+            const dropdown = document.querySelector('.' + dropdownId);
+            dropdown.querySelector('span:last-child').textContent = value;
+            document.getElementById('sort-menu').style.display = 'none';
+        }
+        
+        document.addEventListener('click', function() {
+            document.getElementById('location-menu').style.display = 'none';
+            document.getElementById('sort-menu').style.display = 'none';
+        });
+        
+        document.querySelector('.location-dropdown')?.addEventListener('click', function(e) { e.stopPropagation(); });
+        document.querySelector('.sort-dropdown')?.addEventListener('click', function(e) { e.stopPropagation(); });
+    </script>
 
+</body>
 
-                <!-- Back to Top -->
-                <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i
-                        class="fa fa-arrow-up"></i></a>
-
-
-                <!-- JavaScript Libraries -->
-                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-                <script src="lib/easing/easing.min.js"></script>
-                <script src="lib/waypoints/waypoints.min.js"></script>
-                <script src="lib/lightbox/js/lightbox.min.js"></script>
-                <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-
-                <!-- Template Javascript -->
-                <script src="js/main.js"></script>
-
-                <script>
-                    function loadProducts(page = 1) {
-                        const sort = document.getElementById('sortSelect').value;
-
-                        fetch(`/products/ajax?sort=${sort}&page=${page}`)
-                            .then(res => res.text())
-                            .then(html => {
-                                document.getElementById('productList').innerHTML = html;
-                            })
-                            .catch(err => console.error("Lỗi khi tải sản phẩm:", err));
-                    }
-
-                    // Lắng nghe click trên phân trang (gắn vào <a data-page="...">)
-                    document.addEventListener('click', function (e) {
-                        if (e.target.matches('.pagination a')) {
-                            e.preventDefault();
-                            const page = e.target.dataset.page;
-                            if (page) {
-                                loadProducts(page);
-                            }
-                        }
-                    });
-                </script>
-
-
-            </body>
-
-            </html>
+</html>
