@@ -44,9 +44,6 @@
 
         /* Shop page fix: remove forced tall container that creates huge whitespace */
         .frame-div { min-height: auto !important; }
-
-        /* Shop page fix: footer adds a big top margin by default */
-        body .footer-main { margin-top: 16px !important; }
     </style>
 </head>
 
@@ -215,7 +212,7 @@
 
         <!-- Flash Sale Section -->
         <section class="homepage-inner" style="min-height: auto; padding-bottom: 0;">
-            <div class="special-offer-wrapper" style="background-image: url('/resources/images/content/FooterSection.png'); background-size: 100% auto; background-position: center top; background-repeat: no-repeat; background-attachment: scroll; padding: 50px 10px 16px 180px;">
+            <div class="special-offer-wrapper" style="background-image: url('/resources/images/content/FooterSection.png'); background-size: 100% auto; background-position: center top; background-repeat: no-repeat; background-attachment: scroll; aspect-ratio: 1440 / 640; padding: 100px 10px 52px 180px;">
                 <div class="special-offer">
                     <section class="special-offer2">
                         <div class="text-description5">

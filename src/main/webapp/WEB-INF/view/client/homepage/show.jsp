@@ -484,7 +484,7 @@
         </section>
         
         <section class="homepage-inner" style="min-height: auto; padding-bottom: 0;">
-            <div class="special-offer-wrapper" style="background-image: url('images/content/FooterSection.png'); background-size: 100% auto; background-position: center top; background-repeat: no-repeat; background-attachment: scroll; padding: 100px 10px 52px 180px;">
+            <div class="special-offer-wrapper" style="background-image: url('images/content/FooterSection.png'); background-size: 100% auto; background-position: center top; background-repeat: no-repeat; background-attachment: scroll; aspect-ratio: 1440 / 640; padding: 100px 10px 52px 180px;">
                 <div class="special-offer">
                     <section class="special-offer2">
                         <div class="text-description5">
