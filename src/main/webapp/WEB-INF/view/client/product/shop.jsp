@@ -64,8 +64,8 @@
         <main class="shop-inner">
             <div class="frame-group" style="gap: 0;">
                 <div class="frame-container" style="gap: 0;">
-                    <div class="text-description-wrapper" style="background-image: url('/resources/images/content/Bgcontent.png'); background-size: cover; background-position: center; background-repeat: no-repeat; aspect-ratio: 1445 / 199; min-height: 199px; display: flex; align-items: center; justify-content: center; padding: 0 20px; margin: 0; margin-top: 0; width: 100vw; margin-left: calc(-50vw + 50%);">
-                        <div class="text-description" style="text-align: center; transform: translateY(45px);">
+                    <div class="text-description-wrapper" style="background-image: url('/resources/images/content/Bgcontent.png'); background-size: cover; background-position: center; background-repeat: no-repeat; aspect-ratio: 1445 / 199; min-height: 199px; display: flex; align-items: center; justify-content: center; padding: 0 20px; margin: 0; margin-top: 0; width: 100vw; margin-left: calc(-50vw + 50%); position: relative;">
+                        <div class="text-description" style="text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; position: relative; z-index: 1;">
                             <h2 class="page-title" style="color: #212337; font-size: 48px; font-weight: 700; margin-bottom: 8px;">Cửa hàng</h2>
                             <div class="breadcrumb" style="color: #212337; font-size: 16px; letter-spacing: 0.5px;">
                                 <span>Trang chủ</span>
