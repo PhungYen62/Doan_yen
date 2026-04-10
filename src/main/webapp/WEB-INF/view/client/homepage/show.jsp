@@ -507,6 +507,10 @@
                         display: flex;
                         flex-direction: column;
                     }
+
+                    .js-product-card {
+                        cursor: pointer;
+                    }
                 </style>
             </head>
 
@@ -622,7 +626,7 @@
                                 <section class="card2">
                                     <c:forEach var="product" items="${discountedProducts}" varStatus="loop">
                                         <c:if test="${loop.index < 8}">
-                                            <div class="product-cadt">
+                                            <div class="product-cadt js-product-card" role="link" tabindex="0" data-href="/product/${product.id}">
                                                 <div class="product-img-container bg-icon">
                                                     <c:if test="${not empty product.firstImage}">
                                                         <img src="images/${product.firstImage}" alt="${product.name}"
@@ -747,7 +751,7 @@
                                         <div class="card">
                                             <section class="card2">
                                                 <c:forEach var="product" items="${discountedProducts}">
-                                                    <div class="product-cadt">
+                                                    <div class="product-cadt js-product-card" role="link" tabindex="0" data-href="/product/${product.id}">
                                                         <div class="product-img-container bg-icon">
                                                             <c:if test="${not empty product.firstImage}">
                                                                 <img src="images/${product.firstImage}"
@@ -1011,6 +1015,35 @@
 
                     // Initialize slider
                     startAutoPlay();
+
+                    // Make the whole product card navigate to detail page.
+                    (function () {
+                        function shouldIgnoreNavigation(target) {
+                            return !!(target.closest('form') || target.closest('button') || target.closest('a') || target.closest('input') || target.closest('select') || target.closest('textarea'));
+                        }
+
+                        function navigateFromCard(card) {
+                            var href = card.getAttribute('data-href');
+                            if (!href) return;
+                            window.location.href = href;
+                        }
+
+                        document.addEventListener('click', function (e) {
+                            var card = e.target.closest('.js-product-card');
+                            if (!card) return;
+                            if (shouldIgnoreNavigation(e.target)) return;
+                            navigateFromCard(card);
+                        });
+
+                        document.addEventListener('keydown', function (e) {
+                            var card = e.target.closest('.js-product-card');
+                            if (!card) return;
+                            if (e.key !== 'Enter' && e.key !== ' ') return;
+                            if (shouldIgnoreNavigation(e.target)) return;
+                            e.preventDefault();
+                            navigateFromCard(card);
+                        });
+                    })();
                 </script>
             </body>
 

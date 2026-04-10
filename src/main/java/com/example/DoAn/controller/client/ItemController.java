@@ -120,7 +120,7 @@ public class ItemController {
     }
 
     @GetMapping("/product/{id}")
-    public String getProductDetail(Model model, @PathVariable long id) {
+    public String getProductDetail(Model model, @PathVariable("id") long id) {
         Product pr = this.productService.fetchProductById(id).get();
         List<Product> relatedProducts = this.productService.findRelatedProducts(pr);
         model.addAttribute("relatedProducts", relatedProducts);

@@ -67,7 +67,7 @@ public class CartController {
     }
 
     @PostMapping("/add-product-to-cart/{id}")
-    public String addProductToCart(@PathVariable long id, HttpServletRequest request,
+    public String addProductToCart(@PathVariable("id") long id, HttpServletRequest request,
             @RequestParam(name = "quantity", required = false, defaultValue = "1") int quantity) {
 
         HttpSession session = request.getSession(false);
@@ -81,7 +81,7 @@ public class CartController {
     }
 
     @PostMapping("/delete-cart-product/{id}")
-    public String deleteCartDetail(@PathVariable long id, HttpServletRequest request) {
+    public String deleteCartDetail(@PathVariable("id") long id, HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         long cartDetailId = id;
         this.productService.handleRemoveCartDetail(cartDetailId, session);
