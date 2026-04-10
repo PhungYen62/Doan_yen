@@ -151,7 +151,7 @@
                                     </c:set>
                                     <div
                                         class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start mb-4">
-                                        <p class="fw-bold text-center " style="font-size: 28px">Đăng ký tài khoản</p>
+                                        <p class="fw-bold text-center " style="font-size: 16px">Đăng ký tài khoản</p>
                                     </div>
                                     <div class="row mb-3">
                                         <div class="col-md-6">

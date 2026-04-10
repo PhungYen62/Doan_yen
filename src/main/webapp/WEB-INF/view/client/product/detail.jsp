@@ -33,6 +33,323 @@
 
                 <!-- Template Stylesheet -->
                 <link href="/css/style.css" rel="stylesheet">
+
+                <style>
+                    .detail-gallery {
+                        border: 1px solid rgba(0, 0, 0, .08);
+                        border-radius: 12px;
+                        background: var(--bs-white);
+                        overflow: hidden;
+                    }
+
+                    .detail-gallery img {
+                        width: 100%;
+                        height: auto;
+                        display: block;
+                    }
+
+                    .detail-thumbs {
+                        display: grid;
+                        grid-template-columns: repeat(3, 1fr);
+                        gap: 12px;
+                        margin-top: 14px;
+                        max-width: 360px;
+                    }
+
+                    @media (min-width: 992px) {
+                        .detail-thumbs {
+                            grid-template-columns: repeat(3, 1fr);
+                        }
+                    }
+
+                    .detail-thumb {
+                        border: 1px solid rgba(0, 0, 0, .08);
+                        border-radius: 12px;
+                        overflow: hidden;
+                        background: var(--bs-white);
+                        cursor: pointer;
+                        aspect-ratio: 1 / 1;
+                    }
+
+                    .detail-thumb img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                        display: block;
+                    }
+
+                    .detail-badge {
+                        display: inline-block;
+                        font-size: 12px;
+                        font-weight: 600;
+                        padding: 4px 10px;
+                        border-radius: 8px;
+                        background-color: rgba(116, 155, 63, 0.10);
+                        color: var(--primary-green);
+                    }
+
+                    .detail-rating-star {
+                        color: var(--bs-orange);
+                    }
+
+                    .detail-actions {
+                        display: flex;
+                        gap: 12px;
+                        flex-wrap: wrap;
+                        align-items: center;
+                    }
+
+                    .detail-price {
+                        color: var(--bs-orange);
+                    }
+
+                    .btn-detail-orange {
+                        background-color: var(--bs-orange);
+                        border-color: var(--bs-orange);
+                        color: var(--bs-white);
+                    }
+
+                    .btn-detail-orange:hover,
+                    .btn-detail-orange:focus {
+                        background-color: var(--bs-orange);
+                        border-color: var(--bs-orange);
+                        opacity: .92;
+                        color: var(--bs-white);
+                    }
+
+                    .detail-actions .btn {
+                        border-radius: 10px;
+                        padding: 12px 18px;
+                        font-weight: 500;
+                    }
+
+                    .detail-fav {
+                        width: 44px;
+                        height: 44px;
+                        border-radius: 10px;
+                        border: 1px solid rgba(0, 0, 0, .12);
+                        background: var(--bs-white);
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: var(--bs-gray-600);
+                        text-decoration: none;
+                    }
+
+                    .detail-qty {
+                        border: 1px solid rgba(0, 0, 0, .18);
+                        border-radius: 10px;
+                        overflow: hidden;
+                        background: var(--bs-white);
+                    }
+
+                    .detail-qty .detail-qty-btn {
+                        width: 44px;
+                        border: 0;
+                        border-radius: 0 !important;
+                        background: transparent;
+                        color: var(--bs-dark);
+                    }
+
+                    .detail-qty .detail-qty-btn:focus {
+                        box-shadow: none;
+                    }
+
+                    .detail-qty .detail-qty-btn.detail-qty-minus {
+                        border-right: 1px solid rgba(0, 0, 0, .12);
+                    }
+
+                    .detail-qty .detail-qty-btn.detail-qty-plus {
+                        border-left: 1px solid rgba(0, 0, 0, .12);
+                    }
+
+                    .detail-qty .detail-qty-input {
+                        border: 0;
+                        border-radius: 0 !important;
+                        box-shadow: none;
+                        font-weight: 600;
+                        background: transparent;
+                    }
+
+                    .detail-tabs .nav-tabs {
+                        border-bottom: 0;
+                        gap: 16px;
+                    }
+
+                    .detail-tabs .nav-tabs .nav-link {
+                        margin-bottom: 0;
+                        border: 1px solid rgba(0, 0, 0, .15) !important;
+                        border-radius: 8px;
+                        padding: 10px 28px;
+                        font-weight: 500;
+                        background: var(--bs-white);
+                        color: rgba(0, 0, 0, .45);
+                    }
+
+                    .detail-tabs .nav-tabs .nav-link:hover {
+                        color: rgba(0, 0, 0, .65);
+                    }
+
+                    .detail-tabs .nav-tabs .nav-link.active {
+                        background: var(--primary-green) !important;
+                        border-color: var(--primary-green) !important;
+                        color: var(--bs-white) !important;
+                    }
+
+                    .detail-related-label {
+                        display: inline-block;
+                        padding: 6px 14px;
+                        border-radius: 8px;
+                        background-color: rgba(116, 155, 63, 0.10);
+                        color: var(--primary-green);
+                        font-size: 12px;
+                        font-weight: 600;
+                    }
+
+                    .detail-related-grid {
+                        display: grid;
+                        grid-template-columns: repeat(4, 282px);
+                        gap: 24px;
+                        width: 1200px;
+                        max-width: 100%;
+                        margin: 16px auto 0 auto;
+                        justify-content: center;
+                    }
+
+                    @media (max-width: 1200px) {
+                        .detail-related-grid {
+                            width: 100%;
+                            grid-template-columns: repeat(2, minmax(0, 1fr));
+                        }
+                    }
+
+                    @media (max-width: 576px) {
+                        .detail-related-grid {
+                            grid-template-columns: 1fr;
+                        }
+                    }
+
+                    .detail-related-card {
+                        width: 282px;
+                        height: 343px;
+                        display: flex;
+                        flex-direction: column;
+                        padding: 12px;
+                        border-radius: 18px;
+                        background: var(--bs-white);
+                        border: 0;
+                        box-shadow:
+                            0 4px 10px rgba(16, 24, 40, 0.04),
+                            0 1px 3px rgba(16, 24, 40, 0.02);
+                        box-sizing: border-box;
+                        transition: all 0.3s ease;
+                    }
+
+                    .detail-related-card.js-product-card {
+                        cursor: pointer;
+                    }
+
+                    .detail-related-card:hover {
+                        transform: translateY(-8px);
+                        box-shadow:
+                            0 10px 22px rgba(16, 24, 40, 0.08),
+                            0 2px 6px rgba(16, 24, 40, 0.03);
+                    }
+
+                    .detail-related-card:active {
+                        transform: translateY(-4px);
+                    }
+
+                    @media (max-width: 1200px) {
+                        .detail-related-card {
+                            width: 100%;
+                        }
+                    }
+
+                    .detail-related-img {
+                        height: 200px;
+                        width: 100%;
+                        margin: 0;
+                        background: var(--bs-light);
+                        border-radius: 14px;
+                        overflow: hidden;
+                    }
+
+                    @media (max-width: 1200px) {
+                        .detail-related-img {
+                            width: 100%;
+                        }
+                    }
+
+                    .detail-related-img img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                        display: block;
+                    }
+
+                    .detail-related-body {
+                        flex: 1;
+                        display: flex;
+                        flex-direction: column;
+                        padding: 12px 8px 10px 8px;
+                        width: 100%;
+                        box-sizing: border-box;
+                        text-align: center;
+                        gap: 10px;
+                    }
+
+                    .detail-related-name {
+                        flex-shrink: 0;
+                        font-weight: 600;
+                        color: var(--bs-dark);
+                    }
+
+                    .detail-related-prices {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 8px;
+                        flex-shrink: 0;
+                    }
+
+                    .detail-related-price {
+                        font-size: 16px;
+                        font-weight: 600;
+                        color: var(--bs-orange);
+                    }
+
+                    .detail-related-price-old {
+                        font-size: 13px;
+                        color: #999;
+                        text-decoration: line-through;
+                    }
+
+                    .detail-related-form {
+                        margin-top: auto;
+                        width: 100%;
+                        padding-top: 4px;
+                    }
+
+                    .detail-related-add {
+                        background-color: var(--bs-white);
+                        color: var(--bs-dark);
+                        border: 1px solid rgba(0, 0, 0, .12);
+                        padding: 10px 16px;
+                        border-radius: 6px;
+                        font-size: 14px;
+                        font-weight: 600;
+                        cursor: pointer;
+                        transition: all 0.2s ease;
+                        width: 100%;
+                    }
+
+                    .detail-related-add:hover {
+                        background-color: var(--bs-orange);
+                        border-color: var(--bs-orange);
+                        color: var(--bs-white);
+                    }
+                </style>
             </head>
 
             <body>
@@ -44,263 +361,206 @@
                 </div>
                 <!-- Spinner End -->
 
-
                 <!-- Navbar start -->
                 <jsp:include page="../layout/header.jsp" />
                 <!-- Navbar End -->
 
+                <div class="container-fluid pt-4 pb-5">
+                    <div class="container pb-3 pb-lg-4">
+                        <div class="row g-4">
+                            <div class="col-lg-6">
+                                <div class="detail-gallery">
+                                    <img id="detailMainImage" src="/products/${product.firstImage}" alt="${product.name}">
+                                </div>
 
-                <!-- Modal Search Start -->
-                <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog modal-fullscreen">
-                        <div class="modal-content rounded-0">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Search by keyword</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
+                                <div class="detail-thumbs" aria-label="Ảnh sản phẩm">
+                                    <c:choose>
+                                        <c:when test="${not empty product.images}">
+                                            <c:forEach var="img" items="${product.images}" varStatus="status">
+                                                <c:if test="${status.index < 3}">
+                                                    <div class="detail-thumb" role="button" tabindex="0" data-img-src="/products/${img.imageUrl}" aria-label="Ảnh ${status.index + 1}">
+                                                        <img src="/products/${img.imageUrl}" alt="${product.name} - ${status.index + 1}">
+                                                    </div>
+                                                </c:if>
+                                            </c:forEach>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <div class="detail-thumb" role="button" tabindex="0" data-img-src="/products/${product.firstImage}" aria-label="Ảnh 1">
+                                                <img src="/products/${product.firstImage}" alt="${product.name}">
+                                            </div>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </div>
                             </div>
-                            <div class="modal-body d-flex align-items-center">
-                                <div class="input-group w-75 mx-auto d-flex">
-                                    <input type="search" class="form-control p-3" placeholder="keywords"
-                                        aria-describedby="search-icon-1">
-                                    <span id="search-icon-1" class="input-group-text p-3"><i
-                                            class="fa fa-search"></i></span>
+
+                            <div class="col-lg-6">
+                                <div class="mb-2">
+                                    <c:if test="${not empty product.categories}">
+                                        <span class="detail-badge">
+                                            <c:forEach var="category" items="${product.categories}" varStatus="status">
+                                                <c:if test="${status.first}">${category.name}</c:if>
+                                            </c:forEach>
+                                        </span>
+                                    </c:if>
+                                </div>
+
+                                <h2 class="fw-bold mb-2">${product.name}</h2>
+
+                                <div class="d-flex align-items-center gap-2 mb-3" style="font-size: 14px;">
+                                    <div class="d-flex" style="gap: 2px;">
+                                        <i class="fa fa-star detail-rating-star"></i>
+                                        <i class="fa fa-star detail-rating-star"></i>
+                                        <i class="fa fa-star detail-rating-star"></i>
+                                        <i class="fa fa-star detail-rating-star"></i>
+                                        <i class="fa fa-star detail-rating-star"></i>
+                                    </div>
+                                    <span class="text-muted">5.0</span>
+                                    <span class="text-muted">(1 Review)</span>
+                                </div>
+
+                                <div class="mb-3">
+                                    <c:choose>
+                                        <c:when test="${product.salePrice != 0 && product.salePrice < product.price}">
+                                            <div class="d-flex align-items-baseline flex-wrap gap-2">
+                                                <span class="detail-price fw-bold" style="font-size: 26px;">
+                                                    <fmt:formatNumber value="${product.salePrice}" type="number" maxFractionDigits="2" />đ/kg
+                                                </span>
+                                                <span class="text-muted" style="text-decoration: line-through;">
+                                                    <fmt:formatNumber value="${product.price}" type="number" maxFractionDigits="2" />đ/kg
+                                                </span>
+                                            </div>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <span class="detail-price fw-bold" style="font-size: 26px;">
+                                                <fmt:formatNumber value="${product.price}" type="number" maxFractionDigits="2" />đ/kg
+                                            </span>
+                                        </c:otherwise>
+                                    </c:choose>
+
+                                    <c:if test="${not empty product.shortDesc}">
+                                        <div class="text-muted mt-2">${product.shortDesc}</div>
+                                    </c:if>
+                                </div>
+
+                                <form action="/add-product-to-cart/${product.id}" method="post">
+                                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+
+                                    <div class="d-flex align-items-center flex-wrap gap-3 mb-4">
+                                        <div class="text-dark fw-semibold">Số lượng</div>
+                                        <div class="input-group quantity detail-qty" style="width: 140px;">
+                                            <div class="input-group-btn">
+                                                <button type="button" class="btn btn-sm btn-minus detail-qty-btn detail-qty-minus">
+                                                    <i class="fa fa-minus"></i>
+                                                </button>
+                                            </div>
+                                            <input type="text" name="quantity" class="form-control form-control-sm text-center detail-qty-input" value="1">
+                                            <div class="input-group-btn">
+                                                <button type="button" class="btn btn-sm btn-plus detail-qty-btn detail-qty-plus">
+                                                    <i class="fa fa-plus"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <span class="text-muted" style="font-size: 13px;">/kg</span>
+                                    </div>
+
+                                    <div class="detail-actions">
+                                        <button type="submit" class="btn btn-detail-orange">
+                                            <i class="fa fa-shopping-bag me-2"></i>
+                                            Thêm vào giỏ hàng
+                                        </button>
+
+                                        <a href="/checkout" class="btn btn-detail-orange" style="opacity: .95;">
+                                            Mua ngay
+                                        </a>
+
+                                        <a class="detail-fav" href="#" aria-label="Yêu thích">
+                                            <i class="fa fa-heart"></i>
+                                        </a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="row g-4 mt-4">
+                            <div class="col-12">
+                                <nav class="detail-tabs">
+                                    <div class="nav nav-tabs mb-3">
+                                        <button class="nav-link active" type="button" role="tab" id="nav-about-tab" data-bs-toggle="tab" data-bs-target="#nav-about" aria-controls="nav-about" aria-selected="true">Mô tả</button>
+                                        <button class="nav-link" type="button" role="tab" id="nav-mission-tab" data-bs-toggle="tab" data-bs-target="#nav-mission" aria-controls="nav-mission" aria-selected="false">Đánh giá (1)</button>
+                                    </div>
+                                </nav>
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="nav-about" role="tabpanel" aria-labelledby="nav-about-tab">
+                                        <c:choose>
+                                            <c:when test="${not empty product.detailDesc}">
+                                                <p style="line-height: 1.75;">${product.detailDesc}</p>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <p class="text-muted">Chưa có mô tả cho sản phẩm này.</p>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </div>
+                                    <div class="tab-pane" id="nav-mission" role="tabpanel" aria-labelledby="nav-mission-tab">
+                                        <p class="text-muted mb-0">Chưa có đánh giá.</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <!-- Modal Search End -->
 
-
-                <!-- Single Page Header start -->
-                <div class="container-fluid page-header py-5">
-                    <h1 class="text-center text-white display-6">Product Detail</h1>
-                    <ol class="breadcrumb justify-content-center mb-0">
-                        <li class="breadcrumb-item"><a href="/">Home</a></li>
-                        <li class="breadcrumb-item active text-white">Product Detail</li>
-                    </ol>
-                </div>
-                <!-- Single Page Header End -->
-
-
-                <!-- Single Product Start -->
-                <div class="container-fluid py-5 mt-5">
-                    <div class="container py-5">
-                        <div class="row g-4 mb-5">
-                            <div class="col-lg-8 col-xl-9">
-                                <div class="row g-4">
-                                    <div class="col-lg-6">
-                                        <div class="border rounded">
-                                            <a href="#">
-                                                <img src="/products/${product.firstImage}" class="img-fluid rounded"
-                                                    alt="Image">
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <h4 class="fw-bold mb-3">${product.name}</h4>
-                                        <p class="mb-3">Danh Mục:
-                                            <c:forEach var="category" items="${product.categories}" varStatus="status">
-                                                ${category.name}<c:if test="${!status.last}">, </c:if>
-                                            </c:forEach>
-                                        </p>
-                                        <c:choose>
-                                            <c:when
-                                                test="${product.salePrice != 0 && product.salePrice < product.price}">
-                                                <p class="text-danger fs-5 fw-bold mb-0">
-
-                                                    <fmt:formatNumber value="${product.salePrice}" type="number"
-                                                        maxFractionDigits="2" />đ/kg
-                                                    <span class="text-muted ms-2 fs-6"
-                                                        style="text-decoration: line-through;">
-                                                        <fmt:formatNumber value="${product.price}" type="number"
-                                                            maxFractionDigits="2" />
-                                                        đ/kg
-                                                    </span>
-                                                </p>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <p class="text-dark fs-5 fw-bold mb-0">
-
-                                                    <fmt:formatNumber value="${product.price}" type="number"
-                                                        maxFractionDigits="2" /> /
-                                                    kg
-                                                </p>
-                                            </c:otherwise>
-                                        </c:choose>
-
-                                        <div class="d-flex mb-4">
-                                            <i class="fa fa-star text-secondary"></i>
-                                            <i class="fa fa-star text-secondary"></i>
-                                            <i class="fa fa-star text-secondary"></i>
-                                            <i class="fa fa-star text-secondary"></i>
-                                            <i class="fa fa-star"></i>
-                                        </div>
-
-                                        <form action="/add-product-to-cart/${product.id}" method="post">
-                                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-
-                                            <div class="input-group quantity mb-5" style="width: 100px;">
-                                                <div class="input-group-btn">
-                                                    <button type="button"
-                                                        class="btn btn-sm btn-minus rounded-circle bg-light border">
-                                                        <i class="fa fa-minus"></i>
-                                                    </button>
-                                                </div>
-                                                <input type="text" name="quantity"
-                                                    class="form-control form-control-sm text-center border-0" value="1">
-                                                <div class="input-group-btn">
-                                                    <button type="button"
-                                                        class="btn btn-sm btn-plus rounded-circle bg-light border">
-                                                        <i class="fa fa-plus"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <button type="submit"
-                                                class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary"><i
-                                                    class="fa fa-shopping-bag me-2 text-primary"></i> Thêm vào giỏ
-                                                hàng</button>
-                                        </form>
-
-
-                                    </div>
-                                    <div class="col-lg-12">
-                                        <nav>
-                                            <div class="nav nav-tabs mb-3">
-                                                <button class="nav-link active border-white border-bottom-0"
-                                                    type="button" role="tab" id="nav-about-tab" data-bs-toggle="tab"
-                                                    data-bs-target="#nav-about" aria-controls="nav-about"
-                                                    aria-selected="true">Mô tả</button>
-                                                <button class="nav-link border-white border-bottom-0" type="button"
-                                                    role="tab" id="nav-mission-tab" data-bs-toggle="tab"
-                                                    data-bs-target="#nav-mission" aria-controls="nav-mission"
-                                                    aria-selected="false">Đánh giá</button>
-                                            </div>
-                                        </nav>
-                                        <div class="tab-content mb-5">
-                                            <div class="tab-pane active" id="nav-about" role="tabpanel"
-                                                aria-labelledby="nav-about-tab">
-                                                <p>${product.detailDesc}</p>
-
-                                            </div>
-                                            <div class="tab-pane" id="nav-mission" role="tabpanel"
-                                                aria-labelledby="nav-mission-tab">
-
-                                            </div>
-                                            <div class="tab-pane" id="nav-vision" role="tabpanel">
-                                                <p class="text-dark">Tempor erat elitr rebum at clita. Diam dolor diam
-                                                    ipsum et
-                                                    tempor sit. Aliqu diam
-                                                    amet diam et eos labore. 3</p>
-                                                <p class="mb-0">Diam dolor diam ipsum et tempor sit. Aliqu diam amet
-                                                    diam et eos
-                                                    labore.
-                                                    Clita erat ipsum et lorem et sit</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- <form action="#">
-                                        <h4 class="mb-5 fw-bold">Leave a Reply</h4>
-                                        <div class="row g-4">
-                                            <div class="col-lg-6">
-                                                <div class="border-bottom rounded">
-                                                    <input type="text" class="form-control border-0 me-4"
-                                                        placeholder="Yur Name *">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <div class="border-bottom rounded">
-                                                    <input type="email" class="form-control border-0"
-                                                        placeholder="Your Email *">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-12">
-                                                <div class="border-bottom rounded my-4">
-                                                    <textarea name="" id="" class="form-control border-0" cols="30"
-                                                        rows="8" placeholder="Your Review *"
-                                                        spellcheck="false"></textarea>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-12">
-                                                <div class="d-flex justify-content-between py-3 mb-5">
-                                                    <div class="d-flex align-items-center">
-                                                        <p class="mb-0 me-3">Please rate:</p>
-                                                        <div class="d-flex align-items-center" style="font-size: 12px;">
-                                                            <i class="fa fa-star text-muted"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                        </div>
-                                                    </div>
-                                                    <a href="#"
-                                                        class="btn border border-secondary text-primary rounded-pill px-4 py-3">
-                                                        Post Comment</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form> -->
+                        <div class="row g-4 mt-4 mb-5">
+                            <div class="col-12 text-center">
+                                <div class="mb-3">
+                                    <span class="detail-related-label">Sản phẩm của chúng tôi</span>
                                 </div>
+                                <h2 class="fw-bold mb-3">Sản phẩm liên quan</h2>
+                                <p class="text-muted mb-0">Chúng tôi tự hào cung cấp nhiều loại trái cây, rau củ và nguyên liệu tươi sạch mỗi ngày.</p>
                             </div>
-                            <div class="col-lg-4 col-xl-3">
-                                <div class="row g-4 fruite">
-                                    <div class="col-lg-12">
-                                        <h4 class="mb-4">Các sản phẩm tương tự</h4>
-                                        <c:forEach var="product" items="${relatedProducts}">
-                                            <div class="d-flex align-items-center justify-content-start">
-                                                <div class="rounded mr-1" style="width: 100px; height: 100px;">
-                                                    <a href="/product/${product.id}">
-                                                        <img src="/products/${product.firstImage}"
-                                                            class="img-fluid rounded" alt="Image">
+
+                            <div class="col-12">
+                                <section class="detail-related-grid" aria-label="Sản phẩm liên quan">
+                                    <c:forEach var="related" items="${relatedProducts}" varStatus="loop">
+                                        <c:if test="${loop.index < 4}">
+                                            <div class="detail-related-card js-product-card" role="link" tabindex="0" data-href="/product/${related.id}" aria-label="Xem chi tiết ${related.name}">
+                                                <div class="detail-related-img">
+                                                    <a href="/product/${related.id}" aria-label="Xem chi tiết ${related.name}">
+                                                        <img src="/products/${related.firstImage}" alt="${related.name}">
                                                     </a>
                                                 </div>
-                                                <div class="ml-2">
-                                                    <a href="/product/${product.id}">
-                                                        <h6 class="mb-2">${product.name}</h6>
+
+                                                <div class="detail-related-body">
+                                                    <a href="/product/${related.id}" style="text-decoration: none;">
+                                                        <div class="detail-related-name">${related.name}</div>
                                                     </a>
-                                                    <div class="d-flex mb-2">
-                                                        <i class="fa fa-star text-secondary"></i>
-                                                        <i class="fa fa-star text-secondary"></i>
-                                                        <i class="fa fa-star text-secondary"></i>
-                                                        <i class="fa fa-star text-secondary"></i>
-                                                        <i class="fa fa-star"></i>
-                                                    </div>
-                                                    <div class="d-flex mb-2">
-                                                        <c:choose>
-                                                            <c:when
-                                                                test="${product.salePrice != 0 && product.salePrice < product.price}">
-                                                                <p class="text-danger fs-5 fw-bold mb-0">
 
-                                                                    <fmt:formatNumber value="${product.salePrice}"
-                                                                        type="number" maxFractionDigits="2" />đ/kg
-                                                                    <span class="text-muted ms-2 fs-6"
-                                                                        style="text-decoration: line-through;">
-                                                                        <fmt:formatNumber value="${product.price}"
-                                                                            type="number" maxFractionDigits="2" />
-                                                                        đ/kg
-                                                                    </span>
-                                                                </p>
-                                                            </c:when>
-                                                            <c:otherwise>
-                                                                <p class="text-dark fs-5 fw-bold mb-0">
+                                                    <c:choose>
+                                                        <c:when test="${related.salePrice != 0 && related.salePrice < related.price}">
+                                                            <div class="detail-related-prices">
+                                                                <span class="detail-related-price">
+                                                                    <fmt:formatNumber value="${related.salePrice}" type="number" maxFractionDigits="0" />đ/kg
+                                                                </span>
+                                                                <span class="detail-related-price-old">
+                                                                    <fmt:formatNumber value="${related.price}" type="number" maxFractionDigits="0" />đ/kg
+                                                                </span>
+                                                            </div>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <div class="detail-related-price">
+                                                                <fmt:formatNumber value="${related.price}" type="number" maxFractionDigits="0" />đ/kg
+                                                            </div>
+                                                        </c:otherwise>
+                                                    </c:choose>
 
-                                                                    <fmt:formatNumber value="${product.price}"
-                                                                        type="number" maxFractionDigits="2" /> đ/
-                                                                    kg
-                                                                </p>
-                                                            </c:otherwise>
-                                                        </c:choose>
-                                                    </div>
+                                                    <form action="/add-product-to-cart/${related.id}" method="post" class="detail-related-form">
+                                                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+                                                        <button type="submit" class="detail-related-add">
+                                                            <span>Thêm vào giỏ hàng</span>
+                                                        </button>
+                                                    </form>
                                                 </div>
                                             </div>
-                                        </c:forEach>
-
-
-                                    </div>
-
-                                </div>
+                                        </c:if>
+                                    </c:forEach>
+                                </section>
                             </div>
                         </div>
                         <!-- <h1 class="fw-bold mb-0">Related products</h1>
@@ -481,6 +741,59 @@
 
                 <!-- Template Javascript -->
                 <script src="/js/main.js"></script>
+
+                <script>
+                    (function () {
+                        var mainImg = document.getElementById('detailMainImage');
+                        if (!mainImg) return;
+
+                        function setMain(src) {
+                            if (!src) return;
+                            mainImg.src = src;
+                        }
+
+                        document.querySelectorAll('.detail-thumb').forEach(function (el) {
+                            el.addEventListener('click', function () {
+                                setMain(el.getAttribute('data-img-src'));
+                            });
+                            el.addEventListener('keydown', function (e) {
+                                if (e.key === 'Enter' || e.key === ' ') {
+                                    e.preventDefault();
+                                    setMain(el.getAttribute('data-img-src'));
+                                }
+                            });
+                        });
+                    })();
+
+                    // Make the whole related-product card navigate like the shop page.
+                    (function () {
+                        function shouldIgnoreNavigation(target) {
+                            return !!(target.closest('form') || target.closest('button') || target.closest('a') || target.closest('input') || target.closest('select') || target.closest('textarea'));
+                        }
+
+                        function navigateFromCard(card) {
+                            var href = card.getAttribute('data-href');
+                            if (!href) return;
+                            window.location.href = href;
+                        }
+
+                        document.addEventListener('click', function (e) {
+                            var card = e.target.closest('.js-product-card');
+                            if (!card) return;
+                            if (shouldIgnoreNavigation(e.target)) return;
+                            navigateFromCard(card);
+                        });
+
+                        document.addEventListener('keydown', function (e) {
+                            var card = e.target.closest('.js-product-card');
+                            if (!card) return;
+                            if (e.key !== 'Enter' && e.key !== ' ') return;
+                            if (shouldIgnoreNavigation(e.target)) return;
+                            e.preventDefault();
+                            navigateFromCard(card);
+                        });
+                    })();
+                </script>
             </body>
 
             </html>

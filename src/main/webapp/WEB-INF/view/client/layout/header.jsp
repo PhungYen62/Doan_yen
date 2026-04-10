@@ -87,7 +87,7 @@
         padding: 12px 20px 12px 45px;
         border: 2px solid var(--primary-green);
         border-radius: 6px;
-        font-size: 15px;
+        font-size: 16px;
         font-family: 'Rubik', sans-serif;
         background-color: white;
         color: var(--text-dark);
@@ -150,12 +150,12 @@
         background-color: var(--primary-green);
         color: white;
         border-radius: 50%;
-        width: 20px;
-        height: 20px;
+        width: 22px;
+        height: 22px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 12px;
+        font-size: 16px;
         font-weight: 700;
     }
 
@@ -169,7 +169,7 @@
         color: white;
         border: 2px solid var(--primary-green);
         border-radius: 6px;
-        font-size: 15px;
+        font-size: 16px;
         font-family: 'Rubik', sans-serif;
         font-weight: 600;
         text-decoration: none;
@@ -194,7 +194,7 @@
         color: white;
         border: 2px solid var(--primary-green);
         border-radius: 6px;
-        font-size: 15px;
+        font-size: 16px;
         font-family: 'Rubik', sans-serif;
         font-weight: 600; 
         text-decoration: none;
@@ -272,6 +272,81 @@
             gap: 20px;
         }
     }
+
+    /* ========== ACCOUNT SELECT (CUSTOM DROPDOWN) ========== */
+    .account-select-wrapper {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+    }
+
+    .account-select-btn {
+        position: relative;
+        padding-right: 42px; /* chừa chỗ cho mũi tên */
+        user-select: none;
+    }
+
+    .account-select-btn .account-caret {
+        position: absolute;
+        right: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 16px;
+        opacity: 0.95;
+        pointer-events: none;
+    }
+
+    .account-select-menu {
+        position: absolute;
+        top: calc(100% + 10px);
+        right: 0;
+        min-width: 220px;
+        background: white;
+        border: 1px solid var(--border-light);
+        border-radius: 10px;
+        padding: 8px;
+        z-index: 1001;
+        display: none;
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .account-select-menu.is-open {
+        display: block;
+    }
+
+    .account-select-item {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        border-radius: 8px;
+        text-decoration: none;
+        color: var(--text-dark);
+        font-size: 16px;
+        font-family: 'Rubik', sans-serif;
+        font-weight: 500;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        text-align: left;
+    }
+
+    .account-select-item i {
+        width: 18px;
+        text-align: center;
+    }
+
+    .account-select-item:hover,
+    .account-select-item:focus {
+        background: rgba(116, 155, 63, 0.10);
+        color: var(--primary-green);
+        outline: none;
+    }
+
+    .account-select-form {
+        margin: 0;
+    }
 </style>
 
 <div class="header-top">
@@ -317,10 +392,28 @@
                     </a>
                 </c:if>
                 <c:if test="${not empty pageContext.request.userPrincipal}">
-                    <a href="${contextPath}/user/profile" class="header-login-btn">
-                        <i class="far fa-user"></i>
-                        <span>Tài khoản</span>
-                    </a>
+                    <div class="account-select-wrapper">
+                        <button type="button" class="header-login-btn account-select-btn" id="accountSelectBtn" aria-haspopup="true" aria-expanded="false">
+                            <i class="far fa-user" aria-hidden="true"></i>
+                            <span>Tài khoản</span>
+                            <i class="fas fa-chevron-down account-caret" aria-hidden="true"></i>
+                        </button>
+
+                        <div class="account-select-menu" id="accountSelectMenu" role="menu" aria-labelledby="accountSelectBtn">
+                            <a href="${contextPath}/user/profile" class="account-select-item" role="menuitem">
+                                <i class="fas fa-user-cog" aria-hidden="true"></i>
+                                <span>Cập nhật thông tin</span>
+                            </a>
+
+                            <form action="${contextPath}/logout" method="post" class="account-select-form">
+                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                                <button type="submit" class="account-select-item" role="menuitem">
+                                    <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                                    <span>Đăng xuất</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
                 </c:if>
 
                 <!-- Signup Button -->
@@ -342,3 +435,42 @@
         <li><a href="${contextPath}/blog" class="${activePage == 'blog' ? 'active' : ''}">Blog</a></li>
     </ul>
 </nav>
+
+<script>
+    (function () {
+        var btn = document.getElementById('accountSelectBtn');
+        var menu = document.getElementById('accountSelectMenu');
+        if (!btn || !menu) return;
+
+        function openMenu() {
+            menu.classList.add('is-open');
+            btn.setAttribute('aria-expanded', 'true');
+        }
+
+        function closeMenu() {
+            menu.classList.remove('is-open');
+            btn.setAttribute('aria-expanded', 'false');
+        }
+
+        function toggleMenu() {
+            if (menu.classList.contains('is-open')) closeMenu();
+            else openMenu();
+        }
+
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleMenu();
+        });
+
+        document.addEventListener('click', function (e) {
+            if (!menu.classList.contains('is-open')) return;
+            if (menu.contains(e.target) || btn.contains(e.target)) return;
+            closeMenu();
+        });
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') closeMenu();
+        });
+    })();
+</script>

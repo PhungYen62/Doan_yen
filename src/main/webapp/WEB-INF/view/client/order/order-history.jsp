@@ -78,95 +78,68 @@
                     <!-- Single Page Header start -->
                     <div class="container-fluid page-header py-5">
                         <h1 class="text-center text-white display-6">Lịch sử mua hàng</h1>
-
                     </div>
                     <!-- Single Page Header End -->
 
-
-                    <!-- Cart Page Start -->
+                    <!-- Orders Page Start -->
                     <div class="container-fluid py-5">
                         <div class="container py-5">
-                            <div class="table-responsive">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">Họ tên</th>
-                                            <th scope="col">Địa chỉ</th>
-                                            <th scope="col">Số điện thoại</th>
-                                            <th scope="col">Tổng giá trị đơn hàng</th>
-                                            <th scope="col">Ngày đặt</th>
-                                            <th scope="col">Trạng thái</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <c:if test="${empty orders}">
-                                            <tr>
-                                                <td colspan="6">
-                                                    Bạn chưa có đơn hàng nào
-                                                </td>
-                                            </tr>
-                                        </c:if>
-                                        <c:forEach var="order" items="${orders}" varStatus="status">
-                                            <tr class="${
-                                                    order.status == 'PENDING' ? 'table-warning' :
-                                                    order.status == 'SHIPPING' ? 'table-primary' :
-                                                    order.status == 'COMPLETE' ? 'table-success' :
-                                                    'table-danger'
-                                                }">
-                                                <th>
-                                                    <p class="mb-0 mt-4">
-                                                        ${order.receiverName}
-                                                    </p>
-                                                </th>
-                                                <td>
-                                                    <p class="mb-0 mt-4">
-                                                        ${order.receiverAddress}
-                                                    </p>
-                                                </td>
-                                                <td>
+                            <div class="row">
+                                <!-- Sidebar -->
+                                <div class="col-lg-3 col-md-4 mb-4">
+                                    <div class="p-3" style="background:#f8faf5;border-radius:10px;">
+                                        <div class="d-flex align-items-center mb-3">
+                                            <img src="/avatar/${user.avatar}" alt="Avatar" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #c7e2b1;" onerror="this.src='https://via.placeholder.com/44x44?text=Avatar'" />
+                                            <div style="margin-left:10px;font-weight:600;color:#749b3f;">${user.fullName}</div>
+                                        </div>
+                                        <div style="font-weight:700;margin-bottom:8px;">Quản lý đơn hàng</div>
+                                        <a href="/order-history" class="d-block mb-2" style="padding:10px;border-radius:8px;background:#a6c98a;color:#fff;text-decoration:none;">Đơn hàng</a>
+                                        <div style="font-weight:700;margin-top:8px;margin-bottom:8px;">Quản lý tài khoản</div>
+                                        <a href="/user/profile" class="d-block mb-1" style="padding:8px;border-radius:6px;color:#333;text-decoration:none;">Tài khoản</a>
+                                        <a href="/user/vouchers" class="d-block" style="padding:8px;border-radius:6px;color:#333;text-decoration:none;">Voucher của tôi</a>
+                                    </div>
+                                </div>
 
-                                                    <p class="mb-0 mt-4">
-                                                        ${order.receiverPhone}
-                                                    </p>
-                                                </td>
-                                                <td>
-                                                    <p class="mb-0 mt-4">
-                                                        <fmt:formatNumber type="number" value="${order.totalPrice}" /> đ
-                                                    </p>
-                                                </td>
-                                                <td>
-                                                    <p class="mb-0 mt-4">
-                                                        ${order.createdAt}
-                                                    </p>
-                                                </td>
-                                                <td>
-                                                    <p class="mb-0 mt-4">
-                                                        <c:choose>
-                                                            <c:when test="${order.status == 'PENDING'}">
-                                                                Chờ xác nhận
-                                                            </c:when>
-                                                            <c:when test="${order.status == 'SHIPPING'}">
-                                                                Đang giao hàng
-                                                            </c:when>
-                                                            <c:when test="${order.status == 'COMPLETE'}">
-                                                                Đã giao hàng
-                                                            </c:when>
-                                                            <c:otherwise>
-                                                                Đã hủy
-                                                            </c:otherwise>
-                                                        </c:choose>
-                                                    </p>
-                                                </td>
-                                            </tr>
+                                <!-- Main -->
+                                <div class="col-lg-9 col-md-8">
+                                    <div class="mb-3">
+                                        <button class="btn btn-outline-success btn-sm me-2">Tất cả</button>
+                                        <button class="btn btn-outline-secondary btn-sm me-2">Chờ thanh toán</button>
+                                        <button class="btn btn-outline-secondary btn-sm me-2">Đang giao</button>
+                                        <button class="btn btn-outline-secondary btn-sm me-2">Hoàn thành</button>
+                                        <button class="btn btn-outline-secondary btn-sm">Trả hàng</button>
+                                    </div>
+
+                                    <c:if test="${empty orders}">
+                                        <div class="alert alert-light">Bạn chưa có đơn hàng nào.</div>
+                                    </c:if>
+
+                                    <c:forEach var="order" items="${orders}">
+                                        <c:forEach var="od" items="${order.orderDetails}">
+                                            <div class="mb-3" style="background:#f6f7f8;padding:14px;border-radius:8px;display:flex;align-items:center;justify-content:space-between;">
+                                                <div style="display:flex;align-items:center;gap:14px;">
+                                                    <img src="${od.product.firstImage}" alt="thumb" style="width:72px;height:72px;border-radius:8px;object-fit:cover;" onerror="this.src='${pageContext.request.contextPath}/resources/images/header/logo.png'" />
+                                                    <div>
+                                                        <div style="font-weight:600;color:#333;">${od.product.name}</div>
+                                                        <div style="color:#666;font-size:13px;">x${od.quantity}</div>
+                                                    </div>
+                                                </div>
+                                                <div style="text-align:right;min-width:160px;">
+                                                    <div style="color:#ff6b24;font-weight:700;margin-bottom:8px;"><fmt:formatNumber type="number" value="${od.price}" /> đ</div>
+                                                    <div>
+                                                        <a href="/product/${od.product.id}" class="btn btn-warning btn-sm" style="background:#ff7a2a;border-color:#ff7a2a;color:#fff;margin-right:8px;">Mua lại</a>
+                                                        <a href="/product/${od.product.id}#reviews" class="btn btn-outline-warning btn-sm" style="border-color:#ff7a2a;color:#ff7a2a;">Đánh giá</a>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </c:forEach>
-                                    </tbody>
-                                </table>
+                                    </c:forEach>
+
+                                </div>
                             </div>
-
-
                         </div>
                     </div>
-                    <!-- Cart Page End -->
+                    <!-- Orders Page End -->
 
 
                     <jsp:include page="../layout/footer.jsp" />

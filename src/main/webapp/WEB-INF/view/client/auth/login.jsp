@@ -104,7 +104,7 @@
                                 <form method="post" action="/login">
                                     <div
                                         class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start mb-4">
-                                        <p class="fw-bold text-center " style="font-size: 28px">Đăng nhập</p>
+                                        <p class="fw-bold text-center " style="font-size: 16px">Đăng nhập</p>
                                     </div>
 
 
@@ -120,14 +120,14 @@
                                     <!-- Email input -->
                                     <div data-mdb-input-init class="form-outline mb-4">
                                         <label>Địa chỉ Email</label>
-                                        <input type="email" id="form3Example3" class="form-control form-control-lg"
+                                        <input type="email" id="form3Example3" class="form-control"
                                             placeholder="Nhập địa chỉ email" name="username" />
                                     </div>
 
                                     <!-- Password input -->
                                     <div data-mdb-input-init class="form-outline mb-3">
                                         <label>Mật khẩu</label>
-                                        <input type="password" id="form3Example4" class="form-control form-control-lg"
+                                        <input type="password" id="form3Example4" class="form-control"
                                             placeholder="Mật khẩu" name="password" />
                                     </div>
                                     <div>
@@ -146,7 +146,7 @@
                                     </div>
 
                                     <div class="text-center text-lg-start mt-4 pt-2">
-                                        <button data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg"
+                                        <button data-mdb-button-init data-mdb-ripple-init class="btn btn-primary"
                                             style="padding-left: 2.5rem; padding-right: 2.5rem;">Login</button>
                                         <p class="small fw-bold mt-2 pt-1 mb-0">Bạn chưa có tài khoản? <a
                                                 href="/register" class="">Đăng ký</a></p>

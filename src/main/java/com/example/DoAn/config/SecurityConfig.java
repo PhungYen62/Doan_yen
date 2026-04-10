@@ -46,12 +46,17 @@ public class SecurityConfig {
                 // ===== PUBLIC PAGES =====
                 .requestMatchers(
                         "/",
+                        "/about",
                         "/login",
                         "/register",
+                        "/blog",
+                        "/blog/**",
                         "/logout",
+                        "/product",
                         "/product/**",
                         "/products/**",
-                        "/client/**"
+                        "/client/**",
+                        "/error"
                 ).permitAll()
 
                 // ===== STATIC RESOURCES =====

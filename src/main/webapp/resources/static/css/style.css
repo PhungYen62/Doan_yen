@@ -6,6 +6,38 @@
     z-index: 99999;
 }
 
+html {
+    font-size: 16px;
+}
+
+body {
+    font-size: 16px;
+}
+
+input,
+button,
+select,
+optgroup,
+textarea {
+    font-size: 16px;
+}
+
+label {
+    font-size: 16px;
+}
+
+.form-group>label,
+.form-outline>label,
+.form-label {
+    display: block;
+    margin-bottom: 6px;
+}
+
+.form-control,
+.form-select {
+    font-size: 16px;
+}
+
 #spinner.show {
     transition: opacity .8s ease-out, visibility 0s linear .0s;
     visibility: visible;
@@ -87,7 +119,7 @@
 }
 
 .topbar .top-info {
-    font-size: 15px;
+    font-size: 16px;
     line-height: 0;
     letter-spacing: 1px;
     display: flex;
@@ -95,7 +127,7 @@
 }
 
 .topbar .top-link {
-    font-size: 15px;
+    font-size: 16px;
     line-height: 0;
     letter-spacing: 1px;
     display: flex;

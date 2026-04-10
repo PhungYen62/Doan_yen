@@ -44,6 +44,37 @@
 
         /* Shop page fix: remove forced tall container that creates huge whitespace */
         .frame-div { min-height: auto !important; }
+
+        /* Make product cards feel clickable */
+        .js-product-card { cursor: pointer; }
+
+        /* Shop page: category buttons (Tất cả / Rau Lá / ...) */
+        .shop .categories .c-sn-min {
+            font-size: 16px;
+        }
+
+        /* Shop page: even spacing in product header */
+        .shop .our-products .text-description2 {
+            gap: 16px !important;
+        }
+
+        .shop .our-products {
+            gap: 16px !important;
+        }
+
+        .shop .our-products .categories-parent {
+            margin-top: 0 !important;
+        }
+
+        /* Shop page: avoid overly wide gap in category/filter row */
+        .shop .our-products .categories {
+            flex: 0 0 auto !important;
+        }
+
+        /* Shop page: 16px gap between filter row and product list */
+        .shop section.our-products + section.card2 {
+            margin-top: 16px !important;
+        }
     </style>
 </head>
 
@@ -78,7 +109,7 @@
                             <section class="our-products" style="width: 100%; max-width: 100%; margin: 0; padding: 0; margin-top: 0px;">
                                 <div class="text-description2" style="width: 100%; margin: 0; display: flex; flex-direction: column; gap: 8px; padding: 0;">
                                     <div class="caption" style="margin: 0; padding: 0;">
-                                        <h3 class="section-title" style="font-size: 14px; color: #749b3f; font-weight: 600; margin: 0 !important; background-color: #e8f3d6; padding: 4px 12px; display: inline-block; border-radius: 4px;">Sản phẩm của chúng tôi</h3>
+                                        <h3 class="section-title" style="font-size: 16px; color: #749b3f; font-weight: 600; margin: 0 !important; background-color: #e8f3d6; padding: 4px 12px; display: inline-block; border-radius: 4px;">Sản phẩm của chúng tôi</h3>
                                     </div>
                                     <div class="text-description3" style="display: flex; flex-direction: column; align-items: flex-start !important; gap: 4px; margin: 0; padding: 0;">
                                         <h2 class="page-title" style="margin: 0 !important; margin-left: 0 !important; padding: 0 !important; padding-left: 0 !important; font-size: 32px; color: #212337; font-weight: 700; text-align: left;">
@@ -136,7 +167,9 @@
                                 <section class="card2" style="display: grid; grid-template-columns: repeat(4, 282px); gap: 24px 24px; width: 1200px; margin: 16px auto 16px auto;">
                                     <c:forEach var="product" items="${products}" varStatus="loop">
                                         <c:if test="${loop.index < 21}">
-                                        <div class="product-cadt" style="width: 282px; height: 343px; display: flex; flex-direction: column;">
+                                        <div class="product-cadt js-product-card" role="link" tabindex="0" data-href="/product/${product.id}"
+                                            aria-label="Xem chi tiết ${product.name}"
+                                            style="width: 282px; height: 343px; display: flex; flex-direction: column;">
                                             <div class="product-img-container bg-icon" style="width: 258px; height: 200px; margin: 0 auto;">
                                                 <c:if test="${not empty product.firstImage}">
                                                     <img src="/products/${product.firstImage}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/258x200/e0e0e0/999?text=${product.name}'" style="width: 100%; height: 100%; object-fit: cover;">
@@ -212,14 +245,14 @@
 
         <!-- Flash Sale Section -->
         <section class="homepage-inner" style="min-height: auto; padding-bottom: 0;">
-            <div class="special-offer-wrapper" style="background-image: url('/resources/images/content/FooterSection.png'); background-size: 100% auto; background-position: center top; background-repeat: no-repeat; background-attachment: scroll; aspect-ratio: 1440 / 640; padding: 100px 10px 52px 180px;">
-                <div class="special-offer">
+            <div class="special-offer-wrapper" style="background-image: url('/resources/images/content/FooterSection.png'); background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: scroll; aspect-ratio: 1440 / 640; padding: 84px 20px 64px 20px; display: flex; align-items: center; justify-content: center;">
+                <div class="special-offer" style="width: 100%; max-width: 1200px; display: flex; flex-direction: column; align-items: flex-start; text-align: left;">
                     <section class="special-offer2">
                         <div class="text-description5">
                             <div class="text-description6">
                                 <div class="text-description7">
                                     <div class="caption2" style="background-color: rgba(116, 155, 63, 0.3);">
-                                        <h3 class="u-i-c" style="color: #749b3f;">Ưu đãi đặc biệt</h3>
+                                        <h3 class="u-i-c" style="color: #749b3f; font-size: 16px; font-weight: 600;">Ưu đãi đặc biệt</h3>
                                     </div>
                                 </div>
                                 <h1 class="flash-sale2" style="color: #1f2937;">Flash Sale</h1>
@@ -229,7 +262,7 @@
                                 <span class="off" style="color: #ff7a3d; font-weight: bold;">80% OFF</span>
                             </h2>
                         </div>
-                        <div class="countdown" style="color: #212337; align-items: flex-start; gap: 24px; margin-bottom: 16px;">
+                        <div class="countdown" style="color: #212337; justify-content: flex-start; align-items: center; gap: 24px; margin-bottom: 16px; flex-wrap: wrap;">
                             <div class="countdown2" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
                                 <h2 class="countdown-delimiters" style="position: static; margin: 0;">03</h2>
                                 <div class="ngy-wrapper" style="padding: 0; justify-content: center;"><div class="ngy" style="position: static;">Ngày</div></div>
@@ -248,7 +281,7 @@
                             </div>
                         </div>
                     </section>
-                    <button class="button16" style="background-color: #176d38; margin-top: 8px;">
+                    <button class="button16" style="background-color: #176d38; margin-top: 8px; align-self: flex-start;">
                         <b class="code-fruit28-container">
                             <span class="code">CODE : </span>
                             <span class="fruit28" style="color: #ffeb3b; font-weight: bold;">FRUIT28</span>
@@ -305,6 +338,35 @@
         
         document.querySelector('.location-dropdown')?.addEventListener('click', function(e) { e.stopPropagation(); });
         document.querySelector('.sort-dropdown')?.addEventListener('click', function(e) { e.stopPropagation(); });
+
+        // Make the whole product card navigate to detail page.
+        (function () {
+            function shouldIgnoreNavigation(target) {
+                return !!(target.closest('form') || target.closest('button') || target.closest('a') || target.closest('input') || target.closest('select') || target.closest('textarea'));
+            }
+
+            function navigateFromCard(card) {
+                var href = card.getAttribute('data-href');
+                if (!href) return;
+                window.location.href = href;
+            }
+
+            document.addEventListener('click', function (e) {
+                var card = e.target.closest('.js-product-card');
+                if (!card) return;
+                if (shouldIgnoreNavigation(e.target)) return;
+                navigateFromCard(card);
+            });
+
+            document.addEventListener('keydown', function (e) {
+                var card = e.target.closest('.js-product-card');
+                if (!card) return;
+                if (e.key !== 'Enter' && e.key !== ' ') return;
+                if (shouldIgnoreNavigation(e.target)) return;
+                e.preventDefault();
+                navigateFromCard(card);
+            });
+        })();
     </script>
 
 </body>
