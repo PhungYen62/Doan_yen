@@ -17,12 +17,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.DoAn.domain.Categories;
+import com.example.DoAn.domain.Order;
 import com.example.DoAn.domain.Product;
 import com.example.DoAn.domain.User;
 import com.example.DoAn.domain.dto.ChangePasswordDTO;
 import com.example.DoAn.domain.dto.RegisterDTO;
 import com.example.DoAn.domain.dto.UserUpdateDTO;
 import com.example.DoAn.service.CategoriesService;
+import com.example.DoAn.service.OrderService;
 import com.example.DoAn.service.ProductService;
 import com.example.DoAn.service.UploadService;
 import com.example.DoAn.service.UserService;
@@ -39,14 +41,17 @@ public class HomePageController {
     private final CategoriesService categoriesService;
     private final ProductService productService;
     private final UploadService uploadService;
+    private final OrderService orderService;
 
     public HomePageController(UserService userService, PasswordEncoder passwordEncoder,
-            CategoriesService categoriesService, ProductService productService, UploadService uploadService) {
+            CategoriesService categoriesService, ProductService productService, UploadService uploadService,
+            OrderService orderService) {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.categoriesService = categoriesService;
         this.productService = productService;
         this.uploadService = uploadService;
+        this.orderService = orderService;
     }
 
     @GetMapping("/")
@@ -125,10 +130,13 @@ public class HomePageController {
 
     @GetMapping("/user/profile")
     public String showProfile(Model model, Principal principal) {
-        String email = principal.getName(); // lấy email (hoặc username)
-        User user = userService.getUserByEmail(email); // tìm user theo email
+        String email = principal.getName();
+        User user = userService.getUserByEmail(email);
+        List<Order> orders = this.orderService.fetchOrdersByUser(user);
+        Collections.reverse(orders);
 
         model.addAttribute("user", user);
+        model.addAttribute("orders", orders);
         return "client/auth/user-profile";
     }
 

@@ -1,21 +1,18 @@
 package com.example.DoAn.controller.client;
 
+import java.security.Principal;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import com.example.DoAn.domain.Order;
 import com.example.DoAn.domain.User;
 import com.example.DoAn.service.OrderService;
 import com.example.DoAn.service.UserService;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 
 @Controller("orderClientController")
 public class OrderController {
@@ -28,14 +25,13 @@ public class OrderController {
     }
 
     @GetMapping("/order-history")
-    public String getOrderHistoryPage(Model model, HttpServletRequest request) {
-
-        HttpSession session = request.getSession(false);
-        long id = (long) session.getAttribute("id");
-        User currentUser = this.userService.getUserById(id);
-
-        List<Order> orders = this.orderService.fetchOrdersByUser(currentUser);
+    public String getOrderHistoryPage(Model model, Principal principal) {
+        User currentUser = this.userService.getUserByEmail(principal.getName());
+        List<Order> orders = currentUser == null
+                ? new ArrayList<>()
+                : this.orderService.fetchOrdersByUser(currentUser);
         Collections.reverse(orders);
+        model.addAttribute("user", currentUser);
         model.addAttribute("orders", orders);
         return "client/order/order-history";
     }

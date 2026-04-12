@@ -195,7 +195,57 @@
         .profile-main a:hover {
             color: #5f7f33;
         }
+        .order-status-filter {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+        .order-status-filter .status-filter-btn {
+            background: #ffffff;
+            border: 1px solid #cfd4dc;
+            border-radius: 8px;
+            color: #6b7280;
+            font-family: "Open Sans", sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 6px 14px;
+            line-height: 1.25;
+            transition: all 0.2s ease;
+        }
+        .order-status-filter .status-filter-btn:hover,
+        .order-status-filter .status-filter-btn:focus {
+            background: #749b3f;
+            border-color: #749b3f;
+            color: #ffffff;
+            box-shadow: none;
+        }
+        .order-history-actions .order-action-btn,
+        .order-history-actions .order-action-btn:link,
+        .order-history-actions .order-action-btn:visited,
+        .order-history-actions .order-action-btn:focus {
+            display: inline-block;
+            border-radius: 8px;
+            font-family: "Open Sans", sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            line-height: 1.25;
+            padding: 6px 12px;
+            background-color: #ffffff;
+            border: 1px solid #ff7a2a;
+            color: #ff7a2a;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        .order-history-actions .order-action-btn:hover,
+        .order-history-actions .order-action-btn:active {
+            background-color: #ff7a2a;
+            border-color: #ff7a2a;
+            color: #ffffff;
+            box-shadow: none;
+        }
     </style>
+
 
     <div class="profile-container d-flex gap-4">
         <!-- Sidebar Navigation -->
@@ -270,12 +320,12 @@
             <!-- Orders Tab -->
             <div class="tab-pane fade" id="v-pills-orders" role="tabpanel" aria-labelledby="v-pills-orders-tab">
                 <div class="profile-title">Lịch sử mua hàng</div>
-                <div class="mb-3">
-                    <button class="btn btn-outline-success btn-sm me-2">Tất cả</button>
-                    <button class="btn btn-outline-secondary btn-sm me-2">Chờ thanh toán</button>
-                    <button class="btn btn-outline-secondary btn-sm me-2">Đang giao</button>
-                    <button class="btn btn-outline-secondary btn-sm me-2">Hoàn thành</button>
-                    <button class="btn btn-outline-secondary btn-sm">Trả hàng</button>
+                <div class="order-status-filter">
+                    <button type="button" class="btn btn-sm status-filter-btn">Tất cả</button>
+                    <button type="button" class="btn btn-sm status-filter-btn">Chờ thanh toán</button>
+                    <button type="button" class="btn btn-sm status-filter-btn">Đang giao</button>
+                    <button type="button" class="btn btn-sm status-filter-btn">Hoàn thành</button>
+                    <button type="button" class="btn btn-sm status-filter-btn">Trả hàng</button>
                 </div>
 
                 <c:if test="${empty orders}">
@@ -286,7 +336,7 @@
                     <c:forEach var="od" items="${order.orderDetails}">
                         <div class="mb-3" style="background:#f6f7f8;padding:14px;border-radius:8px;display:flex;align-items:center;justify-content:space-between;">
                             <div style="display:flex;align-items:center;gap:14px;">
-                                <img src="${od.product.firstImage}" alt="thumb" style="width:72px;height:72px;border-radius:8px;object-fit:cover;" onerror="this.src='/resources/images/header/logo.png'" />
+                                <img src="/products/${od.product.firstImage}" alt="${od.product.name}" style="width:72px;height:72px;border-radius:8px;object-fit:cover;" onerror="this.src='/resources/images/header/logo.png'" />
                                 <div>
                                     <div style="font-weight:600;color:#333;">${od.product.name}</div>
                                     <div style="color:#666;font-size:13px;">x${od.quantity}</div>
@@ -294,9 +344,9 @@
                             </div>
                             <div style="text-align:right;min-width:160px;">
                                 <div style="color:#ff6b24;font-weight:700;margin-bottom:8px;"><fmt:formatNumber type="number" value="${od.price}" /> đ</div>
-                                <div>
-                                    <a href="/product/${od.product.id}" class="btn btn-warning btn-sm" style="background:#ff7a2a;border-color:#ff7a2a;color:#fff;margin-right:8px;">Mua lại</a>
-                                    <a href="/product/${od.product.id}#reviews" class="btn btn-outline-warning btn-sm" style="border-color:#ff7a2a;color:#ff7a2a;">Đánh giá</a>
+                                <div class="order-history-actions">
+                                    <a href="/product/${od.product.id}" class="order-action-btn me-2">Mua lại</a>
+                                    <a href="/product/${od.product.id}#reviews" class="order-action-btn">Đánh giá</a>
                                 </div>
                             </div>
                         </div>

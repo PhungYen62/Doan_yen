@@ -30,7 +30,27 @@
 
                 <!-- Template Stylesheet -->
                 <link href="css/style.css" rel="stylesheet">
+                <style>
+                    .btn-back-cart {
+                        background: #ffffff;
+                        border: 1px solid #cfd4dc;
+                        border-radius: 8px;
+                        color: #6b7280;
+                        font-family: "Open Sans", sans-serif;
+                        font-size: 16px;
+                        font-weight: 600;
+                        padding: 8px 16px;
+                        transition: all 0.2s ease;
+                    }
 
+                    .btn-back-cart:hover,
+                    .btn-back-cart:focus {
+                        background: #749b3f;
+                        border-color: #749b3f;
+                        color: #ffffff;
+                        box-shadow: none;
+                    }
+                </style>
             </head>
 
             <body>
@@ -56,7 +76,7 @@
                 </div>
 
                 <div class="d-flex justify-content-center align-items-center">
-                    <a href="/" class="btn btn-primary">Quay về trang chủ</a>
+                    <a href="/cart" class="btn btn-back-cart">Quay về giỏ hàng</a>
 
                 </div>
 

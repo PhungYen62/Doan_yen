@@ -80,7 +80,7 @@
 
                     .detail-badge {
                         display: inline-block;
-                        font-size: 12px;
+                        font-size: 16px;
                         font-weight: 600;
                         padding: 4px 10px;
                         border-radius: 8px;
@@ -137,18 +137,38 @@
                     }
 
                     .detail-qty {
+                        display: flex;
+                        align-items: center;
                         border: 1px solid rgba(0, 0, 0, .18);
                         border-radius: 10px;
                         overflow: hidden;
                         background: var(--bs-white);
+                        height: 44px;
+                    }
+
+                    .detail-qty .input-group-btn {
+                        display: flex;
+                        align-items: center;
+                        height: 100%;
                     }
 
                     .detail-qty .detail-qty-btn {
                         width: 44px;
+                        height: 100%;
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        padding: 0;
                         border: 0;
                         border-radius: 0 !important;
                         background: transparent;
                         color: var(--bs-dark);
+                        line-height: 1;
+                    }
+
+                    .detail-qty .detail-qty-btn i {
+                        font-size: 12px;
+                        line-height: 1;
                     }
 
                     .detail-qty .detail-qty-btn:focus {
@@ -164,6 +184,12 @@
                     }
 
                     .detail-qty .detail-qty-input {
+                        width: 52px;
+                        flex: 0 0 52px;
+                        height: 100%;
+                        line-height: 44px;
+                        text-align: center;
+                        padding: 0 6px;
                         border: 0;
                         border-radius: 0 !important;
                         box-shadow: none;
@@ -202,7 +228,7 @@
                         border-radius: 8px;
                         background-color: rgba(116, 155, 63, 0.10);
                         color: var(--primary-green);
-                        font-size: 12px;
+                        font-size: 16px;
                         font-weight: 600;
                     }
 
