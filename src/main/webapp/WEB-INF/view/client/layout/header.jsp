@@ -189,6 +189,9 @@
 
     /* Nút Đăng ký */
     .header-signup-btn {
+        display: flex;
+        align-items: center;
+        gap: 8px;
         padding: 10px 28px;
         background-color: var(--primary-green);
         color: white;
@@ -200,6 +203,10 @@
         text-decoration: none;
         transition: all 0.3s ease;
         cursor: pointer;
+    }
+
+    .header-signup-btn i {
+        font-size: 18px;
     }
 
     .header-signup-btn:hover {
@@ -418,7 +425,10 @@
 
                 <!-- Signup Button -->
                 <c:if test="${empty pageContext.request.userPrincipal}">
-                    <a href="${contextPath}/register" class="header-signup-btn">Đăng ký</a>
+                    <a href="${contextPath}/register" class="header-signup-btn">
+                        <i class="far fa-user"></i>
+                        <span>Đăng ký</span>
+                    </a>
                 </c:if>
                 
             </div>

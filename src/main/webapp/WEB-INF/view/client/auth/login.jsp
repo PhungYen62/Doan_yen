@@ -1,166 +1,369 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
-    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-        <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-            <!DOCTYPE html>
-            <html lang="en">
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<!DOCTYPE html>
+<html lang="en">
 
-            <head>
-                <meta charset="utf-8" />
-                <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-                <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-                <meta name="description" content="" />
-                <meta name="author" content="" />
-                <title>Login - FarmFresh</title>
-                <link href="css/style.css" rel="stylesheet" />
-                <link href="css/bootstrap.min.css" rel="stylesheet">
-                <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-                <style>
-                    .divider:after,
-                    .divider:before {
-                        content: "";
-                        flex: 1;
-                        height: 1px;
-                        background: #eee;
-                    }
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Đăng nhập - Fresh Food</title>
 
-                    .h-custom {
-                        height: calc(100% - 73px);
-                    }
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
 
-                    @media (max-width: 450px) {
-                        .h-custom {
-                            height: 100%;
-                        }
-                    }
-                </style>
-            </head>
+    <style>
+        :root {
+            --login-orange: #ee7d34;
+            --login-orange-hover: #df6f28;
+            --login-text: #1f2937;
+            --login-muted: #6b7280;
+            --login-border: #e5e7eb;
+        }
 
-            <body class="">
-                <!-- <div id="layoutAuthentication">
-                    <div id="layoutAuthentication_content">
-                        <main>
-                            <div class="container">
-                                <div class="row justify-content-center">
-                                    <div class="col-lg-5">
-                                        <div class="card shadow-lg border-0 rounded-lg mt-5">
-                                            <div class="card-header">
-                                                <h3 class="text-center font-weight-light my-4">Login</h3>
-                                            </div>
-                                            <div class="card-body">
-                                                <form method="post" action="/login">
-                                                    <c:if test="${param.error != null}">
-                                                        <div class="my-2" style="color: red;">Invalid email or password.
-                                                        </div>
-                                                    </c:if>
-                                                    <c:if test="${param.logout != null}">
-                                                        <div class="my-2" style="color: green;">Logout success.
-                                                        </div>
-                                                    </c:if>
+        body.login-view {
+            position: relative;
+        }
 
-                                                    <div class="form-floating mb-3">
-                                                        <input class="form-control" type="email"
-                                                            placeholder="name@example.com" name="username" />
-                                                        <label>Email address</label>
-                                                    </div>
-                                                    <div class="form-floating mb-3">
-                                                        <input class="form-control" type="password"
-                                                            placeholder="Password" name="password" />
-                                                        <label>Password</label>
-                                                    </div>
-                                                    <div>
-                                                        <input type="hidden" name="${_csrf.parameterName}"
-                                                            value="${_csrf.token}" />
+        body.login-view::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.32);
+            z-index: 1001;
+            pointer-events: none;
+        }
 
-                                                    </div>
+        .login-page {
+            min-height: calc(100vh - 130px);
+            background-image: url('/resources/images/content/avatar.png');
+            background-size: cover;
+            background-position: center;
+            padding: 24px 16px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-                                                    <div class="mt-4 mb-0">
-                                                        <div class="d-grid">
-                                                            <button class="btn btn-primary btn-block">
-                                                                Login
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                            <div class="card-footer text-center py-3">
-                                                <div class="small"><a href="/register">Need an account? Sign up!</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </main>
+        .login-card {
+            width: 100%;
+            max-width: 420px;
+            background: #ffffff;
+            border-radius: 6px;
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.24);
+            padding: 22px 18px 18px;
+            position: relative;
+            z-index: 1002;
+        }
+
+        .login-close-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 28px;
+            height: 28px;
+            border: 0;
+            background: transparent;
+            color: #6b7280;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .login-close-btn:hover {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .login-title {
+            text-align: center;
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--login-text);
+            margin: 2px 0 18px;
+            font-family: "Open Sans", sans-serif;
+        }
+
+        .login-msg {
+            border-radius: 6px;
+            font-size: 13px;
+            padding: 10px 12px;
+            margin-bottom: 12px;
+        }
+
+        .login-msg-error {
+            background: #fff2f2;
+            border: 1px solid #fecaca;
+            color: #b91c1c;
+        }
+
+        .login-msg-success {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #166534;
+        }
+
+        .login-label {
+            display: block;
+            font-size: 14px;
+            color: #374151;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .login-field {
+            margin-bottom: 10px;
+        }
+
+        .login-input {
+            width: 100%;
+            height: 46px;
+            border: 1px solid var(--login-border);
+            border-radius: 4px;
+            padding: 0 12px;
+            font-size: 14px;
+            color: #111827;
+            outline: none;
+            box-shadow: none;
+        }
+
+        .login-input::placeholder {
+            color: #9ca3af;
+        }
+
+        .login-input:focus {
+            border-color: #c9d1da;
+        }
+
+        .login-password-wrap {
+            position: relative;
+        }
+
+        .login-password-wrap .login-input {
+            padding-right: 36px;
+        }
+
+        .login-password-icon {
+            position: absolute;
+            top: 50%;
+            right: 12px;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            font-size: 12px;
+            pointer-events: none;
+        }
+
+        .login-meta-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin: 10px 0 14px;
+        }
+
+        .login-remember {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--login-muted);
+            margin: 0;
+        }
+
+        .login-remember input {
+            width: 13px;
+            height: 13px;
+            accent-color: var(--login-orange);
+        }
+
+        .login-forgot {
+            font-size: 12px;
+            color: #374151;
+            text-decoration: none;
+        }
+
+        .login-forgot:hover {
+            color: var(--login-orange-hover);
+            text-decoration: underline;
+        }
+
+        .login-submit {
+            width: 100%;
+            height: 44px;
+            border: 0;
+            border-radius: 5px;
+            background: var(--login-orange);
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 500;
+            letter-spacing: 0.2px;
+            transition: background-color 0.2s ease;
+        }
+
+        .login-submit:hover {
+            background: var(--login-orange-hover);
+            color: #ffffff;
+        }
+
+        .login-divider {
+            display: flex;
+            align-items: center;
+            color: #9ca3af;
+            font-size: 12px;
+            margin: 13px 0;
+            gap: 10px;
+        }
+
+        .login-divider::before,
+        .login-divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: var(--login-border);
+        }
+
+        .login-social {
+            display: flex;
+            gap: 8px;
+        }
+
+        .login-social-btn {
+            flex: 1;
+            height: 38px;
+            border: 1px solid var(--login-border);
+            border-radius: 6px;
+            background: #ffffff;
+            color: #374151;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            cursor: pointer;
+        }
+
+        .login-social-btn:hover {
+            border-color: #d1d5db;
+            background: #f9fafb;
+        }
+
+        .login-social-btn .fa-google {
+            color: #ea4335;
+        }
+
+        .login-social-btn .fa-facebook-f {
+            color: #1877f2;
+        }
+
+        .login-register {
+            margin: 14px 0 2px;
+            text-align: center;
+            font-size: 12px;
+            color: #4b5563;
+        }
+
+        .login-register a {
+            color: var(--login-orange-hover);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-register a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 576px) {
+            .login-page {
+                padding: 16px 12px 24px;
+                align-items: flex-start;
+            }
+
+            .login-card {
+                margin-top: 14px;
+                padding: 20px 14px 16px;
+            }
+
+            .login-title {
+                font-size: 30px;
+            }
+
+            .login-submit {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body class="login-view">
+    <jsp:include page="../layout/header.jsp" />
+
+    <main class="login-page">
+        <section class="login-card" aria-label="Form đăng nhập">
+            <a href="/" class="login-close-btn" aria-label="Đóng">
+                <i class="fas fa-times"></i>
+            </a>
+
+            <h1 class="login-title">Đăng nhập</h1>
+
+            <form method="post" action="/login">
+                <c:if test="${param.error != null}">
+                    <div class="login-msg login-msg-error">Địa chỉ email hoặc mật khẩu không chính xác.</div>
+                </c:if>
+                <c:if test="${param.logout != null}">
+                    <div class="login-msg login-msg-success">Đăng xuất thành công.</div>
+                </c:if>
+
+                <div class="login-field">
+                    <label class="login-label" for="login-email">Email</label>
+                    <input type="email" id="login-email" class="login-input" placeholder="Nhập email" name="username" required />
+                </div>
+
+                <div class="login-field">
+                    <label class="login-label" for="login-password">Mật khẩu</label>
+                    <div class="login-password-wrap">
+                        <input type="password" id="login-password" class="login-input" placeholder="Nhập mật khẩu" name="password" required />
+                        <span class="login-password-icon"><i class="far fa-eye-slash"></i></span>
                     </div>
+                </div>
 
-                </div> -->
-                <section class="vh-100">
-                    <div class="container-fluid h-custom">
-                        <div class="row d-flex justify-content-center align-items-center h-100">
-                            <div class="col-md-9 col-lg-6 col-xl-5">
-                                <img src="/img/hero-img-1.png" class="img-fluid" alt="Sample image">
-                            </div>
-                            <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-                                <form method="post" action="/login">
-                                    <div
-                                        class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start mb-4">
-                                        <p class="fw-bold text-center " style="font-size: 16px">Đăng nhập</p>
-                                    </div>
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 
+                <div class="login-meta-row">
+                    <label class="login-remember" for="remember-login">
+                        <input type="checkbox" id="remember-login" />
+                        <span>Lưu mật khẩu</span>
+                    </label>
+                    <a href="#" class="login-forgot">Quên mật khẩu</a>
+                </div>
 
-                                    <c:if test="${param.error != null}">
-                                        <div class="my-2" style="color: red;">Địa chỉ email hoặc mật khẩu không chính
-                                            xác.
-                                        </div>
-                                    </c:if>
-                                    <c:if test="${param.logout != null}">
-                                        <div class="my-2" style="color: green;">Đăng xuất thành công.
-                                        </div>
-                                    </c:if>
-                                    <!-- Email input -->
-                                    <div data-mdb-input-init class="form-outline mb-4">
-                                        <label>Địa chỉ Email</label>
-                                        <input type="email" id="form3Example3" class="form-control"
-                                            placeholder="Nhập địa chỉ email" name="username" />
-                                    </div>
+                <button type="submit" class="login-submit">Đăng nhập</button>
 
-                                    <!-- Password input -->
-                                    <div data-mdb-input-init class="form-outline mb-3">
-                                        <label>Mật khẩu</label>
-                                        <input type="password" id="form3Example4" class="form-control"
-                                            placeholder="Mật khẩu" name="password" />
-                                    </div>
-                                    <div>
-                                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-                                    </div>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <!-- Checkbox -->
-                                        <div class="form-check mb-0">
-                                            <input class="form-check-input me-2" type="checkbox" value=""
-                                                id="form2Example3" />
-                                            <label class="form-check-label" for="form2Example3">
-                                                Lưu thông tin
-                                            </label>
-                                        </div>
-                                        <a href="#!" class="text-body">Quên mật khẩu?</a>
-                                    </div>
+                <div class="login-divider">Hoặc đăng nhập với</div>
 
-                                    <div class="text-center text-lg-start mt-4 pt-2">
-                                        <button data-mdb-button-init data-mdb-ripple-init class="btn btn-primary"
-                                            style="padding-left: 2.5rem; padding-right: 2.5rem;">Login</button>
-                                        <p class="small fw-bold mt-2 pt-1 mb-0">Bạn chưa có tài khoản? <a
-                                                href="/register" class="">Đăng ký</a></p>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
+                <div class="login-social">
+                    <button type="button" class="login-social-btn">
+                        <i class="fab fa-google"></i>
+                        <span>Google</span>
+                    </button>
+                    <button type="button" class="login-social-btn">
+                        <i class="fab fa-facebook-f"></i>
+                        <span>Facebook</span>
+                    </button>
+                </div>
 
-                </section>
-                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-                    crossorigin="anonymous"></script>
-                <script src="/js/scripts.js"></script>
-            </body>
+                <p class="login-register">Bạn chưa có tài khoản? <a href="/register">Đăng ký mới</a></p>
+            </form>
+        </section>
+    </main>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+</body>
 
-            </html>
+</html>
