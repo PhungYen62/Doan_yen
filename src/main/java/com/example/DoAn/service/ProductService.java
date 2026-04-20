@@ -54,7 +54,7 @@ public class ProductService {
     }
 
     public Page<Product> getAllProductsWithSpec(Pageable page, String name, Double minPrice, Double maxPrice,
-            List<Long> categoryIds) {
+            List<Long> categoryIds, Long provinceId) {
         Specification<Product> spec = Specification.where(ProductSpecs.isNotDeleted());
 
         if (name != null && !name.isEmpty()) {
@@ -68,11 +68,22 @@ public class ProductService {
         if (categoryIds != null && !categoryIds.isEmpty()) {
             spec = spec.and(ProductSpecs.hasCategories(categoryIds));
         }
+
+        if (provinceId != null) {
+            spec = spec.and(ProductSpecs.hasProvinceId(provinceId));
+        }
         return this.productRepository.findAll(spec, page);
     }
 
     public List<Product> getAllProducts() {
         return this.productRepository.findByIsDeletedFalse();
+    }
+
+    public List<Product> getProductsByProvinceId(Long provinceId) {
+        if (provinceId == null) {
+            return this.getAllProducts();
+        }
+        return this.productRepository.findByProvince_IdAndIsDeletedFalse(provinceId);
     }
 
     public Product handleSaveProduct(Product product) {

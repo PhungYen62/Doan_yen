@@ -1,11 +1,11 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+﻿<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
     <%@page contentType="text/html" pageEncoding="UTF-8" %>
         <!DOCTYPE html>
-        <html lang="en">
+        <html lang="vi">
 
         <head>
             <meta charset="utf-8">
-            <title>User</title>
+            <title>Người dùng</title>
             <meta content="width=device-width, initial-scale=1.0" name="viewport">
             <meta content="" name="keywords">
             <meta content="" name="description">
@@ -16,7 +16,7 @@
             <!-- Google Web Fonts -->
             <link rel="preconnect" href="https://fonts.googleapis.com">
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-            <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap"
+            <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
                 rel="stylesheet">
 
             <!-- Icon Font Stylesheet -->
@@ -40,7 +40,7 @@
                 <div id="spinner"
                     class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
                     <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-                        <span class="sr-only">Loading...</span>
+                        <span class="sr-only">Đang tải...</span>
                     </div>
                 </div>
                 <!-- Spinner End -->
@@ -62,22 +62,37 @@
                     <div class="container-fluid pt-5 px-4">
                         <div class="bg-light text-center rounded p-4">
                             <div class="d-flex align-items-center justify-content-between mb-4">
-                                <h6 class="mb-0">Show All</h6>
-                                <a href="/admin/user/create">Create</a>
+                                <h6 class="mb-0">Danh sách người dùng</h6>
+                                <a href="/admin/user/create">Thêm mới</a>
+                            </div>
+                            <div class="row g-3 mb-4" data-filter-toolbar data-target="#admin-user-table">
+                                <div class="col-md-8">
+                                    <label class="form-label text-start d-block">Tìm kiếm</label>
+                                    <input type="search" class="form-control" data-filter-search
+                                        placeholder="Tìm theo email, họ tên, số điện thoại hoặc địa chỉ">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label text-start d-block">Vai trò</label>
+                                    <select class="form-select" data-filter-column="7">
+                                        <option value="">Tất cả vai trò</option>
+                                        <option value="ADMIN">Admin</option>
+                                        <option value="USER">Người dùng</option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="table-responsive">
-                                <table class="table text-start align-middle table-bordered table-hover mb-0">
+                                <table id="admin-user-table" class="table text-start align-middle table-bordered table-hover mb-0">
                                     <thead>
                                         <tr class="text-dark">
                                             <th scope="col">ID</th>
                                             <th scope="col">Email</th>
-                                            <th scope="col">FullName</th>
-                                            <th scope="col">Phone</th>
-                                            <th scope="col">Province</th>
-                                            <th scope="col">District</th>
-                                            <th scope="col">Ward</th>
-                                            <th scope="col">Role</th>
-                                            <th scope="col">Action</th>
+                                            <th scope="col">Họ và tên</th>
+                                            <th scope="col">Điện thoại</th>
+                                            <th scope="col">Tỉnh/Thành</th>
+                                            <th scope="col">Quận/Huyện</th>
+                                            <th scope="col">Phường/Xã</th>
+                                            <th scope="col">Vai trò</th>
+                                            <th scope="col">Hành động</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -95,11 +110,11 @@
                                                 <td>${user.role.name}</td>
 
                                                 <td>
-                                                    <a href="/admin/user/${user.id}" class="btn btn-success">View</a>
+                                                    <a href="/admin/user/${user.id}" class="btn btn-success">Xem</a>
                                                     <a href="/admin/user/update/${user.id}"
-                                                        class="btn btn-warning  mx-2">Update</a>
+                                                        class="btn btn-warning  mx-2">Cập nhật</a>
                                                     <a href="/admin/user/delete/${user.id}"
-                                                        class="btn btn-danger">Delete</a>
+                                                        class="btn btn-danger">Xóa</a>
                                                 </td>
                                             </tr>
 
@@ -149,7 +164,7 @@
                 <!-- Content End -->
 
 
-                <!-- Back to Top -->
+                <!-- Nút về đầu trang -->
                 <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
             </div>
 
@@ -169,3 +184,6 @@
         </body>
 
         </html>
+
+
+

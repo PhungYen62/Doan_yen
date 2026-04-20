@@ -87,7 +87,7 @@
             font-weight: 700;
             color: var(--login-text);
             margin: 2px 0 18px;
-            font-family: "Open Sans", sans-serif;
+            font-family: "Inter", sans-serif;
         }
 
         .login-msg {

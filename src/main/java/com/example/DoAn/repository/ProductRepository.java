@@ -25,6 +25,12 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
 
     List<Product> findByIsDeletedFalse();
 
+    List<Product> findByProvince_Id(Long provinceId);
+
+    List<Product> findByProvince_IdAndIsDeletedFalse(Long provinceId);
+
+    Page<Product> findByProvince_IdAndIsDeletedFalse(Long provinceId, Pageable pageable);
+
     Page<Product> findByCategories_IdInAndIdNotAndIsDeletedFalse(List<Long> categoryIds, Long excludedProductId,
             Pageable pageable);
 

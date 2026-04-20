@@ -84,9 +84,9 @@
 
         .about-title {
             margin: 10px 0 10px 0;
-            font-size: 40px;
+            font-size: 48px;
             line-height: 1.2;
-            font-weight: 800;
+            font-weight: 600;
             color: var(--Black);
         }
 
@@ -109,8 +109,8 @@
         .why-title {
             margin: 16px 0 0 0;
             text-align: center;
-            font-size: 34px;
-            font-weight: 800;
+            font-size: 48px;
+            font-weight: 600;
             color: var(--Black);
         }
 
@@ -190,8 +190,8 @@
         .team-title {
             margin: 16px 0 0 0;
             text-align: center;
-            font-size: 34px;
-            font-weight: 800;
+            font-size: 48px;
+            font-weight: 600;
             color: var(--Black);
         }
 
@@ -289,7 +289,7 @@
 
                             <div>
                                 <div class="about-kicker">Về chúng tôi</div>
-                                <h1 class="about-title">Chào mừng đến<br>Fresh Food</h1>
+                                <h1 class="about-title">Chào mừng đến Fresh Food</h1>
 
                                 <p class="about-desc">
                                     Chào mừng đến với Fresh Food, nguồn cung cấp rau quả tươi ngon chất lượng hàng đầu đến từ vườn của bạn. Chúng tôi tự hào mang đến những sản phẩm được tuyển chọn kỹ lưỡng và đảm bảo an toàn.

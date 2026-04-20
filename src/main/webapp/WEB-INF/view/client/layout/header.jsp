@@ -5,7 +5,7 @@
 
 <style>
     /* ========== NHÚNG FONT CHỮ TỪ GOOGLE ========== */
-    @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
     /* ========== CSS VARIABLES ========== */
     :root {
@@ -19,7 +19,7 @@
     body {
         padding-top: 130px; 
         margin: 0;
-        font-family: 'Rubik', sans-serif; 
+        font-family: 'Inter', sans-serif; 
     }
 
     /* ========== TOP HEADER - WHITE BAR ========== */
@@ -88,7 +88,7 @@
         border: 2px solid var(--primary-green);
         border-radius: 6px;
         font-size: 16px;
-        font-family: 'Rubik', sans-serif;
+        font-family: 'Inter', sans-serif;
         background-color: white;
         color: var(--text-dark);
         outline: none;
@@ -170,7 +170,7 @@
         border: 2px solid var(--primary-green);
         border-radius: 6px;
         font-size: 16px;
-        font-family: 'Rubik', sans-serif;
+        font-family: 'Inter', sans-serif;
         font-weight: 600;
         text-decoration: none;
         transition: all 0.3s ease;
@@ -198,7 +198,7 @@
         border: 2px solid var(--primary-green);
         border-radius: 6px;
         font-size: 16px;
-        font-family: 'Rubik', sans-serif;
+        font-family: 'Inter', sans-serif;
         font-weight: 600; 
         text-decoration: none;
         transition: all 0.3s ease;
@@ -245,7 +245,7 @@
         color: white;
         text-decoration: none;
         font-size: 16px;
-        font-family: 'Rubik', sans-serif;
+        font-family: 'Inter', sans-serif;
         font-weight: 500; 
         letter-spacing: 0.5px;
         transition: opacity 0.2s ease;
@@ -331,7 +331,7 @@
         text-decoration: none;
         color: var(--text-dark);
         font-size: 16px;
-        font-family: 'Rubik', sans-serif;
+        font-family: 'Inter', sans-serif;
         font-weight: 500;
         background: transparent;
         border: none;
@@ -353,6 +353,10 @@
 
     .account-select-form {
         margin: 0;
+    }
+
+    .account-select-btn > span {
+        font-size: 16px;
     }
 </style>
 

@@ -40,6 +40,7 @@ public class ItemController {
             @RequestParam("category") Optional<String> categoryStrOptional,
             @RequestParam("minPrice") Optional<String> minPriceOptional,
             @RequestParam("maxPrice") Optional<String> maxPriceOptional,
+            @RequestParam("province") Optional<String> provinceOptional,
             @RequestParam("sort") Optional<String> sortOptional) {
         List<Categories> categories = this.categoriesService.getAll();
         model.addAttribute("categories", categories);
@@ -86,14 +87,19 @@ public class ItemController {
         }
 
         String name = nameOptional.isPresent() ? nameOptional.get() : "";
+        Long provinceId = null;
+        if (provinceOptional.isPresent() && !provinceOptional.get().isBlank()) {
+            provinceId = Long.parseLong(provinceOptional.get());
+        }
 
         Pageable pageable = PageRequest.of(page - 1, 9, sortOrder);
         Page<Product> ProductPage = this.productService.getAllProductsWithSpec(pageable, name, minPrice, maxPrice,
-                categoryIds);
+                categoryIds, provinceId);
         List<Product> products = ProductPage.getContent();
         model.addAttribute("products", products);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", ProductPage.getTotalPages());
+        model.addAttribute("selectedProvinceId", provinceId);
 
         List<Product> allProducts = this.productService.getAllProducts();
         List<Product> discountedProducts = new ArrayList<>();

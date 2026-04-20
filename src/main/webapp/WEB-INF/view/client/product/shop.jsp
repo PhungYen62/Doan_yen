@@ -14,7 +14,7 @@
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Rubik:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <!-- Icon Font Stylesheet -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
@@ -71,9 +71,9 @@
             flex: 0 0 auto !important;
         }
 
-        /* Shop page: 16px gap between filter row and product list */
+        /* Shop page: add clearer separation between filter row and product list */
         .shop section.our-products + section.card2 {
-            margin-top: 16px !important;
+            margin-top: 24px !important;
         }
     </style>
 </head>
@@ -112,28 +112,32 @@
                                         <h3 class="section-title" style="font-size: 16px; color: #749b3f; font-weight: 600; margin: 0 !important; background-color: #e8f3d6; padding: 4px 12px; display: inline-block; border-radius: 4px;">Sản phẩm của chúng tôi</h3>
                                     </div>
                                     <div class="text-description3" style="display: flex; flex-direction: column; align-items: flex-start !important; gap: 4px; margin: 0; padding: 0;">
-                                        <h2 class="page-title" style="margin: 0 !important; margin-left: 0 !important; padding: 0 !important; padding-left: 0 !important; font-size: 32px; color: #212337; font-weight: 700; text-align: left;">
+                                        <h2 class="page-title" style="margin: 0 !important; margin-left: 0 !important; padding: 0 !important; padding-left: 0 !important; font-size: 48px; color: #212337; font-weight: 600; text-align: left;">
                                             Đặc sản vùng miền của chúng tôi
                                         </h2>
-                                        <div class="section-description" style="font-size: 14px; color: #666; line-height: 1.5; text-align: left; margin: 0; padding: 0;">
+                                        <div class="section-description" style="font-size: 16px; color: #666; line-height: 1.5; text-align: left; margin: 0; padding: 0;">
                                             Chúng tôi tự hào cung cấp nhiều loại trái cây, rau củ và nguyên liệu làm salad tươi ngon nhất.
                                         </div>
                                     </div>
                                 </div>
-                                <div class="categories-parent" style="align-self: stretch; width: 100%; max-width: 1200px; display: flex; justify-content: space-between; align-items: center; gap: 20px; margin-top: 20px; flex-wrap: nowrap;">
+                                <div class="categories-parent" style="align-self: stretch; width: 100%; max-width: 1200px; display: flex; justify-content: space-between; align-items: center; gap: 20px; margin-top: 20px; margin-bottom: 12px; flex-wrap: nowrap;">
                                     <div class="categories" style="display: flex; gap: 12px; flex-wrap: nowrap; align-items: center; white-space: nowrap; flex: 1;">
                                         <button class="button3" style="min-width: 120px; height: 48px; justify-content: center; align-items: center;">
                                             <div class="c-sn-min">Tất cả</div>
                                         </button>
-                                        <c:forEach var="category" items="${categories}">
-                                            <button class="button3" style="min-width: 120px; height: 48px; justify-content: center; align-items: center;">
-                                                <div class="c-sn-min">${category.name}</div>
-                                            </button>
-                                        </c:forEach>
+                                        <button class="button3" style="min-width: 120px; height: 48px; justify-content: center; align-items: center;">
+                                            <div class="c-sn-min">Đặc sản miền Bắc</div>
+                                        </button>
+                                        <button class="button3" style="min-width: 120px; height: 48px; justify-content: center; align-items: center;">
+                                            <div class="c-sn-min">Đặc sản miền Trung</div>
+                                        </button>
+                                        <button class="button3" style="min-width: 120px; height: 48px; justify-content: center; align-items: center;">
+                                            <div class="c-sn-min">Đặc sản miền Nam</div>
+                                        </button>
                                     </div>
                                     <div style="display: flex; gap: 24px; align-items: center; flex-wrap: nowrap; justify-content: flex-end; flex-shrink: 0;">
                                         <div class="sort-by" style="display: flex; flex-direction: row; gap: 12px; align-items: center; cursor: pointer; flex-wrap: nowrap; white-space: nowrap; position: relative;">
-                                            <span style="font-size: 14px; color: #666; font-weight: 500; font-family: 'Inter', sans-serif;">Nơi bán:</span>
+                                            <span style="font-size: 16px; color: #666; font-weight: 500; font-family: 'Inter', sans-serif;">Nơi bán:</span>
                                             <div class="location-dropdown" style="display: flex; gap: 6px; align-items: center; border: 1px solid #e5e7eb; border-radius: 4px; padding: 6px 12px; background-color: #f9fafb; flex-shrink: 0; cursor: pointer;" onclick="toggleDropdown(event, 'location-menu')">
                                                 <span style="font-size: 12px; color: #666;">▼</span>
                                                 <span style="font-size: 14px; color: #666; font-family: 'Inter', sans-serif;">Hà Nội</span>
@@ -147,7 +151,7 @@
                                             </div>
                                         </div>
                                         <div class="sort-by3" style="display: flex; flex-direction: row; gap: 12px; align-items: center; cursor: pointer; flex-wrap: nowrap; white-space: nowrap; position: relative;">
-                                            <span style="font-size: 14px; color: #666; font-weight: 500; font-family: 'Inter', sans-serif;">Sắp xếp theo:</span>
+                                            <span style="font-size: 16px; color: #666; font-weight: 500; font-family: 'Inter', sans-serif;">Sắp xếp theo:</span>
                                             <div class="sort-dropdown" style="display: flex; gap: 6px; align-items: center; border: 1px solid #e5e7eb; border-radius: 4px; padding: 6px 12px; background-color: #f9fafb; flex-shrink: 0; cursor: pointer;" onclick="toggleDropdown(event, 'sort-menu')">
                                                 <span style="font-size: 12px; color: #666;">▼</span>
                                                 <span style="font-size: 14px; color: #666; font-family: 'Inter', sans-serif;">Phổ biến</span>
@@ -164,7 +168,7 @@
                                     </div>
                                 </div>
                             </section>
-                                <section class="card2" style="display: grid; grid-template-columns: repeat(4, 282px); gap: 24px 24px; width: 1200px; margin: 16px auto 16px auto;">
+                                <section class="card2" style="display: grid; grid-template-columns: repeat(4, 282px); gap: 24px 24px; width: 1200px; margin: 24px auto 16px auto;">
                                     <c:forEach var="product" items="${products}" varStatus="loop">
                                         <c:if test="${loop.index < 21}">
                                         <div class="product-cadt js-product-card" role="link" tabindex="0" data-href="/product/${product.id}"

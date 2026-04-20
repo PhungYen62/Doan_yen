@@ -14,7 +14,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Raleway:wght@600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
@@ -206,7 +206,7 @@
             border: 1px solid #cfd4dc;
             border-radius: 8px;
             color: #6b7280;
-            font-family: "Open Sans", sans-serif;
+            font-family: "Inter", sans-serif;
             font-size: 14px;
             font-weight: 600;
             padding: 6px 14px;
@@ -226,7 +226,7 @@
         .order-history-actions .order-action-btn:focus {
             display: inline-block;
             border-radius: 8px;
-            font-family: "Open Sans", sans-serif;
+            font-family: "Inter", sans-serif;
             font-size: 12px;
             font-weight: 600;
             line-height: 1.25;

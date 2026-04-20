@@ -46,6 +46,14 @@ public class ProductSpecs {
         };
     }
 
+    public static Specification<Product> hasProvinceId(Long provinceId) {
+        if (provinceId == null) {
+            return null;
+        }
+
+        return (root, query, cb) -> cb.equal(root.get("province").get("id"), provinceId);
+    }
+
     public static Specification<Product> isNotDeleted() {
         return (root, query, cb) -> cb.isFalse(root.get("isDeleted"));
     }

@@ -24,9 +24,11 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.DoAn.domain.Categories;
 import com.example.DoAn.domain.Product;
 import com.example.DoAn.domain.ProductImage;
+import com.example.DoAn.domain.Province;
 import com.example.DoAn.repository.ProductImageRepository;
 import com.example.DoAn.service.CategoriesService;
 import com.example.DoAn.service.ProductService;
+import com.example.DoAn.service.ProvinceService;
 import com.example.DoAn.service.UploadService;
 import com.example.DoAn.utils.StringUtils;
 
@@ -38,13 +40,16 @@ public class ProductController {
     private final UploadService uploadService;
     private final ProductImageRepository productImageRepository;
     private final CategoriesService categoriesService;
+    private final ProvinceService provinceService;
 
     public ProductController(ProductService productService, UploadService uploadService,
-            ProductImageRepository productImageRepository, CategoriesService categoriesService) {
+            ProductImageRepository productImageRepository, CategoriesService categoriesService,
+            ProvinceService provinceService) {
         this.productService = productService;
         this.uploadService = uploadService;
         this.productImageRepository = productImageRepository;
         this.categoriesService = categoriesService;
+        this.provinceService = provinceService;
     }
 
     // View
@@ -78,9 +83,7 @@ public class ProductController {
     @GetMapping("/admin/product/create")
     public String getCreateProductPage(Model model) {
         model.addAttribute("newProduct", new Product());
-
-        List<Categories> categories = this.categoriesService.getAll();
-        model.addAttribute(("categories"), categories);
+        populateProductFormOptions(model);
         return "admin/product/create";
     }
 
@@ -89,6 +92,7 @@ public class ProductController {
             @ModelAttribute("newProduct") @Valid Product newProduct,
             BindingResult newProductBindingResult,
             @RequestParam("categoryIds") List<Long> categoryIds,
+            @RequestParam(value = "provinceId", required = false) Long provinceId,
             @RequestParam("imageFile") MultipartFile[] files) {
 
         newProduct.setName(newProduct.getName().trim());
@@ -97,6 +101,7 @@ public class ProductController {
         }
         // validate
         if (newProductBindingResult.hasErrors()) {
+            populateProductFormOptions(model);
             return "admin/product/create";
         }
         if (newProduct.getSalePrice() == null) {
@@ -105,6 +110,7 @@ public class ProductController {
 
         List<Categories> categories = this.categoriesService.getCategoriesByIds(categoryIds);
         newProduct.setCategories(categories);
+        setProvinceForProduct(newProduct, provinceId);
 
         // save
         this.productService.handleSaveProduct(newProduct);
@@ -142,9 +148,14 @@ public class ProductController {
     @GetMapping("/admin/product/update/{id}")
     public String getUpdateProductPage(Model model, @PathVariable long id) {
         Optional<Product> currentProduct = this.productService.fetchProductById(id);
+        if (currentProduct.isEmpty()) {
+            return "redirect:/admin/product";
+        }
         List<Categories> categories = this.categoriesService.getAll();
+        List<Province> provinces = this.provinceService.getAllProvinces();
         List<ProductImage> productImages = productImageRepository.findByProduct(currentProduct.get());
         model.addAttribute(("categories"), categories);
+        model.addAttribute(("provinces"), provinces);
         model.addAttribute(("productImages"), productImages);
         model.addAttribute("updateProduct", currentProduct.get());
         return "admin/product/update";
@@ -153,12 +164,21 @@ public class ProductController {
     @PostMapping("/admin/product/update")
     public String postUpdateProduct(Model model, @ModelAttribute("updateProduct") Product productUpdate,
             BindingResult newProductBindingResult,
+            @RequestParam(value = "provinceId", required = false) Long provinceId,
             @RequestParam Map<String, MultipartFile> files) {
-        Product product = this.productService.fetchProductById(productUpdate.getId()).get();
+        Optional<Product> productOptional = this.productService.fetchProductById(productUpdate.getId());
+        if (productOptional.isEmpty()) {
+            return "redirect:/admin/product";
+        }
+
+        Product product = productOptional.get();
 
         if (product != null) {
 
             if (newProductBindingResult.hasErrors()) {
+                model.addAttribute(("categories"), this.categoriesService.getAll());
+                model.addAttribute(("provinces"), this.provinceService.getAllProvinces());
+                model.addAttribute(("productImages"), productImageRepository.findByProduct(product));
                 return "admin/product/update";
             } else {
                 List<ProductImage> existingImages = productImageRepository.findByProduct(product);
@@ -186,12 +206,27 @@ public class ProductController {
                 product.setQuantity(productUpdate.getQuantity());
                 product.setDetailDesc(productUpdate.getDetailDesc());
                 product.setShortDesc(productUpdate.getShortDesc());
+                setProvinceForProduct(product, provinceId);
                 product.setUpdatedAt(LocalDateTime.now());
                 this.productService.handleSaveProduct(product);
             }
         }
 
         return "redirect:/admin/product";
+    }
+
+    private void populateProductFormOptions(Model model) {
+        model.addAttribute(("categories"), this.categoriesService.getAll());
+        model.addAttribute(("provinces"), this.provinceService.getAllProvinces());
+    }
+
+    private void setProvinceForProduct(Product product, Long provinceId) {
+        if (provinceId == null) {
+            product.setProvince(null);
+            return;
+        }
+        Optional<Province> provinceOptional = this.provinceService.getProvinceById(provinceId);
+        product.setProvince(provinceOptional.orElse(null));
     }
 
     // Delete

@@ -1,12 +1,12 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+﻿<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
     <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
         <%@page contentType="text/html" pageEncoding="UTF-8" %>
             <!DOCTYPE html>
-            <html lang="en">
+            <html lang="vi">
 
             <head>
                 <meta charset="utf-8">
-                <title>Products</title>
+                <title>Sản phẩm</title>
                 <meta content="width=device-width, initial-scale=1.0" name="viewport">
                 <meta content="" name="keywords">
                 <meta content="" name="description">
@@ -17,7 +17,7 @@
                 <!-- Google Web Fonts -->
                 <link rel="preconnect" href="https://fonts.googleapis.com">
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-                <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap"
+                <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
                     rel="stylesheet">
 
                 <!-- Icon Font Stylesheet -->
@@ -42,7 +42,7 @@
                     <div id="spinner"
                         class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
                         <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-                            <span class="sr-only">Loading...</span>
+                            <span class="sr-only">Đang tải...</span>
                         </div>
                     </div>
                     <!-- Spinner End -->
@@ -67,8 +67,15 @@
                                     <h6 class="mb-0">Danh sách phản hồi</h6>
 
                                 </div>
+                                <div class="row g-3 mb-4" data-filter-toolbar data-target="#admin-contact-table">
+                                    <div class="col-md-12">
+                                        <label class="form-label text-start d-block">Tìm kiếm</label>
+                                        <input type="search" class="form-control" data-filter-search
+                                            placeholder="Tìm theo email, họ tên hoặc tiêu đề">
+                                    </div>
+                                </div>
                                 <div class="table-responsive">
-                                    <table class="table text-start align-middle table-bordered table-hover mb-0">
+                                    <table id="admin-contact-table" class="table text-start align-middle table-bordered table-hover mb-0">
                                         <thead>
                                             <tr class="text-dark">
                                                 <th scope="col">ID</th>
@@ -90,9 +97,9 @@
                                                         <div class="d-inline-flex">
                                                             <a href="/admin/contact/${contact.id}"
                                                                 class="btn btn-success mx-2">
-                                                                View</a>
+                                                                Xem</a>
                                                             <a href="/admin/contact/delete/${contact.id}"
-                                                                class="btn btn-danger">Delete</a>
+                                                                class="btn btn-danger">Xóa</a>
                                                         </div>
 
                                                     </td>
@@ -144,7 +151,7 @@
                     <!-- Content End -->
 
 
-                    <!-- Back to Top -->
+                    <!-- Nút về đầu trang -->
                     <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i
                             class="bi bi-arrow-up"></i></a>
                 </div>
@@ -165,3 +172,5 @@
             </body>
 
             </html>
+
+

@@ -1,9 +1,9 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+﻿<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
     <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
         <%@page contentType="text/html" pageEncoding="UTF-8" %>
             <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
                 <!DOCTYPE html>
-                <html lang="en">
+                <html lang="vi">
 
                 <head>
                     <meta charset="utf-8">
@@ -18,7 +18,7 @@
                     <!-- Google Web Fonts -->
                     <link rel="preconnect" href="https://fonts.googleapis.com">
                     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-                    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap"
+                    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
                         rel="stylesheet">
 
                     <!-- Icon Font Stylesheet -->
@@ -44,7 +44,7 @@
                         <div id="spinner"
                             class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
                             <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-                                <span class="sr-only">Loading...</span>
+                                <span class="sr-only">Đang tải...</span>
                             </div>
                         </div>
                         <!-- Spinner End -->
@@ -83,23 +83,23 @@
                                                 </div>
 
                                                 <div class="mb-3 col-12 col-md-6">
-                                                    <label class="form-label">User:</label>
+                                                    <label class="form-label">Khách hàng:</label>
                                                     <form:input type="text" class="form-control" disabled="true"
                                                         path="user.fullName" />
                                                 </div>
 
                                                 <div class="mb-3 col-12 col-md-6">
-                                                    <label class="form-label">Status:</label>
+                                                    <label class="form-label">Trạng thái:</label>
                                                     <form:select class="form-select" path="status">
-                                                        <form:option value="PENDING">PENDING</form:option>
-                                                        <form:option value="SHIPPING">SHIPPING</form:option>
-                                                        <form:option value="COMPLETE">COMPLETE</form:option>
-                                                        <form:option value="CANCEL">CANCEL</form:option>
+                                                        <form:option value="PENDING">Chờ xác nhận</form:option>
+                                                        <form:option value="SHIPPING">Đang giao</form:option>
+                                                        <form:option value="COMPLETE">Hoàn tất</form:option>
+                                                        <form:option value="CANCEL">Đã hủy</form:option>
                                                     </form:select>
                                                 </div>
                                                 <div class="col-12 mb-5">
-                                                    <a href="/admin/order" class="btn btn-success">Back</a>
-                                                    <button type="submit" class="btn btn-warning">Update</button>
+                                                    <a href="/admin/order" class="btn btn-success">Quay lại</a>
+                                                    <button type="submit" class="btn btn-warning">Cập nhật</button>
                                                 </div>
                                             </form:form>
 
@@ -119,7 +119,7 @@
                         <!-- Content End -->
 
 
-                        <!-- Back to Top -->
+                        <!-- Nút về đầu trang -->
                         <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i
                                 class="bi bi-arrow-up"></i></a>
                     </div>
@@ -140,3 +140,5 @@
                 </body>
 
                 </html>
+
+

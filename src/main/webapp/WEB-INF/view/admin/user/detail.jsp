@@ -1,11 +1,11 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+﻿<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
     <%@page contentType="text/html" pageEncoding="UTF-8" %>
         <!DOCTYPE html>
-        <html lang="en">
+        <html lang="vi">
 
         <head>
             <meta charset="utf-8">
-            <title>User</title>
+            <title>Người dùng</title>
             <meta content="width=device-width, initial-scale=1.0" name="viewport">
             <meta content="" name="keywords">
             <meta content="" name="description">
@@ -16,7 +16,7 @@
             <!-- Google Web Fonts -->
             <link rel="preconnect" href="https://fonts.googleapis.com">
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-            <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap"
+            <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
                 rel="stylesheet">
 
             <!-- Icon Font Stylesheet -->
@@ -40,7 +40,7 @@
                 <div id="spinner"
                     class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
                     <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-                        <span class="sr-only">Loading...</span>
+                        <span class="sr-only">Đang tải...</span>
                     </div>
                 </div>
                 <!-- Spinner End -->
@@ -60,16 +60,16 @@
 
 
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">Manage Users</h1>
+                        <h1 class="mt-4">Quản lý người dùng</h1>
                         <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
+                            <li class="breadcrumb-item"><a href="/admin">Bảng điều khiển</a></li>
                             <li class="breadcrumb-item active">Users</li>
                         </ol>
                         <div class="container mt-5">
                             <div class="row">
                                 <div class="col-12 mx-auto">
                                     <div class="d-flex justify-content-between">
-                                        <h3>User detail with id = ${id}</h3>
+                                        <h3>Chi tiết người dùng có mã = ${id}</h3>
                                     </div>
                                     <hr />
                                     <div class="card" style="width: 60%">
@@ -79,15 +79,15 @@
                                         <ul class="list-group list-group-flush">
                                             <li class="list-group-item">ID: ${user.id}</li>
                                             <li class="list-group-item">Email: ${user.email}</li>
-                                            <li class="list-group-item">FullName: ${user.fullName}</li>
-                                            <li class="list-group-item">Phone: ${user.phone}</li>
-                                            <li class="list-group-item">Province: ${user.province}</li>
-                                            <li class="list-group-item">District: ${user.district}</li>
-                                            <li class="list-group-item">Ward: ${user.ward}</li>
-                                            <li class="list-group-item">Address_detail: ${user.address_detail}</li>
+                                            <li class="list-group-item">Họ và tên: ${user.fullName}</li>
+                                            <li class="list-group-item">Điện thoại: ${user.phone}</li>
+                                            <li class="list-group-item">Tỉnh/Thành: ${user.province}</li>
+                                            <li class="list-group-item">Quận/Huyện: ${user.district}</li>
+                                            <li class="list-group-item">Phường/Xã: ${user.ward}</li>
+                                            <li class="list-group-item">Địa chỉ chi tiết: ${user.address_detail}</li>
                                         </ul>
                                     </div>
-                                    <a href="/admin/user" class="btn btn-success mt-3">Back</a>
+                                    <a href="/admin/user" class="btn btn-success mt-3">Quay lại</a>
                                 </div>
                             </div>
                         </div>
@@ -99,7 +99,7 @@
                 <!-- Content End -->
 
 
-                <!-- Back to Top -->
+                <!-- Nút về đầu trang -->
                 <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
             </div>
 
@@ -119,3 +119,6 @@
         </body>
 
         </html>
+
+
+

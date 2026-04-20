@@ -14,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.DecimalMin;
@@ -58,6 +59,10 @@ public class Product {
     @ManyToMany
     @JoinTable(name = "product_category", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
     private List<Categories> categories;
+
+    @ManyToOne
+    @JoinColumn(name = "province_id")
+    private Province province;
 
     @Column(name = "is_deleted")
     private Boolean isDeleted = false;
@@ -140,6 +145,14 @@ public class Product {
 
     public void setCategories(List<Categories> categories) {
         this.categories = categories;
+    }
+
+    public Province getProvince() {
+        return province;
+    }
+
+    public void setProvince(Province province) {
+        this.province = province;
     }
 
     public String getFirstImage() {

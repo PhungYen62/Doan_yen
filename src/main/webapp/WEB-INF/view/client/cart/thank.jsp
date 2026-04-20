@@ -12,7 +12,7 @@
                 <link rel="preconnect" href="https://fonts.googleapis.com">
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
                 <link
-                    href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Raleway:wght@600;800&display=swap"
+                    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
                     rel="stylesheet">
 
                 <!-- Icon Font Stylesheet -->
@@ -36,7 +36,7 @@
                         border: 1px solid #cfd4dc;
                         border-radius: 8px;
                         color: #6b7280;
-                        font-family: "Open Sans", sans-serif;
+                        font-family: "Inter", sans-serif;
                         font-size: 16px;
                         font-weight: 600;
                         padding: 8px 16px;

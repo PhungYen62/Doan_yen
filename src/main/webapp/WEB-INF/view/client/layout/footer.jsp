@@ -18,7 +18,7 @@
         padding: 50px 0 20px 0;
         width: 100%;
         margin-top: 60px;
-        font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        font-family: 'Inter', sans-serif;
     }
 
     .footer-container {

@@ -15,7 +15,7 @@
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <!-- Icon Font Stylesheet -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
@@ -40,7 +40,7 @@
         }
 
         body {
-            font-family: 'Rubik', sans-serif;
+            font-family: 'Inter', sans-serif;
             background-color: #ffffff;
         }
 
@@ -644,7 +644,7 @@
                             <c:forEach var="cartDetail" items="${cart.cartDetails}" varStatus="status">
                                 <div class="mb-3">
                                     <form:input type="hidden" path="cartDetails[${status.index}].id" />
-                                    <form:input type="hidden" path="cartDetails[${status.index}].quantity" />
+                                    <form:input type="hidden" path="cartDetails[${status.index}].quantity" cssClass="cart-hidden-quantity" id="cart-hidden-quantity-${status.index}" />
                                 </div>
                             </c:forEach>
                         </div>
@@ -698,6 +698,7 @@
                 if (value > 1) {
                     value--;
                     input.val(value);
+                    syncHiddenQuantity(input);
                     updateCartTotal();
                 }
             });
@@ -708,7 +709,12 @@
                 let value = parseInt(input.val());
                 value++;
                 input.val(value);
+                syncHiddenQuantity(input);
                 updateCartTotal();
+            });
+
+            $('.quantity-input').each(function() {
+                syncHiddenQuantity($(this));
             });
 
             // Update cart total
@@ -728,6 +734,11 @@
 
                 // Update grand total
                 $('.summary-row .value[data-cart-total-price]').text(formatCurrency(total) + ' đ');
+            }
+
+            function syncHiddenQuantity(input) {
+                const index = input.data('cart-detail-index');
+                $('#cart-hidden-quantity-' + index).val(input.val());
             }
 
             function formatCurrency(value) {

@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
 /********** Template CSS **********/
 :root {
     --primary: #009CFF;
@@ -11,6 +13,17 @@
     right: 45px;
     bottom: 45px;
     z-index: 99;
+}
+
+html,
+body,
+body *,
+input,
+button,
+select,
+optgroup,
+textarea {
+    font-family: 'Inter', sans-serif;
 }
 
 

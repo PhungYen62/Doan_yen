@@ -1,12 +1,12 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+﻿<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
     <%@page contentType="text/html" pageEncoding="UTF-8" %>
         <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
             <!DOCTYPE html>
-            <html lang="en">
+            <html lang="vi">
 
             <head>
                 <meta charset="utf-8">
-                <title>User</title>
+                <title>Người dùng</title>
                 <meta content="width=device-width, initial-scale=1.0" name="viewport">
                 <meta content="" name="keywords">
                 <meta content="" name="description">
@@ -17,7 +17,7 @@
                 <!-- Google Web Fonts -->
                 <link rel="preconnect" href="https://fonts.googleapis.com">
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-                <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap"
+                <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
                     rel="stylesheet">
 
                 <!-- Icon Font Stylesheet -->
@@ -43,7 +43,7 @@
                     <div id="spinner"
                         class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
                         <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-                            <span class="sr-only">Loading...</span>
+                            <span class="sr-only">Đang tải...</span>
                         </div>
                     </div>
                     <!-- Spinner End -->
@@ -62,16 +62,16 @@
 
 
                         <div class="container-fluid px-4">
-                            <h1 class="mt-4">Manage Users</h1>
+                            <h1 class="mt-4">Quản lý người dùng</h1>
                             <ol class="breadcrumb mb-4">
-                                <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
+                                <li class="breadcrumb-item"><a href="/admin">Bảng điều khiển</a></li>
                                 <li class="breadcrumb-item active">Users</li>
                             </ol>
                             <div class=" mt-5">
                                 <div class="row">
                                     <div class="col-12 mx-auto">
                                         <div class="d-flex justify-content-between">
-                                            <h3>Delete the user with id = ${id}</h3>
+                                            <h3>Xóa người dùng có mã = ${id}</h3>
                                         </div>
                                         <div class="card" style="width: 60%">
                                             <div class="card-header">
@@ -79,12 +79,12 @@
                                             </div>
                                             <ul class="list-group list-group-flush">
                                                 <li class="list-group-item">Email: ${userDelete.email}</li>
-                                                <li class="list-group-item">FullName: ${userDelete.fullName}</li>
-                                                <li class="list-group-item">Phone: ${userDelete.phone}</li>
-                                                <li class="list-group-item">Province: ${userDelete.province}</li>
-                                                <li class="list-group-item">District: ${userDelete.district}</li>
-                                                <li class="list-group-item">Ward: ${userDelete.ward}</li>
-                                                <li class="list-group-item">Address_detail: ${userDelete.address_detail}
+                                                <li class="list-group-item">Họ và tên: ${userDelete.fullName}</li>
+                                                <li class="list-group-item">Điện thoại: ${userDelete.phone}</li>
+                                                <li class="list-group-item">Tỉnh/Thành: ${userDelete.province}</li>
+                                                <li class="list-group-item">Quận/Huyện: ${userDelete.district}</li>
+                                                <li class="list-group-item">Phường/Xã: ${userDelete.ward}</li>
+                                                <li class="list-group-item">Địa chỉ chi tiết: ${userDelete.address_detail}
                                                 </li>
                                             </ul>
                                         </div>
@@ -114,7 +114,7 @@
                     <!-- Content End -->
 
 
-                    <!-- Back to Top -->
+                    <!-- Nút về đầu trang -->
                     <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i
                             class="bi bi-arrow-up"></i></a>
                 </div>
@@ -135,3 +135,6 @@
             </body>
 
             </html>
+
+
+

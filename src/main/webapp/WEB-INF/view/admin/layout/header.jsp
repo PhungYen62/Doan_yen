@@ -1,4 +1,4 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+﻿<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
     <%@page contentType="text/html" pageEncoding="UTF-8" %>
         <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0">
             <a href="" class="navbar-brand d-flex d-lg-none me-4">
@@ -8,7 +8,7 @@
                 <i class="fa fa-bars"></i>
             </a>
             <form class="d-none d-md-flex ms-4">
-                <input class="form-control border-0" type="search" placeholder="Search">
+                <input class="form-control border-0" type="search" placeholder="Tìm kiếm">
             </form>
             <div class="navbar-nav align-items-center ms-auto">
 

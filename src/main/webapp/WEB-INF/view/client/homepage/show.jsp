@@ -12,7 +12,7 @@
                 <link rel="preconnect" href="https://fonts.googleapis.com">
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
                 <link
-                    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Rubik:wght@500&display=swap"
+                    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
                     rel="stylesheet">
 
                 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
@@ -25,7 +25,7 @@
                     body {
                         padding-top: 135px;
                         margin: 0;
-                        font-family: 'Rubik', sans-serif;
+                        font-family: 'Inter', sans-serif;
                         background-color: #ffffff;
                     }
 
@@ -64,10 +64,10 @@
                         background-color: rgba(255, 255, 255, 0.95);
                         color: #749b3f;
                         padding: 8px 20px;
-                        border-radius: 20px;
-                        font-size: 14px;
+                        border-radius: 8px;
+                        font-size: 16px;
                         font-weight: 600;
-                        font-family: 'Rubik', sans-serif;
+                        font-family: 'Inter', sans-serif;
                     }
 
                     .hero-title {
@@ -75,7 +75,7 @@
                         font-weight: 700;
                         line-height: 1.3;
                         color: white;
-                        font-family: 'Rubik', sans-serif;
+                        font-family: 'Inter', sans-serif;
                         text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
                         margin: 0;
                     }
@@ -87,8 +87,8 @@
                         padding: 14px 40px;
                         border-radius: 6px;
                         font-size: 16px;
-                        font-weight: 600;
-                        font-family: 'Rubik', sans-serif;
+                        font-weight: 700;
+                        font-family: 'Inter', sans-serif;
                         cursor: pointer;
                         transition: background-color 0.3s ease;
                         margin-top: 10px;
@@ -104,7 +104,7 @@
                     }
 
                     .hero-download-label {
-                        font-size: 14px;
+                        font-size: 16px;
                         color: rgba(255, 255, 255, 0.9);
                         margin-bottom: 12px;
                         display: block;
@@ -155,7 +155,7 @@
                         background-color: rgba(116, 155, 63, 0.10);
                         border-radius: 8px;
                         color: #749B3F;
-                        font-size: 20px;
+                        font-size: 16px;
                         font-weight: 600;
                         font-family: 'Inter', sans-serif;
                         margin-bottom: 20px;
@@ -204,6 +204,7 @@
                         align-items: center;
                         justify-content: center;
                         margin: 0 auto;
+                        overflow: hidden;
                     }
 
                     /* Ảnh Background đằng sau */
@@ -233,24 +234,25 @@
                     .promo-cards-wrapper {
                         position: relative;
                         z-index: 10;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        gap: 50px;
                         width: 100%;
                         max-width: 980px;
+                        height: 360px;
                         margin: 0 auto;
                     }
 
                     .product-card-item {
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        width: 520px;
+                        height: 318px;
                         border-radius: 16px;
                         overflow: hidden;
                         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
                         background-color: white;
                         cursor: pointer;
-                        transition: transform 0.3s ease, box-shadow 0.3s ease;
-                        flex-shrink: 0;
-                        position: relative;
+                        transition: transform 0.85s cubic-bezier(0.22, 0.61, 0.36, 1), opacity 0.85s cubic-bezier(0.22, 0.61, 0.36, 1), box-shadow 0.85s cubic-bezier(0.22, 0.61, 0.36, 1);
+                        will-change: transform, opacity;
                     }
 
                     .product-card-item img {
@@ -261,7 +263,6 @@
                     }
 
                     .product-card-item:hover {
-                        transform: translateY(-10px);
                         box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
                     }
 
@@ -283,19 +284,43 @@
                     }
 
                     /* 2 Ảnh nhỏ */
-                    .product-card-item.side-card {
-                        width: 250px;
-                        height: 152px;
-                        opacity: 0.95;
+                    .product-card-item.is-left {
+                        transform: translate(-148%, -50%) scale(0.48);
+                        opacity: 0.92;
+                        z-index: 1;
                     }
 
                     /* Ảnh giữa to nhất */
-                    .product-card-item.center-card {
-                        width: 549px;
-                        height: 335px;
+                    .product-card-item.is-center {
+                        transform: translate(-50%, -50%) scale(1);
                         z-index: 3;
+                        opacity: 1;
                         border: 4px solid white;
                         box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+                    }
+
+                    .product-card-item.is-right {
+                        transform: translate(48%, -50%) scale(0.48);
+                        opacity: 0.92;
+                        z-index: 1;
+                    }
+
+                    .product-card-item.is-exit-right,
+                    .product-card-item.is-pre-right {
+                        transform: translate(170%, -50%) scale(0.36);
+                        opacity: 0;
+                        z-index: 0;
+                    }
+
+                    .product-card-item.is-exit-left,
+                    .product-card-item.is-pre-left {
+                        transform: translate(-270%, -50%) scale(0.36);
+                        opacity: 0;
+                        z-index: 0;
+                    }
+
+                    .product-card-item.no-transition {
+                        transition: none !important;
                     }
 
                     @media (max-width: 1100px) {
@@ -311,17 +336,20 @@
 
                         .promo-cards-wrapper {
                             max-width: 850px;
-                            gap: 50px;
+                            height: 320px;
                         }
 
-                        .product-card-item.side-card {
-                            width: 200px;
-                            height: 122px;
-                        }
-
-                        .product-card-item.center-card {
+                        .product-card-item {
                             width: 430px;
                             height: 262px;
+                        }
+
+                        .product-card-item.is-left {
+                            transform: translate(-138%, -50%) scale(0.46);
+                        }
+
+                        .product-card-item.is-right {
+                            transform: translate(38%, -50%) scale(0.46);
                         }
                     }
 
@@ -346,6 +374,7 @@
                         .promo-display-area {
                             height: auto;
                             padding: 20px 0;
+                            min-height: 320px;
                         }
 
                         .promo-bg-image {
@@ -353,16 +382,29 @@
                         }
 
                         /* Ẩn ảnh nền trên mobile */
-                        .product-card-item.side-card {
+                        .promo-cards-wrapper {
+                            height: 300px;
+                        }
+
+                        .product-card-item {
+                            width: min(100%, 350px);
+                            height: auto;
+                            aspect-ratio: 4/5;
+                        }
+
+                        .product-card-item.is-left,
+                        .product-card-item.is-right,
+                        .product-card-item.is-exit-left,
+                        .product-card-item.is-exit-right,
+                        .product-card-item.is-pre-left,
+                        .product-card-item.is-pre-right {
                             display: none;
                         }
 
                         /* Ẩn ảnh nhỏ trên mobile */
-                        .product-card-item.center-card {
-                            width: 100%;
-                            max-width: 350px;
-                            height: auto;
-                            aspect-ratio: 4/5;
+                        .product-card-item.is-center {
+                            display: block;
+                            transform: translate(-50%, -50%) scale(1);
                         }
 
                         .card2 {
@@ -511,6 +553,58 @@
                     .js-product-card {
                         cursor: pointer;
                     }
+
+                    .our-products-wrapper .caption2 .u-i-c {
+                        font-size: 16px;
+                        font-weight: 600;
+                        color: #749B3F;
+                    }
+
+                    .our-products-wrapper .section-description {
+                        font-size: 16px;
+                        text-align: center;
+                    }
+
+                    .our-products-wrapper .c-sn-vng {
+                        font-size: 48px;
+                    }
+
+                    .special-offer-wrapper .caption2 .u-i-c,
+                    .text-description8 .caption2 .nhn-xt,
+                    .our-blog .caption2 .u-i-c {
+                        font-size: 16px;
+                        font-weight: 600;
+                    }
+
+                    .jane-doe-container {
+                        white-space: nowrap;
+                    }
+
+                    .jane-doe-container span + span {
+                        margin-left: 6px;
+                    }
+
+                    .our-blog .blog-date,
+                    .our-blog .blog-post-title,
+                    .our-blog .read-more-text {
+                        font-size: 16px;
+                    }
+
+                    .categories .button3:hover,
+                    .categories .button4:hover,
+                    .categories2 .button3:hover,
+                    .categories2 .button4:hover {
+                        background-color: #749B3F !important;
+                        border-color: #749B3F !important;
+                        color: #ffffff !important;
+                    }
+
+                    .categories .button3:hover .c-sn-min,
+                    .categories .button4:hover .c-sn-min,
+                    .categories2 .button3:hover .c-sn-min,
+                    .categories2 .button4:hover .c-sn-min {
+                        color: #ffffff !important;
+                    }
                 </style>
             </head>
 
@@ -567,19 +661,19 @@
                                 </div>
 
                                 <div class="promo-cards-wrapper">
-                                    <div class="product-card-item side-card">
+                                    <div class="product-card-item is-left">
                                         <img src="images/content/Main Frame-1.png"
                                             onerror="this.src='https://via.placeholder.com/250x280/dcedc8/333?text=San+Pham+Trai'"
                                             alt="Sản phẩm Trái">
                                     </div>
 
-                                    <div class="product-card-item center-card">
+                                    <div class="product-card-item is-center">
                                         <img src="images/content/Main Frame.png"
                                             onerror="this.src='https://via.placeholder.com/400x420/aed581/333?text=San+Pham+Chinh+(To)'"
                                             alt="Sản phẩm Chính">
                                     </div>
 
-                                    <div class="product-card-item side-card">
+                                    <div class="product-card-item is-right">
                                         <img src="images/content/Main Frame-2.png"
                                             onerror="this.src='https://via.placeholder.com/250x280/dcedc8/333?text=San+Pham+Phai'"
                                             alt="Sản phẩm Phải">
@@ -605,8 +699,8 @@
                                     <div class="text-description4">
                                         <h2 class="c-sn-vng">Đặc sản vùng miền của chúng tôi</h2>
                                         <div class="section-description">
-                                            Chúng tôi tự hào cung cấp nhiều loại trái cây, rau củ và nguyên liệu làm
-                                            salad tươi ngon.
+                                            Chúng tôi tự hào cung cấp nhiều loại đặc sản<br>
+                                            của các vùng miền khác nhau đảm bảo chất lượng cao.
                                         </div>
                                     </div>
                                 </div>
@@ -614,11 +708,15 @@
                                     <button class="button3">
                                         <div class="c-sn-min">Tất cả</div>
                                     </button>
-                                    <c:forEach var="category" items="${categories}">
-                                        <button class="button4">
-                                            <div class="c-sn-min">${category.name}</div>
-                                        </button>
-                                    </c:forEach>
+                                    <button class="button4">
+                                        <div class="c-sn-min">Đặc sản miền Bắc</div>
+                                    </button>
+                                    <button class="button4">
+                                        <div class="c-sn-min">Đặc sản miền Trung</div>
+                                    </button>
+                                    <button class="button4">
+                                        <div class="c-sn-min">Đặc sản miền Nam</div>
+                                    </button>
                                 </div>
                             </section>
 
@@ -629,7 +727,7 @@
                                             <div class="product-cadt js-product-card" role="link" tabindex="0" data-href="/product/${product.id}">
                                                 <div class="product-img-container bg-icon">
                                                     <c:if test="${not empty product.firstImage}">
-                                                        <img src="images/${product.firstImage}" alt="${product.name}"
+                                                        <img src="/products/${product.firstImage}" alt="${product.name}"
                                                             onerror="this.src='https://via.placeholder.com/282x208/e0e0e0/999?text=${product.name}'">
                                                     </c:if>
                                                     <c:if test="${empty product.firstImage}">
@@ -737,13 +835,15 @@
                                     <button class="button3">
                                         <div class="c-sn-min">Tất cả</div>
                                     </button>
-                                    <c:forEach var="category" items="${categories}" varStatus="loop">
-                                        <c:if test="${loop.index < 3}">
-                                            <button class="button4">
-                                                <div class="c-sn-min">${category.name}</div>
-                                            </button>
-                                        </c:if>
-                                    </c:forEach>
+                                    <button class="button4">
+                                        <div class="c-sn-min">Đặc sản miền Bắc</div>
+                                    </button>
+                                    <button class="button4">
+                                        <div class="c-sn-min">Đặc sản miền Trung</div>
+                                    </button>
+                                    <button class="button4">
+                                        <div class="c-sn-min">Đặc sản miền Nam</div>
+                                    </button>
                                 </div>
 
                                 <div class="card4">
@@ -754,7 +854,7 @@
                                                     <div class="product-cadt js-product-card" role="link" tabindex="0" data-href="/product/${product.id}">
                                                         <div class="product-img-container bg-icon">
                                                             <c:if test="${not empty product.firstImage}">
-                                                                <img src="images/${product.firstImage}"
+                                                                <img src="/products/${product.firstImage}"
                                                                     alt="${product.name}"
                                                                     onerror="this.src='https://via.placeholder.com/282x208/e0e0e0/999?text=${product.name}'">
                                                             </c:if>
@@ -819,11 +919,11 @@
                                                             thật tuyệt vời. Luôn tươi ngon, đậm đà hương vị. Việc đặt
                                                             hàng trực tuyến và được giao hàng tận nhà giúp tôi tiết kiệm
                                                             được rất nhiều thời gian. Fresh Food đã trở thành lựa chọn
-                                                            hàng đầu của tôi cho mọi nhu cầu về trái cây và rau củ."
+                                                            hàng đầu của tôi cho mọi nhu cầu về những thức quà đặc sản."
                                                         </div>
                                                         <div class="jane-doe-container">
                                                             <span class="jane-doe">Nguyễn Thị Hương</span>
-                                                            <span> - Khách hàng VIP</span>
+                                                            <span>Khách hàng VIP</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -849,14 +949,14 @@
                                 <h2 class="c-sn-vng">Fresh Food Blog</h2>
                                 <div class="blog-description">
                                     Chào mừng đến với Blog Fresh Food, nguồn thông tin hữu ích cho mọi thứ liên quan đến
-                                    nông sản tươi, ăn uống lành mạnh và cảm hứng ẩm thực.
+                                    đặc sản của mỗi miền từ nguồn gốc, cách chế biến và nguyên liệu đẩm bảo chất lượng.
                                 </div>
                             </div>
                         </section>
                         <div class="blog2">
                             <section class="blog3">
                                 <div class="blog-img-container">
-                                    <img src="https://via.placeholder.com/384x260/90ee90/2d5016?text=Blog+Mùa+Hè"
+                                    <img src="${contextPath}/images/blog/blog1.jpg"
                                         alt="Blog post 1">
                                 </div>
                                 <div class="download-app">
@@ -872,7 +972,7 @@
                             </section>
                             <section class="blog3">
                                 <div class="blog-img-container">
-                                    <img src="https://via.placeholder.com/384x260/90ee90/2d5016?text=Blog+Salad"
+                                    <img src="${contextPath}/images/blog/blog2.jpg"
                                         alt="Blog post 2">
                                 </div>
                                 <div class="download-app">
@@ -888,7 +988,7 @@
                             </section>
                             <section class="blog3">
                                 <div class="blog-img-container">
-                                    <img src="https://via.placeholder.com/384x260/90ee90/2d5016?text=Blog+Nấu+Ăn"
+                                    <img src="${contextPath}/images/blog/blog3.jpg"
                                         alt="Blog post 3">
                                 </div>
                                 <div class="download-app">
@@ -914,73 +1014,85 @@
                     }
 
                     // ========== PROMO SLIDER AUTO-PLAY ==========
-                    let currentIndex = 0;
                     const navButtons = document.querySelectorAll('.promo-nav-btn');
-                    const promoWrapper = document.querySelector('.promo-cards-wrapper');
                     let autoPlayInterval;
+                    const promoTransitionMs = 850;
+                    const promoCards = {
+                        left: document.querySelector('.promo-cards-wrapper .is-left'),
+                        center: document.querySelector('.promo-cards-wrapper .is-center'),
+                        right: document.querySelector('.promo-cards-wrapper .is-right')
+                    };
                     let isTransitioning = false;
 
-                    // Array of image sets to rotate
-                    const imageSets = [
-                        {
-                            left: 'images/content/Main Frame-1.png',
-                            center: 'images/content/Main Frame.png',
-                            right: 'images/content/Main Frame-2.png'
-                        },
-                        {
-                            left: 'images/content/Main Frame-2.png',
-                            center: 'images/content/Main Frame-1.png',
-                            right: 'images/content/Main Frame.png'
-                        },
-                        {
-                            left: 'images/content/Main Frame.png',
-                            center: 'images/content/Main Frame-2.png',
-                            right: 'images/content/Main Frame-1.png'
-                        }
-                    ];
+                    function setCardState(card, state) {
+                        card.classList.remove(
+                            'is-left',
+                            'is-center',
+                            'is-right',
+                            'is-exit-left',
+                            'is-exit-right',
+                            'is-pre-left',
+                            'is-pre-right'
+                        );
+                        card.classList.add(state);
+                    }
 
-                    function updateSlides(direction) {
+                    function slideRight() {
                         if (isTransitioning) return;
                         isTransitioning = true;
 
-                        const cards = document.querySelectorAll('.promo-cards-wrapper .product-card-item');
+                        const oldLeft = promoCards.left;
+                        const oldCenter = promoCards.center;
+                        const oldRight = promoCards.right;
 
-                        // Smooth slide animation
-                        promoWrapper.style.transition = 'all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                        oldRight.classList.add('no-transition');
+                        setCardState(oldRight, 'is-pre-left');
+                        oldRight.getBoundingClientRect();
+                        oldRight.classList.remove('no-transition');
 
-                        if (direction === 'right') {
-                            promoWrapper.style.transform = 'translateX(80px)';
-                        } else {
-                            promoWrapper.style.transform = 'translateX(-80px)';
-                        }
+                        requestAnimationFrame(() => {
+                            setCardState(oldLeft, 'is-center');
+                            setCardState(oldCenter, 'is-right');
+                            setCardState(oldRight, 'is-left');
+                        });
 
                         setTimeout(() => {
-                            promoWrapper.style.transition = 'none';
-                            promoWrapper.style.transform = 'translateX(0)';
-
-                            const currentSet = imageSets[currentIndex];
-                            cards[0].querySelector('img').src = currentSet.left;
-                            cards[1].querySelector('img').src = currentSet.center;
-                            cards[2].querySelector('img').src = currentSet.right;
-
+                            promoCards.left = oldRight;
+                            promoCards.center = oldLeft;
+                            promoCards.right = oldCenter;
                             isTransitioning = false;
-                        }, 800);
+                        }, promoTransitionMs);
                     }
 
-                    function nextSlide() {
-                        currentIndex = (currentIndex + 1) % imageSets.length;
-                        updateSlides('right');
-                        resetAutoPlay();
-                    }
+                    function slideLeft() {
+                        if (isTransitioning) return;
+                        isTransitioning = true;
 
-                    function prevSlide() {
-                        currentIndex = (currentIndex - 1 + imageSets.length) % imageSets.length;
-                        updateSlides('left');
-                        resetAutoPlay();
+                        const oldLeft = promoCards.left;
+                        const oldCenter = promoCards.center;
+                        const oldRight = promoCards.right;
+
+                        oldLeft.classList.add('no-transition');
+                        setCardState(oldLeft, 'is-pre-right');
+                        oldLeft.getBoundingClientRect();
+                        oldLeft.classList.remove('no-transition');
+
+                        requestAnimationFrame(() => {
+                            setCardState(oldRight, 'is-center');
+                            setCardState(oldCenter, 'is-left');
+                            setCardState(oldLeft, 'is-right');
+                        });
+
+                        setTimeout(() => {
+                            promoCards.left = oldCenter;
+                            promoCards.center = oldRight;
+                            promoCards.right = oldLeft;
+                            isTransitioning = false;
+                        }, promoTransitionMs);
                     }
 
                     function startAutoPlay() {
-                        autoPlayInterval = setInterval(nextSlide, 4000);
+                        autoPlayInterval = setInterval(slideRight, 4200);
                     }
 
                     function resetAutoPlay() {
@@ -993,25 +1105,14 @@
                         btn.addEventListener('click', function () {
                             if (index === 0) {
                                 // Mũi tên trái
-                                prevSlide();
+                                slideLeft();
                             } else {
                                 // Mũi tên phải
-                                nextSlide();
+                                slideRight();
                             }
+                            resetAutoPlay();
                         });
                     });
-
-                    // Add CSS for smooth transition
-                    const style = document.createElement('style');
-                    style.textContent = `
-            .promo-cards-wrapper {
-                transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            }
-            .product-card-item img {
-                transition: all 0.3s ease;
-            }
-        `;
-                    document.head.appendChild(style);
 
                     // Initialize slider
                     startAutoPlay();
