@@ -1268,10 +1268,10 @@
                         if (!hotlineMain) return;
 
                         homepageHotlinePanel.innerHTML = `
-                            <a class="homepage-hotline-action" href="https://zalo.me/1234567890" target="_blank" rel="noopener noreferrer" aria-label="Zalo">
+                            <a class="homepage-hotline-action" href="${pageContext.request.contextPath}/contact" aria-label="Zalo">
                                 <img src="${pageContext.request.contextPath}/images/content/zalo.png" alt="Zalo">
                             </a>
-                            <a class="homepage-hotline-action" href="https://m.me/" target="_blank" rel="noopener noreferrer" aria-label="Messenger">
+                            <a class="homepage-hotline-action" href="${pageContext.request.contextPath}/contact" aria-label="Liên hệ">
                                 <img src="${pageContext.request.contextPath}/images/content/mess.png" alt="Messenger">
                             </a>
                             <button type="button" class="homepage-hotline-action" id="homepageHotlineClose" aria-label="Đóng">

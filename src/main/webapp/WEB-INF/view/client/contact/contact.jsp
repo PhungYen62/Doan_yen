@@ -4,7 +4,7 @@
             <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
                 <!DOCTYPE html>
-                <html lang="en">
+                <html lang="vi">
 
                 <head>
                     <meta charset="utf-8">
@@ -12,6 +12,8 @@
                     <meta content="width=device-width, initial-scale=1.0" name="viewport">
                     <meta content="" name="keywords">
                     <meta content="" name="description">
+
+                    <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 
                     <!-- Google Web Fonts -->
                     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,9 +34,31 @@
 
                     <!-- Customized Bootstrap Stylesheet -->
                     <link href="css/bootstrap.min.css" rel="stylesheet">
+                    <link href="css/global.css" rel="stylesheet">
+                    <link href="css/index.css" rel="stylesheet">
 
                     <!-- Template Stylesheet -->
                     <link href="css/style.css" rel="stylesheet">
+
+                    <style>
+                        .contact-title {
+                            color: #212337 !important;
+                        }
+
+                        .contact-submit-btn {
+                            border: 1px solid #ff6a1a !important;
+                            color: #ff6a1a !important;
+                            transition: all 0.25s ease;
+                        }
+
+                        .contact-submit-btn:hover,
+                        .contact-submit-btn:focus {
+                            background: #ff6a1a !important;
+                            border-color: #ff6a1a !important;
+                            color: #ffffff !important;
+                            box-shadow: none !important;
+                        }
+                    </style>
                 </head>
 
                 <body>
@@ -49,13 +73,17 @@
                     <jsp:include page="../layout/header.jsp" />
 
                     <!-- Single Page Header start -->
-                    <div class="container-fluid page-header py-5">
-                        <h1 class="text-center text-white display-6">Contact</h1>
-                        <ol class="breadcrumb justify-content-center mb-0">
-                            <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item"><a href="#">Pages</a></li>
-                            <li class="breadcrumb-item active text-white">Contact</li>
-                        </ol>
+                    <div class="text-description-wrapper"
+                        style="background-image: url('${contextPath}/images/content/Bgcontent.png'); background-size: cover; background-position: center; background-repeat: no-repeat; aspect-ratio: 1445 / 199; min-height: 199px; display: flex; align-items: center; justify-content: center; padding: 0 20px; margin: 0; width: 100vw; margin-left: calc(-50vw + 50%); position: relative; box-shadow: none;">
+                        <div class="text-description"
+                            style="text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; position: relative; z-index: 1;">
+                            <h2 class="page-title"
+                                style="color: #212337; font-size: 48px; font-weight: 700; margin-bottom: 8px;">Liên hệ</h2>
+                            <div class="breadcrumb" style="color: #212337; font-size: 16px; letter-spacing: 0.5px;">
+                                <span>Trang chủ</span>
+                                <span class="ca-hng2" style="color: #ff6a1a;"> / Liên hệ</span>
+                            </div>
+                        </div>
                     </div>
                     <!-- Single Page Header End -->
 
@@ -67,7 +95,7 @@
                                 <div class="row g-4">
                                     <div class="col-12">
                                         <div class="text-center mx-auto" style="max-width: 700px;">
-                                            <h1 class="text-primary">Liên hệ với chúng tôi</h1>
+                                            <h1 class="text-primary contact-title">Liên hệ với chúng tôi</h1>
                                             <p class="mb-4">Bạn có câu hỏi, góp ý hay cần tư vấn? Vui lòng điền vào biểu
                                                 mẫu dưới đây — chúng tôi sẽ phản hồi bạn trong thời gian sớm nhất!</p>
                                         </div>
@@ -100,7 +128,7 @@
 
 
                                             <button
-                                                class="w-100 btn form-control border-secondary py-3 bg-white text-primary "
+                                                class="w-100 btn form-control py-3 bg-white contact-submit-btn"
                                                 type="submit">Gửi</button>
                                         </form:form>
                                         <c:if test="${not empty message}">
@@ -120,7 +148,7 @@
                                             <i class="fas fa-envelope fa-2x text-primary me-4"></i>
                                             <div>
                                                 <h4>Email</h4>
-                                                <p class="mb-2">farmfresh@gmail.com</p>
+                                                <p class="mb-2">freshfood@gmail.com</p>
                                             </div>
                                         </div>
                                         <div class="d-flex p-4 rounded bg-white">
@@ -159,3 +187,4 @@
                 </body>
 
                 </html>
+

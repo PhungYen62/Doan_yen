@@ -77,6 +77,11 @@ public class CartController {
 
         this.productService.handleAddProductToCart(email, productId, session, quantity);
 
+        String referer = request.getHeader("Referer");
+        if (referer != null && !referer.isBlank()) {
+            return "redirect:" + referer;
+        }
+
         return "redirect:/cart";
     }
 
