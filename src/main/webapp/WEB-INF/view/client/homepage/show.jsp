@@ -605,12 +605,124 @@
                     .categories2 .button4:hover .c-sn-min {
                         color: #ffffff !important;
                     }
+
+                    .homepage-hotline {
+                        position: fixed;
+                        right: 48px;
+                        bottom: 24px;
+                        z-index: 1200;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: flex-end;
+                        width: 72px;
+                        min-height: 72px;
+                        pointer-events: auto;
+                    }
+
+                    .homepage-hotline.is-open .homepage-hotline-panel {
+                        display: flex;
+                    }
+
+                    .homepage-hotline.is-open .homepage-hotline-main {
+                        display: none;
+                    }
+
+                    .homepage-hotline-main {
+                        border: none;
+                        background: transparent;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 72px;
+                        height: 72px;
+                        border-radius: 18px;
+                        text-decoration: none;
+                        padding: 0;
+                        cursor: pointer;
+                    }
+
+                    .homepage-hotline-main img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: contain;
+                        display: block;
+                        filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.18));
+                    }
+
+                    .homepage-hotline-panel {
+                        display: none;
+                        position: absolute;
+                        right: 0;
+                        bottom: 0;
+                        flex-direction: column;
+                        gap: 20px;
+                        align-items: center;
+                    }
+
+                    .homepage-hotline-action {
+                        width: 54px;
+                        height: 54px;
+                        border-radius: 0;
+                        text-decoration: none;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        background: transparent;
+                        box-shadow: none;
+                        overflow: hidden;
+                        border: none;
+                        padding: 0;
+                        cursor: pointer;
+                    }
+
+                    .homepage-hotline-action img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: contain;
+                        display: block;
+                    }
+
+                    .homepage-hotline-action:hover {
+                        transform: translateY(-2px);
+                        transition: transform 0.2s ease;
+                    }
+
+                    @media (max-width: 768px) {
+                        .homepage-hotline {
+                            right: 10px;
+                            bottom: 10px;
+                            width: 60px;
+                            min-height: 60px;
+                        }
+
+                        .homepage-hotline-main {
+                            width: 60px;
+                            height: 60px;
+                        }
+
+                        .homepage-hotline-action {
+                            width: 46px;
+                            height: 46px;
+                        }
+                    }
                 </style>
             </head>
 
             <body>
                 <div class="homepage">
                     <jsp:include page="../layout/header.jsp" />
+
+                    <div class="homepage-hotline" id="homepageHotline">
+                        <div class="homepage-hotline-panel" id="homepageHotlinePanel">
+                            <a class="homepage-hotline-link call" href="tel:1234567890">Gọi ngay</a>
+                            <a class="homepage-hotline-action" href="https://m.me/" target="_blank" rel="noopener noreferrer" aria-label="Messenger"><img src="${pageContext.request.contextPath}/images/content/mess.png" alt="Messenger"></a>
+                            <a class="homepage-hotline-link facebook" href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer">Facebook</a>
+                        </div>
+                        <a class="homepage-hotline-main" href="tel:1234567890" aria-label="Gọi hotline">
+                            <img src="${pageContext.request.contextPath}/images/content/hotline.png" alt="Hotline">
+                        </a>
+                    </div>
 
                     <section class="hero-section">
                         <div class="hero-content-wrapper">
@@ -1143,6 +1255,47 @@
                             if (shouldIgnoreNavigation(e.target)) return;
                             e.preventDefault();
                             navigateFromCard(card);
+                        });
+                    })();
+
+                    (function () {
+                        const homepageHotline = document.getElementById('homepageHotline');
+                        const homepageHotlinePanel = document.getElementById('homepageHotlinePanel');
+
+                        if (!homepageHotline || !homepageHotlinePanel) return;
+
+                        const hotlineMain = homepageHotline.querySelector('.homepage-hotline-main');
+                        if (!hotlineMain) return;
+
+                        homepageHotlinePanel.innerHTML = `
+                            <a class="homepage-hotline-action" href="https://zalo.me/1234567890" target="_blank" rel="noopener noreferrer" aria-label="Zalo">
+                                <img src="${pageContext.request.contextPath}/images/content/zalo.png" alt="Zalo">
+                            </a>
+                            <a class="homepage-hotline-action" href="https://m.me/" target="_blank" rel="noopener noreferrer" aria-label="Messenger">
+                                <img src="${pageContext.request.contextPath}/images/content/mess.png" alt="Messenger">
+                            </a>
+                            <button type="button" class="homepage-hotline-action" id="homepageHotlineClose" aria-label="Đóng">
+                                <img src="${pageContext.request.contextPath}/images/content/close.png" alt="Đóng">
+                            </button>
+                        `;
+
+                        hotlineMain.setAttribute('id', 'homepageHotlineToggle');
+                        hotlineMain.setAttribute('aria-label', 'Mở liên hệ nhanh');
+                        hotlineMain.setAttribute('href', '#');
+                        hotlineMain.innerHTML = `<img src="${pageContext.request.contextPath}/images/content/hotline.png" alt="Hotline">`;
+
+                        const homepageHotlineToggle = document.getElementById('homepageHotlineToggle');
+                        const homepageHotlineClose = document.getElementById('homepageHotlineClose');
+
+                        if (!homepageHotlineToggle || !homepageHotlineClose) return;
+
+                        homepageHotlineToggle.addEventListener('click', function (event) {
+                            event.preventDefault();
+                            homepageHotline.classList.add('is-open');
+                        });
+
+                        homepageHotlineClose.addEventListener('click', function () {
+                            homepageHotline.classList.remove('is-open');
                         });
                     })();
                 </script>
