@@ -41,7 +41,8 @@ public class ItemController {
             @RequestParam("minPrice") Optional<String> minPriceOptional,
             @RequestParam("maxPrice") Optional<String> maxPriceOptional,
             @RequestParam("province") Optional<String> provinceOptional,
-            @RequestParam("sort") Optional<String> sortOptional) {
+            @RequestParam("sort") Optional<String> sortOptional,
+            @RequestParam(name = "partial", defaultValue = "false") boolean partial) {
         List<Categories> categories = this.categoriesService.getAll();
         model.addAttribute("categories", categories);
         int page = 1;
@@ -70,11 +71,17 @@ public class ItemController {
 
         // Sort
         String sort = sortOptional.orElse(null);
-        Sort sortOrder = Sort.unsorted();
+        Sort sortOrder = Sort.by(Sort.Order.desc("createdAt"));
         if ("gia-tang-dan".equals(sort)) {
-            sortOrder = Sort.by(Sort.Order.asc("salePrice"), Sort.Order.asc("price"));
+            sortOrder = Sort.by(
+                    Sort.Order.asc("salePrice"),
+                    Sort.Order.asc("price"),
+                    Sort.Order.desc("createdAt"));
         } else if ("gia-giam-dan".equals(sort)) {
-            sortOrder = Sort.by(Sort.Order.desc("salePrice"), Sort.Order.desc("price"));
+            sortOrder = Sort.by(
+                    Sort.Order.desc("salePrice"),
+                    Sort.Order.desc("price"),
+                    Sort.Order.desc("createdAt"));
         }
 
         Double minPrice = minPriceOptional.map(Double::parseDouble).orElse(0.0);
@@ -99,7 +106,12 @@ public class ItemController {
         model.addAttribute("products", products);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", ProductPage.getTotalPages());
+        model.addAttribute("selectedCategory", categoryStrOptional.orElse(""));
         model.addAttribute("selectedProvinceId", provinceId);
+        model.addAttribute("selectedSort", sortOptional.orElse(""));
+        model.addAttribute("selectedName", name);
+        model.addAttribute("selectedMinPrice", minPriceOptional.orElse(""));
+        model.addAttribute("selectedMaxPrice", maxPriceOptional.orElse(""));
 
         List<Product> allProducts = this.productService.getAllProducts();
         List<Product> discountedProducts = new ArrayList<>();
@@ -122,6 +134,9 @@ public class ItemController {
         }
         model.addAttribute("topDiscountedProducts", topDiscountedProducts);
         model.addAttribute("activePage", "activeProduct");
+        if (partial) {
+            return "client/product/product-grid";
+        }
         return "client/product/shop";
     }
 

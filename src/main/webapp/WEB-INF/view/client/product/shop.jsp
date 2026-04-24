@@ -122,16 +122,16 @@
                                 </div>
                                 <div class="categories-parent" style="align-self: stretch; width: 100%; max-width: 1200px; display: flex; justify-content: space-between; align-items: center; gap: 20px; margin-top: 20px; margin-bottom: 12px; flex-wrap: nowrap;">
                                     <div class="categories" style="display: flex; gap: 12px; flex-wrap: nowrap; align-items: center; white-space: nowrap; flex: 1;">
-                                        <button class="button3" style="min-width: 120px; height: 48px; justify-content: center; align-items: center;">
+                                        <button class="button3" type="button" data-shop-category="all" style="min-width: 120px; height: 48px; justify-content: center; align-items: center;">
                                             <div class="c-sn-min">Tất cả</div>
                                         </button>
-                                        <button class="button3" style="min-width: 120px; height: 48px; justify-content: center; align-items: center;">
+                                        <button class="button3" type="button" data-shop-category="13" style="min-width: 120px; height: 48px; justify-content: center; align-items: center;">
                                             <div class="c-sn-min">Đặc sản miền Bắc</div>
                                         </button>
-                                        <button class="button3" style="min-width: 120px; height: 48px; justify-content: center; align-items: center;">
+                                        <button class="button3" type="button" data-shop-category="14" style="min-width: 120px; height: 48px; justify-content: center; align-items: center;">
                                             <div class="c-sn-min">Đặc sản miền Trung</div>
                                         </button>
-                                        <button class="button3" style="min-width: 120px; height: 48px; justify-content: center; align-items: center;">
+                                        <button class="button3" type="button" data-shop-category="15" style="min-width: 120px; height: 48px; justify-content: center; align-items: center;">
                                             <div class="c-sn-min">Đặc sản miền Nam</div>
                                         </button>
                                     </div>
@@ -168,6 +168,10 @@
                                     </div>
                                 </div>
                             </section>
+                                <div id="shopProductGridContainer">
+                                    <jsp:include page="product-grid.jsp" />
+                                </div>
+                                <c:if test="${false}">
                                 <section class="card2" style="display: grid; grid-template-columns: repeat(4, 282px); gap: 24px 24px; width: 1200px; margin: 24px auto 16px auto;">
                                     <c:forEach var="product" items="${products}" varStatus="loop">
                                         <c:if test="${loop.index < 21}">
@@ -239,6 +243,7 @@
                                             </a>
                                         </c:if>
                                     </div>
+                                </c:if>
                                 </c:if>
                             </div>
                         </div>
@@ -334,6 +339,55 @@
             dropdown.querySelector('span:last-child').textContent = value;
             document.getElementById('sort-menu').style.display = 'none';
         }
+
+        function updateActiveCategoryButton() {
+            document.querySelectorAll('button[data-shop-category]').forEach(function (button) {
+                button.style.backgroundColor = '';
+                button.style.borderColor = '';
+                button.style.color = '';
+            });
+        }
+
+        function loadShopProducts(url, pushState) {
+            const shouldPushState = pushState !== false;
+            const requestUrl = new URL(url, window.location.origin);
+            requestUrl.searchParams.set('partial', 'true');
+
+            fetch(requestUrl.toString(), {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            })
+                .then(function (response) {
+                    if (!response.ok) {
+                        throw new Error('Failed to load products');
+                    }
+                    return response.text();
+                })
+                .then(function (html) {
+                    const container = document.getElementById('shopProductGridContainer');
+                    if (!container) return;
+                    container.innerHTML = html;
+                    if (shouldPushState) {
+                        const browserUrl = new URL(url, window.location.origin);
+                        browserUrl.searchParams.delete('partial');
+                        window.history.pushState({}, '', browserUrl.toString());
+                    }
+                    updateActiveCategoryButton();
+                })
+                .catch(function () {
+                    window.location.href = url;
+                });
+        }
+
+        function applyShopCategoryFilter(categoryId) {
+            const url = new URL(window.location.href);
+            if (categoryId === 'all') {
+                url.searchParams.delete('category');
+            } else {
+                url.searchParams.set('category', categoryId);
+            }
+            url.searchParams.set('page', '1');
+            loadShopProducts(url.toString());
+        }
         
         document.addEventListener('click', function() {
             document.getElementById('location-menu').style.display = 'none';
@@ -342,6 +396,21 @@
         
         document.querySelector('.location-dropdown')?.addEventListener('click', function(e) { e.stopPropagation(); });
         document.querySelector('.sort-dropdown')?.addEventListener('click', function(e) { e.stopPropagation(); });
+        document.querySelectorAll('button[data-shop-category]').forEach(function (button) {
+            button.addEventListener('click', function () {
+                applyShopCategoryFilter(button.getAttribute('data-shop-category'));
+            });
+        });
+        document.addEventListener('click', function (e) {
+            const paginationLink = e.target.closest('.shop-pagination-link');
+            if (!paginationLink) return;
+            e.preventDefault();
+            loadShopProducts(paginationLink.getAttribute('href'));
+        });
+        window.addEventListener('popstate', function () {
+            loadShopProducts(window.location.href, false);
+        });
+        updateActiveCategoryButton();
 
         // Make the whole product card navigate to detail page.
         (function () {

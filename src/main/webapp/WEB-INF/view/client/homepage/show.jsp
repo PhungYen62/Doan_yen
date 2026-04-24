@@ -817,16 +817,16 @@
                                     </div>
                                 </div>
                                 <div class="categories">
-                                    <button class="button3">
+                                    <button class="button3" type="button" data-home-filter-group="featured" data-filter-key="all">
                                         <div class="c-sn-min">Tất cả</div>
                                     </button>
-                                    <button class="button4">
+                                    <button class="button4" type="button" data-home-filter-group="featured" data-filter-key="bac" data-filter-category-id="${northCategoryId}">
                                         <div class="c-sn-min">Đặc sản miền Bắc</div>
                                     </button>
-                                    <button class="button4">
+                                    <button class="button4" type="button" data-home-filter-group="featured" data-filter-key="trung" data-filter-category-id="${centralCategoryId}">
                                         <div class="c-sn-min">Đặc sản miền Trung</div>
                                     </button>
-                                    <button class="button4">
+                                    <button class="button4" type="button" data-home-filter-group="featured" data-filter-key="nam" data-filter-category-id="${southCategoryId}">
                                         <div class="c-sn-min">Đặc sản miền Nam</div>
                                     </button>
                                 </div>
@@ -834,9 +834,8 @@
 
                             <div class="card">
                                 <section class="card2">
-                                    <c:forEach var="product" items="${discountedProducts}" varStatus="loop">
-                                        <c:if test="${loop.index < 8}">
-                                            <div class="product-cadt js-product-card" role="link" tabindex="0" data-href="/product/${product.id}">
+                                    <c:forEach var="product" items="${homepageProducts}" varStatus="loop">
+                                            <div class="product-cadt js-product-card" role="link" tabindex="0" data-href="/product/${product.id}" data-home-filter-group="featured" data-category-ids="<c:forEach var='category' items='${product.categories}' varStatus='status'>${category.id}<c:if test='${!status.last}'>|</c:if></c:forEach>">
                                                 <div class="product-img-container bg-icon">
                                                     <c:if test="${not empty product.firstImage}">
                                                         <img src="/products/${product.firstImage}" alt="${product.name}"
@@ -849,11 +848,22 @@
                                                 </div>
                                                 <div class="bnh-phu-th-h-ni-gi-500g-parent">
                                                     <b class="bnh-phu-th">${product.name}</b>
-                                                    <div class="div">
-                                                        <c:if test="${product.salePrice != null}">
-                                                            <fmt:formatNumber value="${product.salePrice}" type="number"
-                                                                maxFractionDigits="0" />đ
-                                                        </c:if>
+                                                    <div class="div" style="display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap;">
+                                                        <c:choose>
+                                                            <c:when test="${product.salePrice != null && product.salePrice > 0 && product.salePrice < product.price}">
+                                                                <span style="color: #ff6a1a; font-weight: 700; font-size: 16px; line-height: 1;">
+                                                                    <fmt:formatNumber value="${product.salePrice}" type="number" maxFractionDigits="0" />đ
+                                                                </span>
+                                                                <span style="color: #999; text-decoration: line-through; font-size: 14px; line-height: 1;">
+                                                                    <fmt:formatNumber value="${product.price}" type="number" maxFractionDigits="0" />đ
+                                                                </span>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <span style="color: #ff6a1a; font-weight: 700; font-size: 16px; line-height: 1;">
+                                                                    <fmt:formatNumber value="${product.price}" type="number" maxFractionDigits="0" />đ
+                                                                </span>
+                                                            </c:otherwise>
+                                                        </c:choose>
                                                     </div>
                                                     <form action="/add-product-to-cart/${product.id}" method="post"
                                                         style="align-self: stretch;">
@@ -865,12 +875,11 @@
                                                     </form>
                                                 </div>
                                             </div>
-                                        </c:if>
                                     </c:forEach>
                                 </section>
                             </div>
 
-                            <button class="button15" onclick="window.location.href='/shop'">
+                            <button class="button15" onclick="window.location.href='/product'">
                                 <div class="xem-tt-c">Xem tất cả sản phẩm</div>
                             </button>
                         </div>
@@ -944,16 +953,16 @@
                         <div class="our-products-parent">
                             <div class="our-products3">
                                 <div class="categories2">
-                                    <button class="button3">
+                                    <button class="button3" type="button" data-home-filter-group="showcase" data-filter-key="all">
                                         <div class="c-sn-min">Tất cả</div>
                                     </button>
-                                    <button class="button4">
+                                    <button class="button4" type="button" data-home-filter-group="showcase" data-filter-key="bac" data-filter-category-id="${northCategoryId}">
                                         <div class="c-sn-min">Đặc sản miền Bắc</div>
                                     </button>
-                                    <button class="button4">
+                                    <button class="button4" type="button" data-home-filter-group="showcase" data-filter-key="trung" data-filter-category-id="${centralCategoryId}">
                                         <div class="c-sn-min">Đặc sản miền Trung</div>
                                     </button>
-                                    <button class="button4">
+                                    <button class="button4" type="button" data-home-filter-group="showcase" data-filter-key="nam" data-filter-category-id="${southCategoryId}">
                                         <div class="c-sn-min">Đặc sản miền Nam</div>
                                     </button>
                                 </div>
@@ -962,8 +971,8 @@
                                     <div class="text-description7">
                                         <div class="card">
                                             <section class="card2">
-                                                <c:forEach var="product" items="${discountedProducts}">
-                                                    <div class="product-cadt js-product-card" role="link" tabindex="0" data-href="/product/${product.id}">
+                                                <c:forEach var="product" items="${showcaseProducts}" varStatus="loop">
+                                                    <div class="product-cadt js-product-card" role="link" tabindex="0" data-href="/product/${product.id}" data-home-filter-group="showcase" data-category-ids="<c:forEach var='category' items='${product.categories}' varStatus='status'>${category.id}<c:if test='${!status.last}'>|</c:if></c:forEach>">
                                                         <div class="product-img-container bg-icon">
                                                             <c:if test="${not empty product.firstImage}">
                                                                 <img src="/products/${product.firstImage}"
@@ -977,11 +986,22 @@
                                                         </div>
                                                         <div class="bnh-phu-th-h-ni-gi-500g-parent">
                                                             <b class="bnh-phu-th">${product.name}</b>
-                                                            <div class="div">
-                                                                <c:if test="${product.salePrice != null}">
-                                                                    <fmt:formatNumber value="${product.salePrice}"
-                                                                        type="number" maxFractionDigits="0" />đ
-                                                                </c:if>
+                                                            <div class="div" style="display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap;">
+                                                                <c:choose>
+                                                                    <c:when test="${product.salePrice != null && product.salePrice > 0 && product.salePrice < product.price}">
+                                                                        <span style="color: #ff6a1a; font-weight: 700; font-size: 16px; line-height: 1;">
+                                                                            <fmt:formatNumber value="${product.salePrice}" type="number" maxFractionDigits="0" />đ
+                                                                        </span>
+                                                                        <span style="color: #999; text-decoration: line-through; font-size: 14px; line-height: 1;">
+                                                                            <fmt:formatNumber value="${product.price}" type="number" maxFractionDigits="0" />đ
+                                                                        </span>
+                                                                    </c:when>
+                                                                    <c:otherwise>
+                                                                        <span style="color: #ff6a1a; font-weight: 700; font-size: 16px; line-height: 1;">
+                                                                            <fmt:formatNumber value="${product.price}" type="number" maxFractionDigits="0" />đ
+                                                                        </span>
+                                                                    </c:otherwise>
+                                                                </c:choose>
                                                             </div>
                                                             <form action="/add-product-to-cart/${product.id}"
                                                                 method="post" style="align-self: stretch;">
@@ -1121,9 +1141,41 @@
                 </div>
 
                 <script>
-                    function filterProducts(categoryId) {
-                        console.log('Filter by category: ' + categoryId);
+                    function filterProducts(groupName, filterKey) {
+                        const cards = document.querySelectorAll('.product-cadt[data-home-filter-group="' + groupName + '"]');
+                        const activeButton = document.querySelector('button[data-home-filter-group="' + groupName + '"][data-filter-key="' + filterKey + '"]');
+                        const filterCategoryId = activeButton ? activeButton.getAttribute('data-filter-category-id') : '';
+                        const maxVisible = 8;
+                        let visibleCount = 0;
+
+                        cards.forEach(function (card) {
+                            const categoryIds = (card.getAttribute('data-category-ids') || '').split('|').filter(Boolean);
+                            const matchesById = filterKey === 'all' || (filterCategoryId && categoryIds.includes(filterCategoryId));
+                            const isVisible = matchesById && visibleCount < maxVisible;
+                            card.style.display = isVisible ? '' : 'none';
+                            if (isVisible) {
+                                visibleCount++;
+                            }
+                        });
+                        const buttons = document.querySelectorAll('button[data-home-filter-group="' + groupName + '"]');
+                        buttons.forEach(function (button) {
+                            const isActive = button.getAttribute('data-filter-key') === filterKey;
+                            button.classList.toggle('button3', isActive);
+                            button.classList.toggle('button4', !isActive);
+                        });
                     }
+
+                    document.querySelectorAll('button[data-home-filter-group]').forEach(function (button) {
+                        button.addEventListener('click', function () {
+                            filterProducts(
+                                button.getAttribute('data-home-filter-group'),
+                                button.getAttribute('data-filter-key')
+                            );
+                        });
+                    });
+
+                    filterProducts('featured', 'all');
+                    filterProducts('showcase', 'all');
 
                     // ========== PROMO SLIDER AUTO-PLAY ==========
                     const navButtons = document.querySelectorAll('.promo-nav-btn');
@@ -1302,3 +1354,7 @@
             </body>
 
             </html>
+
+
+
+

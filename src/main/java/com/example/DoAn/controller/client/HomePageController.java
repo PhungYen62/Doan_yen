@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.text.Normalizer;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -59,9 +60,31 @@ public class HomePageController {
         List<Categories> categories = this.categoriesService.getAll();
         List<Product> allProducts = this.productService.getAllProducts();
         List<Product> discountedProducts = new ArrayList<>();
+        Long northCategoryId = findCategoryIdByKeyword(categories, "mien bac");
+        Long centralCategoryId = findCategoryIdByKeyword(categories, "mien trung");
+        Long southCategoryId = findCategoryIdByKeyword(categories, "mien nam");
         model.addAttribute("activePage", "home");
         model.addAttribute("categories", categories);
         model.addAttribute("selectedCategoryId", 1);
+        model.addAttribute("northCategoryId", northCategoryId);
+        model.addAttribute("centralCategoryId", centralCategoryId);
+        model.addAttribute("southCategoryId", southCategoryId);
+
+        Collections.sort(allProducts, new Comparator<Product>() {
+            @Override
+            public int compare(Product p1, Product p2) {
+                if (p1.getCreatedAt() == null && p2.getCreatedAt() == null) {
+                    return 0;
+                }
+                if (p1.getCreatedAt() == null) {
+                    return 1;
+                }
+                if (p2.getCreatedAt() == null) {
+                    return -1;
+                }
+                return p2.getCreatedAt().compareTo(p1.getCreatedAt());
+            }
+        });
 
         // Xử lý sản phẩm giảm giá
         for (Product p : allProducts) {
@@ -81,7 +104,16 @@ public class HomePageController {
                 double percent1 = (price1 - sale1) / price1;
                 double percent2 = (price2 - sale2) / price2;
 
-                return Double.compare(percent2, percent1); // giảm dần
+                if (p1.getCreatedAt() == null && p2.getCreatedAt() == null) {
+                    return 0;
+                }
+                if (p1.getCreatedAt() == null) {
+                    return 1;
+                }
+                if (p2.getCreatedAt() == null) {
+                    return -1;
+                }
+                return p2.getCreatedAt().compareTo(p1.getCreatedAt());
             }
         });
 
@@ -90,9 +122,37 @@ public class HomePageController {
         for (int i = 0; i < Math.min(6, discountedProducts.size()); i++) {
             topDiscountedProducts.add(discountedProducts.get(i));
         }
+        List<Product> showcaseProducts = allProducts.size() > 8
+                ? new ArrayList<>(allProducts.subList(8, allProducts.size()))
+                : new ArrayList<>(allProducts);
+        model.addAttribute("homepageProducts", allProducts);
+        model.addAttribute("showcaseProducts", showcaseProducts);
         model.addAttribute("topDiscountedProducts", topDiscountedProducts);
         model.addAttribute("discountedProducts", discountedProducts);
         return "client/homepage/show";
+    }
+
+    private Long findCategoryIdByKeyword(List<Categories> categories, String keyword) {
+        if (categories == null || keyword == null) {
+            return null;
+        }
+
+        for (Categories category : categories) {
+            String normalizedName = normalizeText(category.getName());
+            if (normalizedName.contains(keyword)) {
+                return category.getId();
+            }
+        }
+        return null;
+    }
+
+    private String normalizeText(String value) {
+        if (value == null) {
+            return "";
+        }
+        return Normalizer.normalize(value.toLowerCase(), Normalizer.Form.NFD)
+                .replaceAll("\\p{M}", "")
+                .replace('đ', 'd');
     }
 
     @GetMapping("/register")
