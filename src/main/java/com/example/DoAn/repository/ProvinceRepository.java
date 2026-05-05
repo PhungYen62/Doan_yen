@@ -19,4 +19,6 @@ public interface ProvinceRepository extends JpaRepository<Province, Long> {
     Optional<Province> findByNameIgnoreCase(String name);
 
     Optional<Province> findByCode(String code);
+
+    Optional<Province> findByGeojsonId(String geojsonId);
 }

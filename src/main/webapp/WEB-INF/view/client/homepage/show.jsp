@@ -620,6 +620,28 @@
                         pointer-events: auto;
                     }
 
+                    .homepage-map-icon {
+                        width: 72px;
+                        height: 72px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        text-decoration: none;
+                        margin-bottom: 12px;
+                    }
+
+                    .homepage-map-icon img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: contain;
+                        display: block;
+                        filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.18));
+                    }
+
+                    .homepage-hotline.is-open .homepage-map-icon {
+                        display: none;
+                    }
+
                     .homepage-hotline.is-open .homepage-hotline-panel {
                         display: flex;
                     }
@@ -696,6 +718,12 @@
                             min-height: 60px;
                         }
 
+                        .homepage-map-icon {
+                            width: 60px;
+                            height: 60px;
+                            margin-bottom: 8px;
+                        }
+
                         .homepage-hotline-main {
                             width: 60px;
                             height: 60px;
@@ -714,6 +742,9 @@
                     <jsp:include page="../layout/header.jsp" />
 
                     <div class="homepage-hotline" id="homepageHotline">
+                        <a class="homepage-map-icon" href="${pageContext.request.contextPath}/map" aria-label="Bản đồ đặc sản">
+                            <img src="${pageContext.request.contextPath}/images/content/vietnam_map.png" alt="Bản đồ Việt Nam">
+                        </a>
                         <div class="homepage-hotline-panel" id="homepageHotlinePanel">
                             <a class="homepage-hotline-link call" href="tel:1234567890">Gọi ngay</a>
                             <a class="homepage-hotline-action" href="https://m.me/" target="_blank" rel="noopener noreferrer" aria-label="Messenger"><img src="${pageContext.request.contextPath}/images/content/mess.png" alt="Messenger"></a>

@@ -443,6 +443,7 @@
 
 <nav class="header-nav">
     <ul class="navbar-menu">
+        <li><a href="${contextPath}/map" class="${activePage == 'map' ? 'active' : ''}">Map</a></li>
         <li><a href="${contextPath}/" class="${activePage == 'home' ? 'active' : ''}">Trang chủ</a></li>
         <li><a href="${contextPath}/product" class="${activePage == 'product' ? 'active' : ''}">Cửa hàng</a></li>
         <li><a href="${contextPath}/about" class="${activePage == 'about' ? 'active' : ''}">Về chúng tôi</a></li>

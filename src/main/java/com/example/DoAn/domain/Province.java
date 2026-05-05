@@ -28,6 +28,9 @@ public class Province {
     @Column(nullable = false, length = 255)
     private String name;
 
+    @Column(name = "geojson_id", length = 20, unique = true)
+    private String geojsonId;
+
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;
@@ -57,6 +60,14 @@ public class Province {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getGeojsonId() {
+        return geojsonId;
+    }
+
+    public void setGeojsonId(String geojsonId) {
+        this.geojsonId = geojsonId;
     }
 
     public LocalDateTime getCreatedAt() {
