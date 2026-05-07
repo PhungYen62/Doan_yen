@@ -346,7 +346,7 @@
                                 <div style="color:#ff6b24;font-weight:700;margin-bottom:8px;"><fmt:formatNumber type="number" value="${od.price}" /> đ</div>
                                 <div class="order-history-actions">
                                     <a href="/product/${od.product.id}" class="order-action-btn me-2">Mua lại</a>
-                                    <a href="/product/${od.product.id}#reviews" class="order-action-btn">Đánh giá</a>
+                                    <a href="${pageContext.request.contextPath}/contact" class="order-action-btn">Đánh giá</a>
                                 </div>
                             </div>
                         </div>
