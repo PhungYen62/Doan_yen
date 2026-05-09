@@ -218,34 +218,6 @@
             font-weight: 500;
         }
 
-        /* Delete action (reuse from cart/show) */
-        .delete-btn {
-            background: transparent;
-            border: none;
-            color: #ff6a1a;
-            width: 36px;
-            height: 36px;
-            padding: 0;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .delete-btn:hover {
-            background-color: #fff1e8;
-            color: #e55a0f;
-        }
-
-        .cart-table tbody td:last-child form {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-        }
-
         /* Payment */
         .payment-options {
             display: flex;
@@ -499,6 +471,32 @@
             background: #e55a0f;
         }
 
+        .btn-primary-orange:disabled {
+            background: #d1d5db;
+            color: #6b7280;
+            cursor: not-allowed;
+        }
+
+        .btn-primary-orange:disabled:hover {
+            background: #d1d5db;
+        }
+
+        .checkout-alert {
+            margin-bottom: 20px;
+        }
+
+        .checkout-alert ul {
+            margin-bottom: 0;
+            padding-left: 18px;
+        }
+
+        .stock-warning {
+            margin-top: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #dc2626;
+        }
+
         .empty-cart-message {
             text-align: center;
             padding: 60px 20px;
@@ -558,6 +556,16 @@
                 <input type="hidden" name="totalPrice" value="${totalPrice}" />
             </form>
 
+            <c:if test="${not empty errorMessages}">
+                <div class="alert alert-danger checkout-alert">
+                    <ul>
+                        <c:forEach var="err" items="${errorMessages}">
+                            <li>${err}</li>
+                        </c:forEach>
+                    </ul>
+                </div>
+            </c:if>
+
             <div class="checkout-grid">
                 <!-- Left column -->
                 <div class="checkout-col">
@@ -567,10 +575,9 @@
                             <thead>
                                 <tr>
                                     <th style="width: 8%;">STT</th>
-                                    <th style="width: 42%;">Sản phẩm</th>
+                                    <th style="width: 50%;">Sản phẩm</th>
                                     <th style="width: 18%;">Số lượng</th>
-                                    <th style="width: 22%;">Tổng tiền</th>
-                                    <th style="width: 10%;">Thao tác</th>
+                                    <th style="width: 24%;">Tổng tiền</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -587,6 +594,11 @@
                                                     <div style="margin-top: 2px; font-size: 12px; color: #6b7280;">
                                                         <fmt:formatNumber type="number" value="${cartDetail.price}" /> VND
                                                     </div>
+                                                    <c:if test="${cartDetail.quantity > cartDetail.product.quantity}">
+                                                        <div class="stock-warning">
+                                                            Chỉ còn ${cartDetail.product.quantity} trong kho.
+                                                        </div>
+                                                    </c:if>
                                                 </div>
                                             </div>
                                         </td>
@@ -597,14 +609,6 @@
                                             <span class="price-text">
                                                 <fmt:formatNumber type="number" value="${cartDetail.price * cartDetail.quantity}" /> VND
                                             </span>
-                                        </td>
-                                        <td>
-                                            <form method="post" action="/delete-cart-product/${cartDetail.id}" style="display: inline;">
-                                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-                                                <button class="delete-btn" type="submit" title="Xóa sản phẩm">
-                                                    <i class="fa fa-trash"></i>
-                                                </button>
-                                            </form>
                                         </td>
                                     </tr>
                                 </c:forEach>
@@ -696,8 +700,18 @@
 
                             <div class="action-row">
                                 <a class="btn-secondary-gray" href="/cart">Hủy đơn</a>
-                                <button class="btn-primary-orange" type="submit" form="placeOrderForm">Đặt hàng</button>
+                                <button class="btn-primary-orange" type="submit" form="placeOrderForm" <c:if test="${hasStockIssues}">disabled</c:if>>
+                                    <c:choose>
+                                        <c:when test="${hasStockIssues}">Không thể đặt hàng</c:when>
+                                        <c:otherwise>Đặt hàng</c:otherwise>
+                                    </c:choose>
+                                </button>
                             </div>
+                            <c:if test="${hasStockIssues}">
+                                <div class="stock-warning" style="margin-top: 12px; text-align: center;">
+                                    Vui lòng quay lại giỏ hàng để giảm số lượng.
+                                </div>
+                            </c:if>
                         </div>
                     </div>
                 </div>

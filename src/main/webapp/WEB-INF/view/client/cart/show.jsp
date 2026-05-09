@@ -451,6 +451,25 @@
             color: #ffffff;
         }
 
+        .checkout-btn:disabled {
+            background-color: #d1d5db;
+            border-color: #d1d5db;
+            color: #6b7280;
+            cursor: not-allowed;
+        }
+
+        .checkout-btn:disabled:hover {
+            background-color: #d1d5db;
+            color: #6b7280;
+        }
+
+        .stock-warning {
+            margin-top: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #dc2626;
+        }
+
         .alert {
             margin-top: 20px;
         }
@@ -553,6 +572,9 @@
                                         </div>
                                         <div class="product-name">
                                             <a href="/product/${cartDetail.product.id}">${cartDetail.product.name}</a>
+                                            <c:if test="${cartDetail.quantity > cartDetail.product.quantity}">
+                                                <div class="stock-warning">Chỉ còn ${cartDetail.product.quantity} trong kho.</div>
+                                            </c:if>
                                         </div>
                                     </div>
                                 </td>
@@ -597,6 +619,16 @@
                 </table>
             </c:if>
         </div>
+
+        <c:if test="${not empty errorMessages}">
+            <div class="alert alert-danger">
+                <ul style="margin-bottom: 0;">
+                    <c:forEach var="err" items="${errorMessages}">
+                        <li>${err}</li>
+                    </c:forEach>
+                </ul>
+            </div>
+        </c:if>
 
         <!-- Cart Summary Section -->
         <c:if test="${not empty cartDetails}">
@@ -648,18 +680,8 @@
                                 </div>
                             </c:forEach>
                         </div>
-                        <button class="checkout-btn" type="submit">Tiếp tục thanh toán</button>
+                        <button class="checkout-btn" type="submit" <c:if test="${hasStockIssues}">disabled</c:if>>Tiếp tục thanh toán</button>
                     </form:form>
-
-                    <c:if test="${not empty errorMessages}">
-                        <div class="alert alert-danger" style="margin-top: 20px;">
-                            <ul style="margin-bottom: 0;">
-                                <c:forEach var="err" items="${errorMessages}">
-                                    <li>${err}</li>
-                                </c:forEach>
-                            </ul>
-                        </div>
-                    </c:if>
                 </div>
             </div>
         </c:if>

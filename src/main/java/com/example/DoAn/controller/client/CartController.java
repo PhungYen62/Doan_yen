@@ -58,8 +58,13 @@ public class CartController {
             totalPrice += cd.getPrice() * cd.getQuantity();
         }
 
+        List<String> stockErrors = this.productService.getCartStockErrors(cartDetails);
         model.addAttribute("cartDetails", cartDetails);
         model.addAttribute("totalPrice", totalPrice);
+        model.addAttribute("hasStockIssues", !stockErrors.isEmpty());
+        if (!stockErrors.isEmpty()) {
+            model.addAttribute("errorMessages", stockErrors);
+        }
 
         model.addAttribute("cart", cart);
 
@@ -109,9 +114,14 @@ public class CartController {
             totalPrice += cd.getPrice() * cd.getQuantity();
         }
 
+        List<String> stockErrors = this.productService.getCartStockErrors(cartDetails);
         model.addAttribute("cartDetails", cartDetails);
         model.addAttribute("totalPrice", totalPrice);
         model.addAttribute("user", currentUser);
+        model.addAttribute("hasStockIssues", !stockErrors.isEmpty());
+        if (!model.containsAttribute("errorMessages") && !stockErrors.isEmpty()) {
+            model.addAttribute("errorMessages", stockErrors);
+        }
         return "client/cart/checkout";
     }
 
@@ -134,7 +144,8 @@ public class CartController {
             @RequestParam("receiverAddress") String receiverAddress,
             @RequestParam("receiverPhone") String receiverPhone,
             @RequestParam("paymentMethod") String paymentMethod,
-            @RequestParam("totalPrice") Double totalPrice) {
+            @RequestParam("totalPrice") Double totalPrice,
+            RedirectAttributes redirectAttributes) {
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("id") == null) {
             return "redirect:/login"; // hoặc xử lý lỗi
@@ -143,6 +154,11 @@ public class CartController {
         long id = (long) session.getAttribute("id");
         User currentUser = new User();
         currentUser.setId(id);
+        List<String> stockErrors = this.productService.getCartStockErrors(currentUser);
+        if (!stockErrors.isEmpty()) {
+            redirectAttributes.addFlashAttribute("errorMessages", stockErrors);
+            return "redirect:/checkout";
+        }
 
         // Xử lý theo hình thức thanh toán
         if ("VNPAY".equalsIgnoreCase(paymentMethod)) {

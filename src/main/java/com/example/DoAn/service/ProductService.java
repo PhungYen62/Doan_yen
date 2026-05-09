@@ -228,6 +228,28 @@ public class ProductService {
         return errors;
     }
 
+    public List<String> getCartStockErrors(List<CartDetail> cartDetails) {
+        List<String> errors = new ArrayList<>();
+        if (cartDetails == null) {
+            return errors;
+        }
+
+        for (CartDetail cartDetail : cartDetails) {
+            Product product = cartDetail.getProduct();
+            if (product != null && cartDetail.getQuantity() > product.getQuantity()) {
+                errors.add(buildCartStockError(product));
+            }
+        }
+
+        return errors;
+    }
+
+    public List<String> getCartStockErrors(User user) {
+        Cart cart = this.cartRepository.findByUser(user);
+        List<CartDetail> cartDetails = cart == null ? new ArrayList<CartDetail>() : cart.getCartDetails();
+        return this.getCartStockErrors(cartDetails);
+    }
+
     public Cart findByUser(User user) {
         return this.cartRepository.findByUser(user);
     }
@@ -324,5 +346,9 @@ public class ProductService {
     // Lấy ra danh sách sản phẩm sắp hết hàng
     public List<Product> findProductsLowStock() {
         return this.productRepository.findProductsLowStock();
+    }
+
+    private String buildCartStockError(Product product) {
+        return "Sản phẩm '" + product.getName() + "' chỉ còn " + product.getQuantity() + " trong kho.";
     }
 }

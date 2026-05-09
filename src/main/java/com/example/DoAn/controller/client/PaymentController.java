@@ -125,6 +125,7 @@ public class PaymentController {
     @GetMapping("/vnpay-return")
     public String handleVNPayReturn(HttpServletRequest request, Model model) {
         String message = "";
+        String status = "success";
         String responseCode = request.getParameter("vnp_ResponseCode");
         if ("00".equals(responseCode)) {
 
@@ -137,6 +138,13 @@ public class PaymentController {
 
                 User user = new User();
                 user.setId(userId);
+                List<String> stockErrors = this.productService.getCartStockErrors(user);
+                if (!stockErrors.isEmpty()) {
+                    message = "Thanh toán thành công nhưng một số sản phẩm không còn đủ tồn kho. Vui lòng liên hệ cửa hàng để được hỗ trợ.";
+                    status = "error";
+                    String encodedMessage = URLEncoder.encode(message, StandardCharsets.UTF_8);
+                    return "redirect:/thanks?status=" + status + "&message=" + encodedMessage;
+                }
                 this.productService.handlePlaceOrder(user, session, receiverName, receiverAddress, receiverPhone, 1);
                 // ✅ Thành công
                 message = "Cảm ơn bạn đã đặt hàng!";
@@ -148,7 +156,7 @@ public class PaymentController {
             message = "Thanh toán thất bại! Mã lỗi: " + responseCode;
         }
         String encodedMessage = URLEncoder.encode(message, StandardCharsets.UTF_8);
-        return "redirect:/thanks?status=success&message=" + encodedMessage;
+        return "redirect:/thanks?status=" + status + "&message=" + encodedMessage;
     }
 
 }

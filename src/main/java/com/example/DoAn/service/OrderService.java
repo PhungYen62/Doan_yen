@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.DoAn.domain.Order;
 import com.example.DoAn.domain.OrderDetail;
@@ -49,12 +50,17 @@ public class OrderService {
         return this.orderRepository.findByUser(user);
     }
 
+    @Transactional
     public void updateOrder(Order order) {
         Optional<Order> orderOptional = this.fetchOrderById(order.getId());
         if (orderOptional.isPresent()) {
             Order currentOrder = orderOptional.get();
-            if (order.getStatus().equals("COMPLETE")) {
-                // delete order detail
+            boolean stockShouldBeDeducted = isStockDeductingStatus(order.getStatus())
+                    && !isStockDeductingStatus(currentOrder.getStatus());
+            boolean stockShouldBeRestored = !isStockDeductingStatus(order.getStatus())
+                    && isStockDeductingStatus(currentOrder.getStatus());
+
+            if (stockShouldBeDeducted) {
                 List<OrderDetail> orderDetails = currentOrder.getOrderDetails();
                 for (OrderDetail orderDetail : orderDetails) {
                     this.productRepository.findById(orderDetail.getProduct().getId()).ifPresent(product -> {
@@ -62,10 +68,25 @@ public class OrderService {
                         this.productService.handleSaveProduct(product);
                     });
                 }
+            } else if (stockShouldBeRestored) {
+                List<OrderDetail> orderDetails = currentOrder.getOrderDetails();
+                for (OrderDetail orderDetail : orderDetails) {
+                    this.productRepository.findById(orderDetail.getProduct().getId()).ifPresent(product -> {
+                        product.setQuantity(product.getQuantity() + orderDetail.getQuantity());
+                        this.productService.handleSaveProduct(product);
+                    });
+                }
             }
             currentOrder.setStatus(order.getStatus());
+            if ("COMPLETE".equals(order.getStatus())) {
+                currentOrder.setPaymentStatus(1);
+            }
             this.orderRepository.save(currentOrder);
         }
+    }
+
+    private boolean isStockDeductingStatus(String status) {
+        return "SHIPPING".equals(status) || "COMPLETE".equals(status);
     }
 
     public void deleteOrderById(long id) {
