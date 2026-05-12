@@ -76,6 +76,7 @@
             gap: 36px;
             padding: 18px max(0px, calc((100vw - 1480px) / 2 + 0px)) 24px;
             pointer-events: none;
+            z-index: 1000;
         }
 
         .map-spacer {
@@ -295,18 +296,18 @@
                             <section>
                                 <div class="panel-kicker">
                                     <i class="fas fa-pepper-hot"></i>
-                                    <span>Chi Tiet Tinh</span>
+                                    <span>Chi Tiết Tỉnh</span>
                                 </div>
                             </section>
 
                             <section>
-                                <h2 class="province-name" id="province-name">Chon mot tinh tren ban do</h2>
+                                <h2 class="province-name" id="province-name">Chọn một tỉnh trên bản đồ</h2>
                             </section>
 
                             <section>
                                 <h3 class="section-title">Đặc sản</h3>
                                 <div class="product-list" id="province-products">
-                                    <div class="empty-state">Chua co tinh nao duoc chon.</div>
+                                    <div class="empty-state">Chưa có tỉnh nào được chọn.</div>
                                 </div>
                             </section>
 
@@ -355,6 +356,7 @@
         };
 
         const liveMarkers = [];
+        const provinceLayerById = {};
         let geoJsonLayer = null;
         let activeLayer = null;
         let mapBounds = null;
@@ -373,10 +375,18 @@
             liveMarkers.length = 0;
         }
 
+        function focusProvince(featureId) {
+            const layer = provinceLayerById[featureId];
+            if (layer) {
+                activateLayer(layer);
+            }
+            updateProvincePanel(featureId);
+        }
+
         function renderProducts(products) {
             provinceProductsEl.innerHTML = '';
             if (!products || products.length === 0) {
-                provinceProductsEl.innerHTML = '<div class="empty-state">Tinh nay chua co san pham nao duoc gan trong co so du lieu.</div>';
+                provinceProductsEl.innerHTML = '<div class="empty-state">Tỉnh này chưa có sản phẩm nào được gắn trong cơ sở dữ liệu.</div>';
                 return;
             }
 
@@ -386,7 +396,7 @@
                 card.href = '/product/' + product.id;
 
                 const image = product.image ? '/products/' + product.image : '/resources/images/header/logo.png';
-                const shortDesc = product.shortDesc ? product.shortDesc : 'Chua co mo ta ngan.';
+                const shortDesc = product.shortDesc ? product.shortDesc : 'Chưa có mô tả ngắn.';
                 const price = product.salePrice && product.salePrice > 0 ? product.salePrice : product.price;
 
                 card.innerHTML =
@@ -401,41 +411,81 @@
         }
 
         function renderMarkers(markers) {
-            resetLiveMarkers();
-
             if (!markers || markers.length === 0) {
                 return;
             }
 
             markers.forEach(function (marker) {
-                const circle = L.circleMarker([marker.latitude, marker.longitude], {
-                    radius: 8,
-                    color: marker.color || '#176d38',
+                const lat = Number(marker.latitude);
+                const lng = Number(marker.longitude);
+                if (Number.isNaN(lat) || Number.isNaN(lng)) {
+                    return;
+                }
+
+                const circle = L.circleMarker([lat, lng], {
+                    radius: 10,
+                    color: '#ffffff',
                     fillColor: marker.color || '#176d38',
-                    fillOpacity: 0.9,
-                    weight: 2
+                    fillOpacity: 1,
+                    weight: 2,
+                    riseOnHover: true
                 }).bindPopup(
-                    '<strong>' + marker.title + '</strong><br>' +
-                    '<span>' + (marker.description ? marker.description : 'Chua co mo ta.') + '</span>'
+                    '<strong>' + (marker.provinceName ? marker.provinceName + ' - ' : '') + marker.title + '</strong><br>' +
+                    '<span>' + (marker.description ? marker.description : 'Chưa có mô tả.') + '</span>'
                 );
+
+                circle.on('click', function () {
+                    if (marker.provinceGeojsonId) {
+                        focusProvince(marker.provinceGeojsonId);
+                    }
+                });
 
                 circle.addTo(map);
                 liveMarkers.push(circle);
             });
         }
 
+        function collectAllProvinceMarkers() {
+            const markers = [];
+            Object.keys(provinceData).forEach(function (featureId) {
+                const data = provinceData[featureId];
+                if (data && data.markers && data.markers.length > 0) {
+                    markers.push.apply(markers, data.markers);
+                }
+            });
+            return markers;
+        }
+
+        function getRandomSample(items, limit) {
+            const pool = items.slice();
+            for (let i = pool.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                const tmp = pool[i];
+                pool[i] = pool[j];
+                pool[j] = tmp;
+            }
+            return pool.slice(0, Math.max(1, Math.min(limit, pool.length)));
+        }
+
+        function renderRandomProvinceMarkers(limit) {
+            resetLiveMarkers();
+            const allMarkers = collectAllProvinceMarkers();
+            if (allMarkers.length === 0) {
+                return;
+            }
+            renderMarkers(getRandomSample(allMarkers, limit || 3));
+        }
+
         function updateProvincePanel(featureId) {
             const data = provinceData[featureId];
             if (!data) {
-                provinceNameEl.textContent = 'Tinh chua duoc anh xa';
-                provinceProductsEl.innerHTML = '<div class="empty-state">Chua co san pham de hien thi.</div>';
-                resetLiveMarkers();
+                provinceNameEl.textContent = 'Tỉnh chưa được ánh xạ';
+                provinceProductsEl.innerHTML = '<div class="empty-state">Chưa có sản phẩm để hiển thị.</div>';
                 return;
             }
 
             provinceNameEl.textContent = data.name;
             renderProducts(data.products || []);
-            renderMarkers(data.markers || []);
         }
 
         function clearActiveLayer() {
@@ -486,15 +536,15 @@
             const lngSpan = mapBounds.getEast() - mapBounds.getWest();
             const centerLng = (mapBounds.getEast() + mapBounds.getWest()) / 2;
 
-            // Đã đổi dấu trừ (-) thành cộng (+) để đẩy tâm camera sang phải, từ đó ép bản đồ hiển thị sang lề trái
+            // Canh bản đồ ra giữa trang một cách cân đối
             const northFocus = {
                 lat: mapBounds.getNorth() - latSpan * 0.15,
-                lng: centerLng + lngSpan * 0.18 
+                lng: centerLng
             };
 
             const southFocus = {
                 lat: mapBounds.getSouth() + latSpan * 0.16,
-                lng: centerLng + lngSpan * 0.15 
+                lng: centerLng
             };
 
             map.setView([
@@ -510,7 +560,10 @@
                     style: defaultStyle,
                     onEachFeature: function (feature, layer) {
                         const featureId = feature.properties ? feature.properties.id : null;
-                        const featureName = feature.properties ? feature.properties.name : 'Khong ro ten';
+                        const featureName = feature.properties ? feature.properties.name : 'Không rõ tên';
+                        if (featureId) {
+                            provinceLayerById[featureId] = layer;
+                        }
 
                         layer.bindTooltip(featureName, {
                             sticky: true,
@@ -542,6 +595,7 @@
                     fixedStoryZoom = Math.min(9.95, map.getZoom() + 1.2);
                     map.setMinZoom(fixedStoryZoom);
                     map.setMaxZoom(fixedStoryZoom);
+                    renderRandomProvinceMarkers(3);
                     updateStoryCamera();
                     window.addEventListener('scroll', updateStoryCamera, { passive: true });
                     window.addEventListener('resize', function () {
@@ -551,8 +605,8 @@
                 }
             })
             .catch(function () {
-                provinceNameEl.textContent = 'Khong tai duoc du lieu ban do';
-                provinceDescriptionEl.textContent = 'Kiem tra lai file /data/vietnam-provinces.json va ResourceHandler cua project.';
+                provinceNameEl.textContent = 'Không tải được dữ liệu bản đồ';
+                provinceProductsEl.innerHTML = '<div class="empty-state">Kiểm tra lại file /data/vietnam-provinces.json và ResourceHandler của project.</div>';
             });
     </script>
 </body>

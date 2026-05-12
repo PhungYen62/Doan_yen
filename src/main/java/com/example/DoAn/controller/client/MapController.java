@@ -43,7 +43,9 @@ public class MapController {
             provinceInfo.put("name", province.getName());
             provinceInfo.put("geojsonId", province.getGeojsonId());
             provinceInfo.put("products", buildProductPayload(this.provinceService.getProductsByProvinceId(province.getId())));
-            provinceInfo.put("markers", buildMarkerPayload(this.provinceMarkerService.getMarkersByProvinceId(province.getId())));
+            provinceInfo.put("markers", buildMarkerPayload(
+                    this.provinceMarkerService.getMarkersByProvinceId(province.getId()),
+                    province));
             provinceData.put(province.getGeojsonId(), provinceInfo);
         }
 
@@ -67,7 +69,7 @@ public class MapController {
         return payload;
     }
 
-    private List<Map<String, Object>> buildMarkerPayload(List<ProvinceMarker> markers) {
+    private List<Map<String, Object>> buildMarkerPayload(List<ProvinceMarker> markers, Province province) {
         List<Map<String, Object>> payload = new ArrayList<>();
         for (ProvinceMarker marker : markers) {
             Map<String, Object> item = new HashMap<>();
@@ -77,6 +79,8 @@ public class MapController {
             item.put("latitude", marker.getLatitude());
             item.put("longitude", marker.getLongitude());
             item.put("color", marker.getColor());
+            item.put("provinceGeojsonId", province.getGeojsonId());
+            item.put("provinceName", province.getName());
             payload.add(item);
         }
         return payload;
