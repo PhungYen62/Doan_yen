@@ -35,6 +35,12 @@ public class Order {
     @Column(name = "payment_status")
     private int paymentStatus;
 
+    @Column(name = "payment_method")
+    private String paymentMethod;
+
+    @Column(name = "vnpay_transaction_id")
+    private String vnpayTransactionId;
+
     // user id
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -125,6 +131,22 @@ public class Order {
 
     public void setPaymentStatus(int paymentStatus) {
         this.paymentStatus = paymentStatus;
+    }
+
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
+    public String getVnpayTransactionId() {
+        return vnpayTransactionId;
+    }
+
+    public void setVnpayTransactionId(String vnpayTransactionId) {
+        this.vnpayTransactionId = vnpayTransactionId;
     }
 
 }

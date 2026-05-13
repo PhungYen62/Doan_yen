@@ -113,7 +113,7 @@ public class ItemController {
         model.addAttribute("selectedMinPrice", minPriceOptional.orElse(""));
         model.addAttribute("selectedMaxPrice", maxPriceOptional.orElse(""));
 
-        List<Product> allProducts = this.productService.getAllProducts();
+        List<Product> allProducts = this.productService.getAllActiveProducts();
         List<Product> discountedProducts = new ArrayList<>();
         for (Product p : allProducts) {
             if (p.getSalePrice() != null && p.getSalePrice() > 0 && p.getSalePrice() < p.getPrice()) {

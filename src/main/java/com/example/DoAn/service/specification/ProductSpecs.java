@@ -58,4 +58,8 @@ public class ProductSpecs {
         return (root, query, cb) -> cb.isFalse(root.get("isDeleted"));
     }
 
+    public static Specification<Product> isActive() {
+        return (root, query, cb) -> cb.isTrue(root.get("isActive"));
+    }
+
 }

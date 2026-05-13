@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.DoAn.domain.Product;
@@ -31,31 +32,35 @@ public class DashBoardController {
         this.userService = userService;
     }
 
-    @GetMapping("/api/revenue/last7days")
+    @GetMapping("/api/revenue")
     @ResponseBody
-    public List<RevenuePerDayDTO> getRevenueLast7Days() {
-        return orderService.getDailyRevenueLast7Days();
+    public List<RevenuePerDayDTO> getRevenue(@RequestParam(value = "days", required = false, defaultValue = "6") Integer days) {
+        int filterDays = (days != null) ? days : 6;
+        return orderService.getDailyRevenue(filterDays);
     }
 
     @GetMapping("/admin")
-    public String getDashboard(Model model) {
-        // Lấy ra doanh thu trong 7 ngày gần nhất
-        List<RevenuePerDayDTO> results = orderService.getDailyRevenueLast7Days();
+    public String getDashboard(@RequestParam(value = "days", required = false, defaultValue = "6") Integer days, Model model) {
+        int filterDays = (days != null) ? days : 6;
+        
+        // Lấy ra doanh thu
+        List<RevenuePerDayDTO> results = orderService.getDailyRevenue(filterDays);
 
         // Lấy ra top 5 khách hàng có doanh thu cao nhất
-        List<TopCustomerDTO> topCustomers = orderService.getTopCustomers();
+        List<TopCustomerDTO> topCustomers = orderService.getTopCustomers(filterDays);
 
         // Lấy ra tổng số sản phẩm
         Long totalProducts = productService.countAllProducts();
 
         // Lấy ra tổng doanh thu
-        Double totalRevenue = orderService.getTotalRevenue();
+        Double totalRevenue = orderService.getTotalRevenue(filterDays);
+        if (totalRevenue == null) totalRevenue = 0.0;
 
         // Lấy ra tổng số khách hàng
         Long totalCustomers = userService.countCustomers();
 
-        // Tổng số đơn hàng
-        Long totalOrders = orderService.countAllOrders();
+        // Tổng số đơn hàng (chỉ tính đơn hoàn thành)
+        Long totalOrders = orderService.countCompletedOrders(filterDays);
 
         // Danh sách sản phẩm sắp hết hàng
         List<Product> lowStockProducts = productService.findProductsLowStock();
@@ -67,6 +72,7 @@ public class DashBoardController {
         model.addAttribute("totalCustomers", totalCustomers);
         model.addAttribute("totalOrders", totalOrders);
         model.addAttribute("lowStockProducts", lowStockProducts);
+        model.addAttribute("selectedDays", filterDays);
         return "admin/dashboard/show";
     }
 

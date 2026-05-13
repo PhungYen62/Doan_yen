@@ -103,9 +103,9 @@ public class OrderService {
         this.orderRepository.deleteById(id);
     }
 
-    // Lấy doanh thu trong 7 ngày gần nhất
-    public List<RevenuePerDayDTO> getDailyRevenueLast7Days() {
-        List<Object[]> result = orderRepository.getDailyRevenueLast7DaysNative();
+    // Lấy doanh thu theo số ngày
+    public List<RevenuePerDayDTO> getDailyRevenue(int days) {
+        List<Object[]> result = orderRepository.getDailyRevenueNative(days);
 
         return result.stream()
                 .map(row -> {
@@ -127,8 +127,8 @@ public class OrderService {
     }
 
     // Lây top 5 khách hàng
-    public List<TopCustomerDTO> getTopCustomers() {
-        List<Object[]> result = orderRepository.getTopCustomersRaw();
+    public List<TopCustomerDTO> getTopCustomers(int days) {
+        List<Object[]> result = orderRepository.getTopCustomersRaw(days);
 
         return result.stream()
                 .map(row -> {
@@ -143,11 +143,16 @@ public class OrderService {
                 .collect(Collectors.toList());
     }
 
-    public Double getTotalRevenue() {
-        return this.orderRepository.getTotalRevenue();
+    public Double getTotalRevenue(int days) {
+        return this.orderRepository.getTotalRevenue(days);
     }
 
-    // Lấy tổng số đơn hàng
+    // Lấy tổng số đơn hàng đã hoàn thành và thanh toán trong khoảng thời gian
+    public Long countCompletedOrders(int days) {
+        return this.orderRepository.countAllCompletedOrdersWithinDays(days);
+    }
+
+    // Lấy tổng số đơn hàng tổng quát
     public Long countAllOrders() {
         return this.orderRepository.count();
     }

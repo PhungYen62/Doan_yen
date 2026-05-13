@@ -203,6 +203,7 @@ public class ProductController {
                     product.setSalePrice(productUpdate.getSalePrice());
                 }
                 product.setPrice(productUpdate.getPrice());
+                product.setIsActive(productUpdate.getIsActive() != null ? productUpdate.getIsActive() : false);
                 product.setQuantity(productUpdate.getQuantity());
                 product.setDetailDesc(productUpdate.getDetailDesc());
                 product.setShortDesc(productUpdate.getShortDesc());

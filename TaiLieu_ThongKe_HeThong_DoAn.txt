@@ -1,0 +1,61 @@
+========================================================================
+TÀI LIỆU THỐNG KÊ CHI TIẾT: LUỒNG DỮ LIỆU & KIẾN TRÚC HỆ THỐNG DỰ ÁN
+========================================================================
+
+Dự án phát triển trên nền tảng: Java Spring Boot (MVC) + Hibernate JPA + JSP + MySQL.
+Dưới đây là thống kê các luồng dữ liệu quan trọng nhất theo chuẩn quy trình hệ thống, giải thích đường đi của code từ View (JSP) -> Controller -> Service -> Repository -> Database.
+
+------------------------------------------------------------------------
+1. LUỒNG QUẢN LÝ SẢN PHẨM & TRẠNG THÁI ẨN/HIỆN (PRODUCT MANAGEMENT)
+------------------------------------------------------------------------
+* Mục đích: Quản lý danh sách sản phẩm, thêm/sửa/xóa sản phẩm và thay đổi trạng thái bán/ẩn trên Web (thuộc tính `isActive`).
+* Bảng CSDL tương tác: `products` (bảng chính), `product_image` (ảnh), `categories` (danh mục).
+
+* Đường đi của dữ liệu (Ví dụ luồng Cập nhật - Update):
+  (1) VIEW (JSP): Admin thao tác trên file `src/main/webapp/WEB-INF/view/admin/product/update.jsp`.
+      Tại đây, HTML form bao bọc các trường, có checkbox `<form:checkbox path="isActive" />`.
+  (2) CONTROLLER: Code bay tới `ProductController.java` bên trong package `admin`, đón request ở hàm `@PostMapping("/admin/product/update")`.
+      Controller sử dụng `@ModelAttribute` để bắt các tham số do form submit lên.
+      [!] Core Logic tại đây: Bắt tham số `isActive`. Xử lý lưu ảnh nếu Admin upload ảnh mới (gọi interface MultipartFile). Set thủ công các trường giá cả, số lượng. Đặc biệt CẤM đè lên những trường bị khóa ở Frontend (như biến Name bị disabled nên tránh bị dội lỗi Data Null lúc lưu).
+  (3) SERVICE & REPOSITORY: Controller đẩy đối tượng `Product` đã chỉnh sửa xuống `ProductService.handleSaveProduct()`. Service gián tiếp gọi `ProductRepository.save()`.
+  (4) DATABASE: Hibernate JPA biên dịch đối tượng thành câu lệnh SQL `UPDATE products SET is_active = ?, price = ?, ... WHERE id = ?`. Trạng thái được cập nhật trực tiếp tại bảng `products`.
+
+------------------------------------------------------------------------
+2. LUỒNG TÍNH TOÁN & HIỂN THỊ THỐNG KÊ DASHBOARD (STATISTICS & REPORTING)
+------------------------------------------------------------------------
+* Mục đích: Hiển thị bộ lọc cho Admin xem thu nhập (doanh thu), số đơn thành công theo Ngày, Tuần, Tháng.
+* Bảng CSDL tương tác: `orders` (bảng hóa đơn - dựa vào số tiền tổng và date), `order_detail` (nếu cần tính số lượng sản phẩm).
+
+* Đường đi của dữ liệu:
+  (1) VIEW (JSP): Màn hình `dashboard.jsp` chứa Select Box khoảng thời gian (Hôm nay, 7 ngày, 1 tháng). Dùng AJAX gọi ẩn về Java Backend thông qua Javascript hoặc User nhấn submit theo params `?days=7`.
+  (2) CONTROLLER: Đón tại `DashBoardController.java` (`@GetMapping("/admin/dashboard")`), trích xuất biến `@RequestParam("days")`.
+  (3) REPOSITORY (Tầng truy vấn): Gọi xuống `OrderRepository.java`.
+      Tại đây chúng ta sử dụng Native Query SQL (`@Query(nativeQuery = true)`) để thao tác logic SUM() và COUNT().
+      Ví dụ SQL: Lấy tổng `total_price` từ bảng `orders` ở điều kiện trạng thái đơn (status) = SUCCESS và trạng thái thanh toán (payment_status) = PAID, đồng thời thỏa mãn khoảng dữ liệu tạo lúc `created_at` trong vòng 'N' ngày (sử dụng hàm DATEDIFF hoặc NOW() của MySQL).
+  (4) BẢO MẬT & NGOẠI LỆ: Nếu hệ thống chưa từng có đơn hàng nào, query SUM sẽ thả về NULL. Spring Boot sẽ crash. Do đó, kết quả hứng ở method của Repository phải được ép kiểu bằng Wrapper Class `Double` hoặc `Integer` để đón trạng thái Null safely và Controller trả về `0` cho View để vẽ lên đồ thị JS mượt mà.
+
+------------------------------------------------------------------------
+3. LUỒNG THANH TOÁN VNPay (VNPAY PAYMENT INTEGRATION)
+------------------------------------------------------------------------
+* Mục đích: Giả lập môi trường thanh toán online (Sandbox), mã hóa thông tin đơn hàng ném qua VNPay, hứng dữ liệu VNPay báo về xem khách đã tự chuyển khoản hay chưa.
+* Bảng CSDL tương tác: `orders` (cập nhật trạng thái `payment_status`).
+
+* Đường đi của dữ liệu:
+  (1) MUA HÀNG (Controller): Tại `OrderController` / `CheckoutController`, khi người dùng bấm "Đặt hàng bằng VNPay", backend tạo ra một Object Order tạm lưu vào DB trạng thái đang "PENDING".
+  (2) TẠO MÃ GIAO DỊCH VNPay: Java xâu chuỗi thông tin (Tiền + Mã hóa đơn + Mã bí mật Hash Secret VNPay + Mã Merchant). Tạo ra một đường dẫn URL URLencoded trỏ thẳng tới Server của VNPay. Controller Return cái URL đó ra lệnh cho trình duyệt khách Redirect sang web VNPay.
+  (3) THANH TOÁN CLIENT: Khách hàng nhập mã thẻ Test và thanh toán trên màn VNPay. VNPay sau khi trừ tiền sẽ Redirect ngược lại cái Link web ta (Return URL: `/vnpay/return`).
+  (4) VNPAY RETURN CONTROLLER: Đón dữ liệu trả về từ VNPay (Chứa các checksum, Amount, Date, Status của giao dịch).
+      [!] Xử lý logic: Java giải mã checksum (HMAC SHA512) để xác minh không có Hacker đổi giá trị URL. Check nếu mã ResponseCode = '00' (Thành công).
+  (5) UPDATE DATABASE: Tìm ID đơn hàng (vnp_TxnRef) tương ứng trong CSDL thông qua vnpay. Cập nhật `payment_status` ở bảng `orders` sang trạng thái ĐÃ THANH TOÁN (`PAID`).
+
+------------------------------------------------------------------------
+4. TÓM TẮT DÒNG CHẢY (ARCHITECTURE FLOW) CHUẨN MVC CỦA DỰ ÁN
+------------------------------------------------------------------------
+- Client Browser (JSP/HTML/JS)  <--- HTTP GET/POST --->  CONTROLLER : Người điều phối, bắt Request và nhả Response.
+- CONTROLLER                    <--- method call    --->  SERVICE    : Tầng Business Logic. Chứa mọi xử lý nghiệp vụ, logic toán học, chuẩn hóa chuỗi.
+- SERVICE                       <--- entity passing --->  REPOSITORY : Tầng giao tiếp Database. Cấu hình bằng Interface kế thừa JpaRepository. Tự gen CRUD hoặc viết Query Custom.
+- REPOSITORY                    <--- JDBC mapping   --->  MYSQL DB   : Lưu trữ Entity (Bảng `users`, `products`, `orders`, `categories`, `cart`...) dưới dạng các record.
+
+========================================================================
+END OF DOCUMENT
+========================================================================

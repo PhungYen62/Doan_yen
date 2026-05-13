@@ -124,15 +124,14 @@
                                         <thead>
                                             <tr class="text-dark">
                                                 <th scope="col">ID</th>
-                                                <th scope="col">Tên</th>
-                                                <th scope="col">Giá</th>
+                                                <th scope="col">Tên</th>                                                <th scope="col">Trạng thái</th>                                                <th scope="col">Giá</th>
                                                 <th scope="col">Giá khuyến mãi</th>
                                                 <th scope="col">Hình ảnh</th>
                                                 <th scope="col">Số lượng</th>
                                                 <th scope="col">Danh mục</th>
-                                                <th scope="col">Tỉnh/Thành</th>
-                                                <th scope="col">Ngày tạo</th>
-                                                <th scope="col">Ngày cập nhật</th>
+                                                <!-- <th scope="col">Tỉnh/Thành</th> -->
+                                                <!-- <th scope="col">Ngày tạo</th>
+                                                <th scope="col">Ngày cập nhật</th> -->
                                                 <th scope="col">Hành động</th>
                                             </tr>
                                         </thead>
@@ -142,6 +141,12 @@
                                                 <tr>
                                                     <th>${product.id}</th>
                                                     <td>${product.name}</td>
+                                                    <td>
+                                                        <c:choose>
+                                                            <c:when test="${product.isActive}"><span class="badge bg-success">Đang bán</span></c:when>
+                                                            <c:otherwise><span class="badge bg-secondary">Ngừng bán</span></c:otherwise>
+                                                        </c:choose>
+                                                    </td>
                                                     <td>
                                                         <fmt:formatNumber value="${product.price}" type="number"
                                                             maxFractionDigits="2" />đ
@@ -153,13 +158,13 @@
                                                     <td><img src="/products/${product.firstImage}" alt="Hình ảnh sản phẩm"
                                                             width="100">
                                                     </td>
-                                                    <td>${product.quantity} kg</td>
+                                                    <td>${product.quantity} sp</td>
                                                     <td>
                                                         <c:forEach var="category" items="${product.categories}">
                                                             ${category.name} <br />
                                                         </c:forEach>
                                                     </td>
-                                                    <td>
+                                                    <!-- <td>
                                                         <c:choose>
                                                             <c:when test="${product.province != null}">
                                                                 ${product.province.name}
@@ -168,9 +173,9 @@
                                                                 -
                                                             </c:otherwise>
                                                         </c:choose>
-                                                    </td>
-                                                    <td>${product.createdAt}</td>
-                                                    <td>${product.updatedAt}</td>
+                                                    </td> -->
+                                                    <!-- <td>${product.createdAt}</td>
+                                                    <td>${product.updatedAt}</td> -->
 
                                                     <td>
                                                         <div class="product-action-group">

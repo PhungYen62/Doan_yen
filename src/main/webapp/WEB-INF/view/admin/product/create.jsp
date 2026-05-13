@@ -135,8 +135,13 @@
                                                         </option>
                                                     </c:forEach>
                                                 </select>
+                                            </div>                                            <div class="mb-3 col-12 col-md-6">
+                                                <label class="form-label">Trạng thái bán (Hiển thị ra web):</label>
+                                                <div class="form-check form-switch mt-2">
+                                                    <form:checkbox class="form-check-input" path="isActive" checked="checked" />
+                                                    <label class="form-check-label">Đang bán</label>
+                                                </div>
                                             </div>
-
                                             <div class="mb-3 col-12 col-md-6">
                                                 <label class="form-label">Chọn danh mục:</label>
                                                 <c:forEach var="category" items="${categories}">

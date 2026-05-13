@@ -55,7 +55,7 @@ public class ProductService {
 
     public Page<Product> getAllProductsWithSpec(Pageable page, String name, Double minPrice, Double maxPrice,
             List<Long> categoryIds, Long provinceId) {
-        Specification<Product> spec = Specification.where(ProductSpecs.isNotDeleted());
+        Specification<Product> spec = Specification.where(ProductSpecs.isNotDeleted()).and(ProductSpecs.isActive());
 
         if (name != null && !name.isEmpty()) {
             spec = spec.and(ProductSpecs.nameLike(name));
@@ -77,6 +77,10 @@ public class ProductService {
 
     public List<Product> getAllProducts() {
         return this.productRepository.findByIsDeletedFalse();
+    }
+
+    public List<Product> getAllActiveProducts() {
+        return this.productRepository.findByIsDeletedFalseAndIsActiveTrue();
     }
 
     public List<Product> getProductsByProvinceId(Long provinceId) {
@@ -272,7 +276,7 @@ public class ProductService {
     @Transactional
     public void handlePlaceOrder(
             User user, HttpSession session,
-            String receiverName, String receiverAddress, String receiverPhone, int paymentStatus) {
+            String receiverName, String receiverAddress, String receiverPhone, int paymentStatus, String paymentMethod, String vnpayTransactionId) {
 
         // step 1: get cart by user
         Cart cart = this.cartRepository.findByUser(user);
@@ -289,6 +293,8 @@ public class ProductService {
                 order.setReceiverPhone(receiverPhone);
                 order.setStatus("PENDING");
                 order.setPaymentStatus(paymentStatus);
+                order.setPaymentMethod(paymentMethod);
+                order.setVnpayTransactionId(vnpayTransactionId);
                 double sum = 0;
                 for (CartDetail cd : cartDetails) {
                     sum += cd.getPrice() * cd.getQuantity();

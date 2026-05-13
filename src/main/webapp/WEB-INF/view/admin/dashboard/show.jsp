@@ -62,6 +62,18 @@
                         <!-- Navbar End -->
 
 
+                        <!-- Filter By Days -->
+                        <div class="container-fluid pt-4 px-4">
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <b>Thống kê theo thời gian:</b>
+                                <select class="form-select w-auto" id="daysFilter" onchange="window.location.href='/admin?days=' + this.value;">
+                                    <option value="0" ${selectedDays == 0 ? 'selected' : ''}>1 Ngày (Hôm nay)</option>
+                                    <option value="6" ${selectedDays == 6 ? 'selected' : ''}>7 Ngày qua</option>
+                                    <option value="29" ${selectedDays == 29 ? 'selected' : ''}>1 Tháng qua</option>
+                                </select>
+                            </div>
+                        </div>
+                        
                         <!-- Sale & Revenue Start -->
                         <div class="container-fluid pt-4 px-4">
                             <div class="row g-4">
@@ -117,7 +129,7 @@
                                 <div class="col-sm-12 col-xl-12">
                                     <div class="bg-light text-center rounded p-4">
                                         <div class="d-flex align-items-center justify-content-between mb-4">
-                                            <h6 class="mb-0">Doanh thu 7 ngày gần nhất</h6>
+                                            <h6 class="mb-0">Thống kê doanh thu</h6>
                                         </div>
                                         <canvas id="salse-revenue"
                                             style="width:100% !important; height:400px !important;"></canvas>

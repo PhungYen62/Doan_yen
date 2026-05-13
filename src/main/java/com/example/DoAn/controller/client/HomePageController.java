@@ -58,7 +58,7 @@ public class HomePageController {
     @GetMapping("/")
     public String getHomePage(Model model) {
         List<Categories> categories = this.categoriesService.getAll();
-        List<Product> allProducts = this.productService.getAllProducts();
+        List<Product> allProducts = this.productService.getAllActiveProducts();
         List<Product> discountedProducts = new ArrayList<>();
         Long northCategoryId = findCategoryIdByKeyword(categories, "mien bac");
         Long centralCategoryId = findCategoryIdByKeyword(categories, "mien trung");

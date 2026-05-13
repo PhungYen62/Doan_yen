@@ -140,8 +140,10 @@
 
     // Revenue chart on dashboard
     if (document.getElementById("salse-revenue")) {
+        var daysFilter = document.getElementById("daysFilter");
+        var days = daysFilter ? daysFilter.value : "6";
         $.ajax({
-            url: "/api/revenue/last7days",
+            url: "/api/revenue?days=" + days,
             method: "GET",
             success: function (data) {
                 var labels = data.map(function (item) { return item.day; });

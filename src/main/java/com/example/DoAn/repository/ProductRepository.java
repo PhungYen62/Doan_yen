@@ -24,6 +24,8 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
     Product findByName(String name);
 
     List<Product> findByIsDeletedFalse();
+    
+    List<Product> findByIsDeletedFalseAndIsActiveTrue();
 
     List<Product> findByProvince_Id(Long provinceId);
 

@@ -656,22 +656,12 @@
                             <div class="payment-options">
                                 <label class="payment-option">
                                     <input form="placeOrderForm" type="radio" name="paymentMethod" value="COD" checked>
-                                    <span>Thanh toán bằng tiền mặt</span>
-                                </label>
-                                <label class="payment-option">
-                                    <input form="placeOrderForm" type="radio" name="paymentMethod" value="VNPAY">
-                                    <span>Thanh toán bằng chuyển khoản</span>
-                                </label>
-                            </div>
-
-                            <div class="qr-box">
-                                <img src="/resources/images/content/Vector.png" alt="Payment methods">
-                                <div class="qr-meta">
-                                    FRESHFOOD<br>
-                                    123 4567 8900<br>
-                                    Ngân hàng Vietcombank
-                                </div>
-                            </div>
+                                        <span>Thanh toán bằng tiền mặt (COD)</span>
+                                    </label>
+                                    <label class="payment-option">
+                                        <input form="placeOrderForm" type="radio" name="paymentMethod" value="VNPAY">
+                                        <span>Thanh toán trực tuyến (VNPay Sandbox)</span>
+                                    </label>
                         </div>
                     </div>
 

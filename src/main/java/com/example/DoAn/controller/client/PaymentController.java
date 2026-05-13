@@ -127,6 +127,7 @@ public class PaymentController {
         String message = "";
         String status = "success";
         String responseCode = request.getParameter("vnp_ResponseCode");
+        String vnpTxnRef = request.getParameter("vnp_TxnRef");
         if ("00".equals(responseCode)) {
 
             HttpSession session = request.getSession(false);
@@ -145,9 +146,9 @@ public class PaymentController {
                     String encodedMessage = URLEncoder.encode(message, StandardCharsets.UTF_8);
                     return "redirect:/thanks?status=" + status + "&message=" + encodedMessage;
                 }
-                this.productService.handlePlaceOrder(user, session, receiverName, receiverAddress, receiverPhone, 1);
+                this.productService.handlePlaceOrder(user, session, receiverName, receiverAddress, receiverPhone, 1, "VNPAY", vnpTxnRef);
                 // ✅ Thành công
-                message = "Cảm ơn bạn đã đặt hàng!";
+                message = "Cảm ơn bạn đã đặt hàng qua VNPay!";
             } else {
                 return "redirect:/login";
             }

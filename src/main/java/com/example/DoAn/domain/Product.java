@@ -67,6 +67,9 @@ public class Product {
     @Column(name = "is_deleted")
     private Boolean isDeleted = false;
 
+    @Column(name = "is_active")
+    private Boolean isActive = true;
+
     public long getId() {
         return id;
     }
@@ -176,6 +179,14 @@ public class Product {
 
     public void setIsDeleted(Boolean isDeleted) {
         this.isDeleted = isDeleted;
+    }
+
+    public Boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
     }
 
 }

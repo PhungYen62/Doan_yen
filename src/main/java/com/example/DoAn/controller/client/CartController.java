@@ -178,7 +178,7 @@ public class CartController {
             }
         } else {
             // COD: xử lý như cũ
-            this.productService.handlePlaceOrder(currentUser, session, receiverName, receiverAddress, receiverPhone, 0);
+            this.productService.handlePlaceOrder(currentUser, session, receiverName, receiverAddress, receiverPhone, 0, "COD", null);
             String message = "Cảm ơn bạn đã đặt hàng!";
             String encodedMessage = URLEncoder.encode(message, StandardCharsets.UTF_8);
             return "redirect:/thanks?status=success&message=" + encodedMessage;
