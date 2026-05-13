@@ -42,7 +42,7 @@ UPDATE provinces SET geojson_id = 'VNDN' WHERE id = 80;   -- Đà Nẵng
 UPDATE provinces SET geojson_id = 'VN33' WHERE id = 81;   -- Đắk Lắk
 UPDATE provinces SET geojson_id = 'VN72' WHERE id = 82;   -- Đắk Nông
 UPDATE provinces SET geojson_id = 'VN71' WHERE id = 83;   -- Điện Biên
-UPDATE provinces SET geojson_id = NULL   WHERE id = 84;   -- Đồng Nai: not found in current GeoJSON file
+UPDATE provinces SET geojson_id = 'VN39' WHERE id = 84;   -- Đồng Nai
 UPDATE provinces SET geojson_id = 'VN46' WHERE id = 85;   -- Đồng Tháp
 UPDATE provinces SET geojson_id = 'VN30' WHERE id = 86;   -- Gia Lai
 UPDATE provinces SET geojson_id = 'VN03' WHERE id = 87;   -- Hà Giang

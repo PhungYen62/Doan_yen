@@ -4,7 +4,7 @@ SET SQL_SAFE_UPDATES = 0;
 UPDATE provinces SET geojson_id = 'VN44' WHERE id = 66;   -- An Giang
 UPDATE provinces SET geojson_id = 'VN43' WHERE id = 67;   -- Bà Rịa - Vũng Tàu
 UPDATE provinces SET geojson_id = 'VN54' WHERE id = 68;   -- Bắc Giang
-UPDATE provinces SET geojson_id = NULL   WHERE id = 69;   -- Bắc Kạn: not found in current GeoJSON file
+UPDATE provinces SET geojson_id = 'VN53' WHERE id = 69;   -- Bắc Kạn
 UPDATE provinces SET geojson_id = 'VN55' WHERE id = 70;   -- Bạc Liêu
 UPDATE provinces SET geojson_id = 'VN56' WHERE id = 71;   -- Bắc Ninh
 UPDATE provinces SET geojson_id = 'VN50' WHERE id = 72;   -- Bến Tre
@@ -19,7 +19,7 @@ UPDATE provinces SET geojson_id = 'VNDN' WHERE id = 80;   -- Đà Nẵng
 UPDATE provinces SET geojson_id = 'VN33' WHERE id = 81;   -- Đắk Lắk
 UPDATE provinces SET geojson_id = 'VN72' WHERE id = 82;   -- Đắk Nông
 UPDATE provinces SET geojson_id = 'VN71' WHERE id = 83;   -- Điện Biên
-UPDATE provinces SET geojson_id = NULL   WHERE id = 84;   -- Đồng Nai: not found in current GeoJSON file
+UPDATE provinces SET geojson_id = 'VN39' WHERE id = 84;   -- Đồng Nai
 UPDATE provinces SET geojson_id = 'VN46' WHERE id = 85;   -- Đồng Tháp
 UPDATE provinces SET geojson_id = 'VN30' WHERE id = 86;   -- Gia Lai
 UPDATE provinces SET geojson_id = 'VN03' WHERE id = 87;   -- Hà Giang
