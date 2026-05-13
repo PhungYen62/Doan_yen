@@ -54,7 +54,8 @@
             transition: all 0.2s ease;
         }
         .order-status-filter .status-filter-btn:hover,
-        .order-status-filter .status-filter-btn:focus {
+        .order-status-filter .status-filter-btn:focus,
+        .order-status-filter .status-filter-btn.filter-active {
             background: #749b3f;
             border-color: #749b3f;
             color: #ffffff;
@@ -157,11 +158,11 @@
                                 <!-- Main -->
                                 <div class="col-lg-9 col-md-8">
                                     <div class="order-status-filter">
-                                        <button type="button" class="btn btn-sm status-filter-btn">Tất cả</button>
-                                        <button type="button" class="btn btn-sm status-filter-btn">Chờ thanh toán</button>
-                                        <button type="button" class="btn btn-sm status-filter-btn">Đang giao</button>
-                                        <button type="button" class="btn btn-sm status-filter-btn">Hoàn thành</button>
-                                        <button type="button" class="btn btn-sm status-filter-btn">Trả hàng</button>
+                                        <button type="button" class="btn btn-sm status-filter-btn filter-active" data-status="ALL">Tất cả</button>
+                                        <button type="button" class="btn btn-sm status-filter-btn" data-status="PENDING">Chờ thanh toán</button>
+                                        <button type="button" class="btn btn-sm status-filter-btn" data-status="SHIPPING">Đang giao</button>
+                                        <button type="button" class="btn btn-sm status-filter-btn" data-status="COMPLETE">Hoàn thành</button>
+                                        <button type="button" class="btn btn-sm status-filter-btn" data-status="CANCEL">Đã hủy</button>
                                     </div>
 
                                     <c:if test="${empty orders}">
@@ -170,7 +171,7 @@
 
                                     <c:forEach var="order" items="${orders}">
                                         <c:forEach var="od" items="${order.orderDetails}">
-                                            <div class="mb-3" style="background:#f6f7f8;padding:14px;border-radius:8px;display:flex;align-items:center;justify-content:space-between;">
+                                            <div class="mb-3 order-item" data-status="${order.status}" style="background:#f6f7f8;padding:14px;border-radius:8px;display:flex;align-items:center;justify-content:space-between;">
                                                 <div style="display:flex;align-items:center;gap:14px;">
                                                     <img src="/products/${od.product.firstImage}" alt="${od.product.name}" style="width:72px;height:72px;border-radius:8px;object-fit:cover;" onerror="this.src='${pageContext.request.contextPath}/resources/images/header/logo.png'" />
                                                     <div>
@@ -215,6 +216,24 @@
 
                     <!-- Template Javascript -->
                     <script src="js/main.js"></script>
+                    
+                    <script>
+                        $(document).ready(function() {
+                            $('.status-filter-btn').on('click', function(e) {
+                                e.preventDefault();
+                                $('.status-filter-btn').removeClass('filter-active');
+                                $(this).addClass('filter-active');
+                                
+                                var status = $(this).data('status');
+                                if (status === 'ALL') {
+                                    $('.order-item').show();
+                                } else {
+                                    $('.order-item').hide();
+                                    $('.order-item[data-status="' + status + '"]').show();
+                                }
+                            });
+                        });
+                    </script>
                 </body>
 
                 </html>

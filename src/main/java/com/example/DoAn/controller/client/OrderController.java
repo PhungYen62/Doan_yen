@@ -30,6 +30,7 @@ public class OrderController {
         List<Order> orders = currentUser == null
                 ? new ArrayList<>()
                 : this.orderService.fetchOrdersByUser(currentUser);
+
         Collections.reverse(orders);
         model.addAttribute("user", currentUser);
         model.addAttribute("orders", orders);
