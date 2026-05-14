@@ -321,11 +321,11 @@
             <div class="tab-pane fade" id="v-pills-orders" role="tabpanel" aria-labelledby="v-pills-orders-tab">
                 <div class="profile-title">Lịch sử mua hàng</div>
                 <div class="order-status-filter">
-                    <button type="button" class="btn btn-sm status-filter-btn">Tất cả</button>
-                    <button type="button" class="btn btn-sm status-filter-btn">Chờ thanh toán</button>
-                    <button type="button" class="btn btn-sm status-filter-btn">Đang giao</button>
-                    <button type="button" class="btn btn-sm status-filter-btn">Hoàn thành</button>
-                    <button type="button" class="btn btn-sm status-filter-btn">Trả hàng</button>
+                    <button type="button" class="btn btn-sm status-filter-btn <c:if test="${selectedStatus eq 'ALL'}">filter-active</c:if>" data-status="ALL">Tất cả</button>
+                    <button type="button" class="btn btn-sm status-filter-btn <c:if test="${selectedStatus eq 'PENDING'}">filter-active</c:if>" data-status="PENDING">Chờ thanh toán</button>
+                    <button type="button" class="btn btn-sm status-filter-btn <c:if test="${selectedStatus eq 'SHIPPING'}">filter-active</c:if>" data-status="SHIPPING">Đang giao</button>
+                    <button type="button" class="btn btn-sm status-filter-btn <c:if test="${selectedStatus eq 'COMPLETE'}">filter-active</c:if>" data-status="COMPLETE">Hoàn thành</button>
+                    <button type="button" class="btn btn-sm status-filter-btn <c:if test="${selectedStatus eq 'CANCEL'}">filter-active</c:if>" data-status="CANCEL">Đã hủy</button>
                 </div>
 
                 <c:if test="${empty orders}">
@@ -333,24 +333,42 @@
                 </c:if>
 
                 <c:forEach var="order" items="${orders}">
-                    <c:forEach var="od" items="${order.orderDetails}">
-                        <div class="mb-3" style="background:#f6f7f8;padding:14px;border-radius:8px;display:flex;align-items:center;justify-content:space-between;">
-                            <div style="display:flex;align-items:center;gap:14px;">
-                                <img src="/products/${od.product.firstImage}" alt="${od.product.name}" style="width:72px;height:72px;border-radius:8px;object-fit:cover;" onerror="this.src='/resources/images/header/logo.png'" />
-                                <div>
-                                    <div style="font-weight:600;color:#333;">${od.product.name}</div>
-                                    <div style="color:#666;font-size:13px;">x${od.quantity}</div>
-                                </div>
+                    <div class="mb-4" style="background:#f6f7f8;padding:18px;border-radius:12px;">
+                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3 gap-2">
+                            <div>
+                                <div style="font-weight:700;color:#333;">Mã đơn: #${order.id}</div>
+                                <div style="font-size:13px;color:#666;">Ngày đặt: ${order.createdAtFormatted}</div>
                             </div>
                             <div style="text-align:right;min-width:160px;">
-                                <div style="color:#ff6b24;font-weight:700;margin-bottom:8px;"><fmt:formatNumber type="number" value="${od.price}" /> đ</div>
-                                <div class="order-history-actions">
-                                    <a href="/product/${od.product.id}" class="order-action-btn me-2">Mua lại</a>
-                                    <a href="${pageContext.request.contextPath}/contact" class="order-action-btn">Đánh giá</a>
+                                <div style="font-weight:700;color:#749b3f;">
+                                    <c:choose>
+                                        <c:when test="${order.status == 'PENDING'}">Chờ thanh toán</c:when>
+                                        <c:when test="${order.status == 'SHIPPING'}">Đang giao</c:when>
+                                        <c:when test="${order.status == 'COMPLETE'}">Hoàn thành</c:when>
+                                        <c:when test="${order.status == 'CANCEL'}">Đã hủy</c:when>
+                                        <c:otherwise>${order.status}</c:otherwise>
+                                    </c:choose>
                                 </div>
+                                <div style="font-size:13px;color:#666;">Tổng đơn: <fmt:formatNumber type="number" value="${order.totalPrice}"/> đ</div>
                             </div>
                         </div>
-                    </c:forEach>
+                        <c:forEach var="od" items="${order.orderDetails}">
+                            <div class="mb-3" style="display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid #e3e8ef;">
+                                <img src="/products/${od.product.firstImage}" alt="${od.product.name}" style="width:72px;height:72px;border-radius:8px;object-fit:cover;" onerror="this.src='/resources/images/header/logo.png'" />
+                                <div style="flex:1;min-width:0;">
+                                    <div style="font-weight:600;color:#333;">${od.product.name}</div>
+                                    <div style="color:#666;font-size:13px;">Số lượng: x${od.quantity}</div>
+                                </div>
+                                <div style="text-align:right;min-width:140px;">
+                                    <div style="color:#ff6b24;font-weight:700;margin-bottom:8px;"><fmt:formatNumber type="number" value="${od.price}" /> đ</div>
+                                    <div class="order-history-actions">
+                                        <a href="/product/${od.product.id}" class="order-action-btn me-2">Mua lại</a>
+                                        <a href="${pageContext.request.contextPath}/contact" class="order-action-btn">Đánh giá</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </c:forEach>
+                    </div>
                 </c:forEach>
             </div>
 
@@ -411,6 +429,27 @@
     <script src="/js/main.js"></script>
     
     <script>
+        $(document).ready(function() {
+            $('.status-filter-btn').on('click', function(e) {
+                e.preventDefault();
+                var status = $(this).data('status');
+                window.location.href = '/user/profile?status=' + status;
+            });
+
+            if (window.location.search.indexOf('status=') !== -1) {
+                var ordersTab = document.getElementById('v-pills-orders-tab');
+                var profileTab = document.getElementById('v-pills-profile-tab');
+                var ordersPane = document.getElementById('v-pills-orders');
+                var profilePane = document.getElementById('v-pills-profile');
+                if (ordersTab && profileTab && ordersPane && profilePane) {
+                    ordersTab.classList.add('active');
+                    profileTab.classList.remove('active');
+                    ordersPane.classList.add('show', 'active');
+                    profilePane.classList.remove('show', 'active');
+                }
+            }
+        });
+
         // Preview selected avatar
         (function(){
             const fileInput = document.getElementById('avatarFile');

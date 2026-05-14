@@ -50,6 +50,13 @@ public class OrderService {
         return this.orderRepository.findByUser(user);
     }
 
+    public List<Order> fetchOrdersByUserAndStatus(User user, String status) {
+        if (status == null || "ALL".equalsIgnoreCase(status)) {
+            return this.orderRepository.findByUser(user);
+        }
+        return this.orderRepository.findByUserAndStatus(user, status);
+    }
+
     @Transactional
     public void updateOrder(Order order) {
         Optional<Order> orderOptional = this.fetchOrderById(order.getId());

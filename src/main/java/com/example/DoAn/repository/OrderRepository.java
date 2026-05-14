@@ -16,6 +16,8 @@ import com.example.DoAn.domain.User;
 public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findByUser(User user);
 
+    List<Order> findByUserAndStatus(User user, String status);
+
     Page<Order> findAll(Pageable page);
 
     List<Order> findByStatus(String status);

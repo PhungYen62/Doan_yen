@@ -1,0 +1,151 @@
+TÀI LIỆU MÔ TẢ LUỒNG DỮ LIỆU CHÍNH
+DỰ ÁN: FreshFood (Spring Boot + JSP + MySQL)
+Ngày tạo: 14/05/2026
+
+Mục tiêu tài liệu:
+- Thống kê các luồng quan trọng: đặt hàng, thêm vào giỏ hàng, bản đồ (địa chỉ)
+- Liệt kê tệp Java/JSP liên quan (đường đi code từ file nào -> file nào)
+- Liệt kê các bảng CSDL tương tác và vai trò của chúng
+- Giải thích chi tiết từng bước, ngoại lệ và lưu ý cần sửa
+
+-----------------------------------------------------------------
+I. TỔNG QUAN NGUYÊN LÝ HOẠT ĐỘNG
+-----------------------------------------------------------------
+Kiến trúc: MVC (View - Controller - Service - Repository - Database)
+- View: JSP files trong `src/main/webapp/WEB-INF/view/...` (client pages như cart/show.jsp, cart/checkout.jsp)
+- Controller: package `com.example.DoAn.controller` (client controllers: `CartController.java`, `PaymentController.java`, `OrderController.java` nếu có)
+- Service: package `com.example.DoAn.service` (e.g., `ProductService`, `OrderService`)
+- Repository: Spring Data JPA interfaces (e.g., `ProductRepository`, `OrderRepository`)
+- Database: MySQL (bảng chính: `products`, `orders`, `order_details`, `product_image`, `users`, `province`, `categories`, `cart`/`cart_details`)
+
+-----------------------------------------------------------------
+II. LUỒNG 1: THÊM SẢN PHẨM VÀO GIỎ HÀNG (ADD TO CART)
+-----------------------------------------------------------------
+1) View -> Controller
+- File View: `src/main/webapp/WEB-INF/view/client/product/detail.jsp` hoặc danh sách sản phẩm `shop.jsp` có nút "Thêm vào giỏ".
+- Khi người dùng bấm "Thêm vào giỏ", client gửi request (POST hoặc AJAX) tới Controller: `CartController.java` (endpoint ví dụ `/add-to-cart` hoặc tương tự).
+
+2) Controller xử lý
+- `CartController` nhận request chứa `productId`, `quantity`, và session userId.
+- Kiểm tra: session tồn tại (user đã login) hoặc lưu giỏ hàng dưới session cho guest.
+- Gọi `ProductService` để lấy thông tin `Product` (kiểm tra `product.getQuantity()` để prevent over-order).
+- Gọi `CartService` hoặc logic nội bộ để tạo/ cập nhật `Cart` và `CartDetail`:
+    - Nếu cartDetail cho product đã tồn tại trong cart: tăng quantity.
+    - Nếu chưa, tạo cartDetail mới liên kết `cart_id`.
+- Lưu trạng thái giỏ hàng vào Session hoặc Database tuỳ thiết kế (project này dùng session user id + DB cartDetails trong nhiều chỗ).
+
+3) Repository / Database
+- Bảng tương tác: `cart` (nếu có), `cart_details` hoặc lưu tạm trong session.
+- Nếu lưu DB: `cart_details` records liên kết `product_id`, `quantity`, `price`.
+- Nếu lưu session: chỉ cập nhật session attribute `cartDetails`.
+
+4) Trả về View
+- Controller trả redirect hoặc JSON success.
+- View cập nhật số lượng giỏ hàng ở header.
+
+Ghi chú quan trọng:
+- Luôn validate stock (số lượng) trong Controller hoặc Service trước khi chấp nhận thêm.
+- Nếu phục vụ guest: cân nhắc đồng bộ lên DB khi user login.
+
+-----------------------------------------------------------------
+III. LUỒNG 2: QUY TRÌNH ĐẶT HÀNG (PLACE ORDER / CHECKOUT)
+-----------------------------------------------------------------
+A. Từ trang Checkout (View) -> Đặt lệnh
+1) View: `src/main/webapp/WEB-INF/view/client/cart/checkout.jsp`
+- Form `placeOrderForm` chứa thông tin: `receiverName`, `receiverPhone`, `receiverAddress`, `totalPrice`, `paymentMethod` (COD hoặc VNPAY).
+- Button submit gửi POST tới Controller endpoint (ví dụ `/checkout` hoặc handled trong `CartController` bằng method `@PostMapping("/checkout")` hoặc `place-order`).
+
+2) Controller: `CartController.java`
+- Kiểm tra session user, kiểm tra tồn kho (`productService.getCartStockErrors(currentUser)`). Nếu có lỗi, redirect về checkout với thông báo.
+- Nếu phương thức thanh toán là `VNPAY`:
+    - Lưu tạm thông tin người nhận/total vào session (để dùng sau khi VNPay callback return).
+    - Gọi `PaymentController.createPayment(request, resp, totalPrice)` để tạo link thanh toán VNPay và redirect người dùng sang VNPay.
+- Nếu `COD` (hoặc paymentMethod khác không cần redirect):
+    - Gọi `productService.handlePlaceOrder(currentUser, session, receiverName, receiverAddress, receiverPhone, 0, "COD", null)`
+    - `handlePlaceOrder` chịu trách nhiệm: tạo `Order` + `OrderDetail` records, giảm stock `products.quantity`, xóa/ cập nhật `cart_details`.
+    - Redirect tới trang cảm ơn `/thanks?status=success`.
+
+B. Service `handlePlaceOrder` (mô tả chung)
+- Tạo `Order` entity với fields: `user_id`, `receiver_name`, `receiver_phone`, `receiver_address`, `total_price`, `payment_method`, `payment_status` (PENDING / PAID), `order_status`.
+- Lặp qua `cartDetails`:
+    - Tạo `OrderDetail` cho từng item: `order_id`, `product_id`, `quantity`, `price`.
+    - Giảm `products.quantity` = `products.quantity - quantity`.
+- Lưu `order` và `orderDetails` thông qua `OrderRepository.save(order)` (kèm cascade nếu cấu hình).
+- Xóa `cartDetails` tương ứng hoặc giữ lịch sử.
+
+C. Bảng Database tương tác
+- `orders`: lưu thông tin đơn hàng (id, user_id, receiver info, total_price, payment_method, payment_status, created_at, ...)
+- `order_details`: chi tiết mỗi mặt hàng (order_id, product_id, quantity, price)
+- `products`: cần cập nhật trường `quantity` sau khi đặt hàng thành công
+- `users`: thông tin người dùng
+- `cart`/`cart_details`: nếu lưu persistent, sẽ bị xóa/ cập nhật
+
+D. Luồng thanh toán VNPay (tóm tắt)
+- Controller tạo URL với checksum HMAC SHA512, redirect client tới VNPay.
+- VNPay xử lý thanh toán trên cổng; sau đó gọi `vnpay/return` endpoint của bạn kèm dữ liệu giao dịch.
+- `vnpay/return` controller xác thực checksum, kiểm tra `ResponseCode` = '00' => Thanh toán thành công.
+- Nếu thành công: update `orders.payment_status` = 'PAID' (dựa trên `vnp_TxnRef` hoặc order id lưu trong session trước khi redirect), và thực hiện các bước xử lý đặt hàng như `handlePlaceOrder` nếu chưa tạo order trước khi redirect (tuỳ cách implement: tạo order trước hoặc sau callback).
+
+Ghi chú:
+- Thiết kế an toàn: lưu một bản `order` ở trạng thái PENDING trước khi redirect VNPay, gồm `vnp_TxnRef` hoặc `orderReference` để đối chiếu khi return.
+- Luôn kiểm tra checksum trên dữ liệu VNPay để tránh giả mạo.
+
+-----------------------------------------------------------------
+IV. LUỒNG 3: BẢN ĐỒ (MAP) 
+-----------------------------------------------------------------
+Mô tả: Bản đồ được dùng để hiển thị địa chỉ / vị trí tỉnh thành hoặc chọn điểm giao hàng (nếu chức năng này có trong dự án).
+
+1) View: có thể là `src/main/webapp/WEB-INF/view/client/map/show.jsp` hoặc phần chọn tỉnh trong `checkout.jsp`.
+2) Controller: `MapController` hoặc `ProvinceController` (nếu có) trả JSON hoặc JSP dữ liệu các tỉnh/huyện.
+3) Service/Repository: `ProvinceService` gọi `ProvinceRepository` để lấy `province` table.
+4) Bảng DB tương tác: `province` (id, name, code...), `district`, `ward` (nếu có chi tiết vùng)
+
+Ví dụ trong code hiện tại:
+- `checkout.jsp` hiển thị địa chỉ theo `user.province, user.district, user.ward, user.address_detail` (tức dữ liệu địa chỉ đã lưu trong `users` hoặc `province` relation).
+- `ProductController` khi tạo sản phẩm có gọi `provinceService.getAllProvinces()` để hiển thị select box danh sách tỉnh.
+
+Ghi chú:
+- Nếu cần chọn chính xác toạ độ (lat/long), cần trang bị API JS (Google Maps hoặc Leaflet) và endpoint trả dữ liệu JSON cho bản đồ.
+
+-----------------------------------------------------------------
+V. DANH SÁCH FILES CHÍNH (PATHS) VÀ CHỨC NĂNG TƯƠNG ỨNG
+-----------------------------------------------------------------
+- View (JSP):
+  - `src/main/webapp/WEB-INF/view/client/cart/show.jsp` : Hiển thị giỏ hàng
+  - `src/main/webapp/WEB-INF/view/client/cart/checkout.jsp` : Trang checkout / đặt hàng
+  - `src/main/webapp/WEB-INF/view/client/cart/thank.jsp` : Trang cảm ơn
+  - `src/main/webapp/WEB-INF/view/client/product/detail.jsp` : Chi tiết sản phẩm (nút thêm giỏ)
+  - `src/main/webapp/WEB-INF/view/client/map/show.jsp` : (nếu có) hiển thị bản đồ
+
+- Controller:
+  - `src/main/java/com/example/DoAn/controller/client/CartController.java` : Xử lý checkout, place-order, add-to-cart, thanks
+  - `src/main/java/com/example/DoAn/controller/client/PaymentController.java` : Tạo link VNPay, xử lý callback `vnpay/return`
+  - `src/main/java/com/example/DoAn/controller/admin/OrderController.java` : Quản lý đơn hàng trên admin (xem, thay đổi trạng thái)
+  - `src/main/java/com/example/DoAn/controller/admin/ProductController.java` : Quản lý sản phẩm, ảnh, thuộc tính `isActive`
+
+- Service:
+  - `src/main/java/com/example/DoAn/service/ProductService.java` : Kiểm tra số lượng, xử lý lưu ảnh, handlePlaceOrder có thể nằm ở đây
+  - `src/main/java/com/example/DoAn/service/OrderService.java` : (nếu có) logic tạo order, cập nhật stock
+
+- Repository (ví dụ tên phổ biến):
+  - `ProductRepository`, `OrderRepository`, `OrderDetailRepository`, `CartRepository`, `ProvinceRepository`, `UserRepository`.
+
+-----------------------------------------------------------------
+VI. LƯU Ý KỸ THUẬT VÀ VẤN ĐỀ PHẢI QUAN TÂM
+-----------------------------------------------------------------
+1) Checkbox / Disabled Field: Trường input `disabled` sẽ không gửi về server -> không map vào `@ModelAttribute`. Nếu cần giữ giá trị cũ, controller phải tránh overwrite hoặc dùng `readonly` thay `disabled`.
+2) Checkbox (`isActive`) khi không checked: tham số không tồn tại -> nhận `null`. Dùng Wrapper `Boolean` và xử lý `null` -> set false.
+3) Transactional: khi commit JPA bị lỗi (ConstraintViolation, NotNull) cần kiểm tra dữ liệu trước khi save.
+4) Thanh toán VNPay: luôn validate checksum HMAC, lưu order PENDING trước redirect, tránh tạo order 2 lần.
+5) Cập nhật stock: cần dùng transaction để đảm bảo atomic (reduce stock + create order + create order_details).
+6) Xử lý guest: cân nhắc lưu cart tạm trong session và migrate lên DB khi user đăng nhập.
+
+-----------------------------------------------------------------
+VII. KẾT LUẬN NGẮN
+-----------------------------------------------------------------
+Tài liệu này tóm tắt đường đi dữ liệu chính liên quan đến giỏ hàng, đặt hàng và bản đồ. Nếu bạn muốn, tôi có thể mở rộng:
+- Thêm sơ đồ sequence diagram (mermaid) mô tả call flow
+- Trích đoạn code cụ thể từng hàm (`CartController.addToCart`, `CartController.checkout`, `ProductService.handlePlaceOrder`)
+- Tạo checklist test cases (unit/integration) cho luồng đặt hàng và thanh toán VNPay
+
+END OF DOCUMENT

@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.DoAn.domain.Order;
 import com.example.DoAn.domain.User;
@@ -16,6 +17,7 @@ import com.example.DoAn.service.UserService;
 
 @Controller("orderClientController")
 public class OrderController {
+
     private final OrderService orderService;
     private final UserService userService;
 
@@ -25,15 +27,23 @@ public class OrderController {
     }
 
     @GetMapping("/order-history")
-    public String getOrderHistoryPage(Model model, Principal principal) {
+    public String getOrderHistoryPage(
+            Model model,
+            Principal principal,
+            @RequestParam(value = "status", required = false, defaultValue = "ALL") String status) {
+
         User currentUser = this.userService.getUserByEmail(principal.getName());
+
         List<Order> orders = currentUser == null
                 ? new ArrayList<>()
-                : this.orderService.fetchOrdersByUser(currentUser);
+                : this.orderService.fetchOrdersByUserAndStatus(currentUser, status);
 
         Collections.reverse(orders);
+
         model.addAttribute("user", currentUser);
         model.addAttribute("orders", orders);
+        model.addAttribute("selectedStatus", status);
+
         return "client/order/order-history";
     }
 }

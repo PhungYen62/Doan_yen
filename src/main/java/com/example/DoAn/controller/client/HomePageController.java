@@ -189,14 +189,16 @@ public class HomePageController {
     }
 
     @GetMapping("/user/profile")
-    public String showProfile(Model model, Principal principal) {
+    public String showProfile(Model model, Principal principal,
+            @RequestParam(value = "status", required = false, defaultValue = "ALL") String status) {
         String email = principal.getName();
         User user = userService.getUserByEmail(email);
-        List<Order> orders = this.orderService.fetchOrdersByUser(user);
+        List<Order> orders = this.orderService.fetchOrdersByUserAndStatus(user, status);
         Collections.reverse(orders);
 
         model.addAttribute("user", user);
         model.addAttribute("orders", orders);
+        model.addAttribute("selectedStatus", status);
         return "client/auth/user-profile";
     }
 
